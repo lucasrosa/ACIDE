@@ -278,7 +278,7 @@ if(!file_exists(DATA . '/plugins.php')) {
                 <ul id="dropdown-list-active-files"></ul>
                 <div class="bar"></div>
             </div>
-
+			<div> This is a div</div>
             <div id="root-editor-wrapper"></div>
 
             <div id="editor-bottom-bar">
