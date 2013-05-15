@@ -287,8 +287,9 @@ if(!file_exists(DATA . '/plugins.php')) {
                 <a id="current-mode"><span class="icon-layout"></span></a>
                 <div class="divider"></div>
                 <div id="current-file"></div>				
+				<br />
+				<div id="lucas">Hi! How are you?</div>
             </div>
-			<div id="lucas">Hi! How are you?</div>
             <div id="changemode-menu" class="options-menu">
             </div>
             <ul id="split-options-menu" class="options-menu">
