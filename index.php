@@ -278,13 +278,7 @@ if(!file_exists(DATA . '/plugins.php')) {
                 <ul id="dropdown-list-active-files"></ul>
                 <div class="bar"></div>
             </div>
-            <div id="root-editor-wrapper">
-            	<div style="height: 20px; width: 684px;" class="editor-wrapper editor-wrapper-vertical">
-					<div style="font-size: 13px; top: 0px; height: 20px; width: 684px; left: 0px;" class="editor ace_editor ace-twilight ace_dark">
-						Hail!
-					</div>
-				</div>
-            </div>
+            <div id="root-editor-wrapper"></div>
             <div id="editor-bottom-bar">
                 <a id="settings" class="ico-wrapper"><span class="icon-doc-text"></span>Settings</a>
                 <div class="divider"></div>
@@ -301,6 +295,7 @@ if(!file_exists(DATA . '/plugins.php')) {
               <li id="split-vertically"><a> Split Vertically </a></li>
               <li id="merge-all"><a> Merge all </a></li>
             </ul>
+			<div id="lucas">Hi! How are you?</div>
         </div>
 
         <div id="sb-right" class="sidebar">
