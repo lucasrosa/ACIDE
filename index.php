@@ -279,7 +279,7 @@ if(!file_exists(DATA . '/plugins.php')) {
                 <div class="bar"></div>
             </div>
             <div id="root-editor-wrapper"></div>
-			<div id="lucas">Well, hello!</div>
+			<div id="editor-bottom-bar">Well, hello!</div>
             <div id="editor-bottom-bar">
                 <a id="settings" class="ico-wrapper"><span class="icon-doc-text"></span>Settings</a>
                 <div class="divider"></div>
