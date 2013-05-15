@@ -286,8 +286,9 @@ if(!file_exists(DATA . '/plugins.php')) {
                 <div class="divider"></div>
                 <a id="current-mode"><span class="icon-layout"></span></a>
                 <div class="divider"></div>
-                <div id="current-file"></div>
+                <div id="current-file"></div>				
             </div>
+			<div id="lucas">Hi! How are you?</div>
             <div id="changemode-menu" class="options-menu">
             </div>
             <ul id="split-options-menu" class="options-menu">
@@ -295,7 +296,6 @@ if(!file_exists(DATA . '/plugins.php')) {
               <li id="split-vertically"><a> Split Vertically </a></li>
               <li id="merge-all"><a> Merge all </a></li>
             </ul>
-			<div id="lucas">Hi! How are you?</div>
         </div>
 
         <div id="sb-right" class="sidebar">
