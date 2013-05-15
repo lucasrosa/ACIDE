@@ -248,6 +248,36 @@
                 } 
              });
             return currentResponse;
+        },
+		
+        //////////////////////////////////////////////////////////////////
+        // LF: Submit Project (Submit as an Assignment)
+        //////////////////////////////////////////////////////////////////
+
+        submit: function(path) {
+	            var _this = this;
+	            codiad.modal.load(500, this.dialog + '?action=submit&path=' + escape(path));
+	            $('#modal-content form')
+	                .live('submit', function(e) {
+	                e.preventDefault();
+	                var projectPath = $('#modal-content form input[name="project_path"]')
+	                    .val();
+	                var comments = $('#modal-content form input[name="comments"]')
+	                    .val();    
+	                $.get(_this.controller + '?action=submit&project_path=' + projectPath + '&comments=' + comments, function(data) {
+	                   renameResponse = codiad.jsend.parse(data);
+	                    if (renameResponse != 'error') {
+	                        codiad.message.success(i18n('Project submited'));
+	                        _this.loadSide();
+	                        $('#file-manager a[data-type="root"]').html(comments);
+	                        codiad.modal.unload();
+	                    }
+	                });
+	            });
         }
+        
+		
+		
+		
     };
 })(this, jQuery);

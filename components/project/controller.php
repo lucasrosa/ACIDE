@@ -76,6 +76,16 @@
         $Project->path = $_GET['project_path'];
         $Project->Rename();
     }
+	
+    //////////////////////////////////////////////////////////////////
+    // LF: Submit Project
+    //////////////////////////////////////////////////////////////////
+
+    if($_GET['action']=='submit'){
+        $Project->path = $_GET['project_path'];
+		$Project->comments = $_GET['comments'];
+        $Project->Submit();
+    }
 
     //////////////////////////////////////////////////////////////////
     // Delete Project

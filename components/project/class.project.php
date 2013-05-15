@@ -22,6 +22,8 @@ class Project extends Common {
     public $no_return    = false;
     public $assigned     = false;
     public $command_exec = '';
+	// LF: Comments are used when submitting the project as an assignment
+	public $comments	 = '';
 
     //////////////////////////////////////////////////////////////////
     // METHODS
@@ -172,6 +174,28 @@ class Project extends Common {
         $revised_array[] = $this->projects[] = array("name"=>$_GET['project_name'],"path"=>$this->path);
         // Save array back to JSON
         saveJSON('projects.php',$revised_array);
+        // Response
+        echo formatJSEND("success",null);
+    }
+	
+    //////////////////////////////////////////////////////////////////
+    // LF: Submit Project
+    //////////////////////////////////////////////////////////////////
+
+    public function Submit(){
+        
+		$revised_array = array();
+        foreach($this->projects as $project=>$data){
+            if($data['path']!=$this->path){
+                $revised_array[] = array("name"=>$data['name'],"path"=>$data['path']);
+            }
+        }
+		
+        $revised_array[] = $this->projects[] = array("name"=>"[S] ".$data['name'],"path"=>$this->path);
+		
+        // Save array back to JSON
+        saveJSON('projects.php',$revised_array);
+		
         // Response
         echo formatJSEND("success",null);
     }

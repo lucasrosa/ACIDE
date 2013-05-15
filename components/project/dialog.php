@@ -42,7 +42,18 @@
                 if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
                 if($show){
                 ?>
-                <li onclick="codiad.project.open('<?php echo($data['path']); ?>');"><div class="icon-archive icon"></div><?php echo($data['name']); ?></li>
+                <li>
+					<div>
+						<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
+							<div class="icon-archive icon"></div>
+							<?php echo($data['name']); ?>
+						</span>
+						<!-- Adding a button to Submit the project as an assignment -->
+						<span  onclick="codiad.project.submit('<?php echo($data['path']); ?>');">
+							<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
+						</span>
+					</div>
+				</li>
                 
                 <?php
                 }
@@ -173,6 +184,21 @@
         <label><span class="icon-pencil"></span>Rename Project</label>    
         <input type="text" name="project_name" autofocus="autofocus" autocomplete="off" value="<?php echo($_GET['project_name']); ?>">  
         <button class="btn-left">Rename</button>&nbsp;<button class="btn-right" onclick="codiad.modal.unload(); return false;">Cancel</button>
+        <form>
+        <?php
+        break;
+		
+        //////////////////////////////////////////////////////////////////
+        // LF: Submit Project
+        //////////////////////////////////////////////////////////////////
+        case 'submit':
+		
+        ?>
+        <form>
+        <input type="hidden" name="project_path" value="<?php echo($_GET['path']); ?>">
+        <label><span class="icon-graduation-cap"></span>Comments:</label>    
+        <input type="text" name="comments" autofocus="autofocus" autocomplete="off" value="<?php echo($_GET['comments']); ?>">  
+        <button class="btn-left">Submit</button>&nbsp;<button class="btn-right" onclick="codiad.modal.unload(); return false;">Cancel</button>
         <form>
         <?php
         break;       
