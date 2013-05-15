@@ -280,6 +280,7 @@ if(!file_exists(DATA . '/plugins.php')) {
             </div>
             <div id="root-editor-wrapper"></div>
             <div id="editor-bottom-bar">
+				<!-- Terminal is inserted here via jQuery -->
                 <a id="settings" class="ico-wrapper"><span class="icon-doc-text"></span>Settings</a>
                 <div class="divider"></div>
                 <a id="split" class="ico-wrapper"><span class="icon-layout"></span>Split</a>

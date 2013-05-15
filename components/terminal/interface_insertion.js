@@ -9,7 +9,7 @@
 		// Removing the annoying left bar (this code doesn't work, to remove the z-index has to be set in the .js file of the Ace Editor')
 		$(".ace_gutter").css('z-index', '0');
 		// LF: Adding content to the terminal container
-		$("#terminal_container").append("<div style='width:100%; height:100%;'><iframe id='terminal' width='100%' height='100%' src='components/terminal/emulator/index.php?id=kd9kdi8nundj' style='height: 100%;'></iframe></div>");
+		$("#terminal_container").append("<h2 style=\"font-size: 15px;\">Terminal</h2><div style='width:100%; height:95%;'><iframe id='terminal' width='100%' height='100%' src='components/terminal/emulator/index.php?id=kd9kdi8nundj' style='height: 100%;'></iframe></div>");
 	});
 	
 		// LF: Removing the split option that is currently bugged
