@@ -355,22 +355,8 @@ if(!file_exists(DATA . '/plugins.php')) {
 
     <!-- ACE -->
     <script src="components/editor/ace-editor/ace.js"></script>
-	
-	<!-- Modifying the interface to fit the terminal between the editor and the bottom bar -->
-	<script> 
-		$(document).ready(function() {
-			// Decreasing the size of the editor
-			$("#root-editor-wrapper").css("height", "50%");
-			// Increasing the size of the bottom bar
-			$("#editor-bottom-bar").css("height", "45%");
-			// Inserting the div that will fit the terminal
-			$("#editor-bottom-bar").prepend("<div id='terminal_container' style=\"height:95%\"></div>");
-			// Removing the annoying left bar (this code doesn't work, to remove the z-index has to be set in the .js file of the Ace Editor')
-			$(".ace_gutter").css('z-index', '0');
-			// Adding content to the terminal container
-			$("#terminal_container").append("<div style='width:100%; height:100%;'><iframe id='terminal' width='100%' height='100%' src='plugins/terminal/emulator/index.php?id=kd9kdi8nundj' style='height: 100%;'></iframe></div>");
-		});
-	</script>
+	<!-- Terminal -->
+	<script src="components/terminal/interface_insertion.js"></script>
 	
     <!-- COMPONENTS -->
     <?php
@@ -395,6 +381,5 @@ if(!file_exists(DATA . '/plugins.php')) {
     }
 
     ?>
-	<!-- <div class="editor ace_editor ace_nobold ace-twilight ace_dark" style="top: 318.5px; height: 315.5px; width: 760px; left: 0px; font-size: 13px;"><textarea class="ace_text-input" wrap="off" spellcheck="false" style="bottom: 298px; height: 17px; width: 8px; right: 707px;"></textarea><div class="ace_gutter"><div class="ace_layer ace_gutter-layer ace_folding-enabled" style="margin-top: 0px; height: 350px; width: 41px;"><div class="ace_gutter-cell " style="height:17px;">1</div></div><div class="ace_gutter-active-line" style="top: 0px; height: 17px;"></div></div><div class="ace_scroller" style="left: 41px; right: 10px;"><div class="ace_content" style="margin-top: 0px; width: 709px; height: 350px;"><div class="ace_layer ace_print-margin-layer"><div class="ace_print-margin" style="left: 644px; visibility: hidden;"></div></div><div class="ace_layer ace_marker-layer"><div class="ace_active-line" style="height:17px;top:0px;left:0;right:0;"></div></div><div class="ace_layer ace_text-layer" style="padding: 0px 4px;"><div class="ace_line" style="height:17px"></div></div><div class="ace_layer ace_marker-layer"></div><div class="ace_layer ace_cursor-layer ace_hidden-cursors"><div class="ace_cursor" style="left: 4px; top: 0px; width: 8px; height: 17px;"></div></div></div></div><div style="height: auto; width: auto; top: -100px; left: -100px; visibility: hidden; position: fixed; overflow: visible; white-space: nowrap;">X</div><div class="ace_scrollbar" style="width: 15px; height: 316px;"><div class="ace_scrollbar-inner" style="height: 17px;"></div></div></div> -->
 </body>
 </html>
