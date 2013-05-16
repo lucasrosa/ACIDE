@@ -183,21 +183,20 @@ class Project extends Common {
     //////////////////////////////////////////////////////////////////
 
     public function Submit(){
-        
 		$revised_array = array();
         foreach($this->projects as $project=>$data){
             if($data['path']!=$this->path){
                 $revised_array[] = array("name"=>$data['name'],"path"=>$data['path']);
             }
         }
-		
-        $revised_array[] = $this->projects[] = array("name"=>"[S] ".$data['name'],"path"=>$this->path);
+		$newName = "[S] ".$data['name'];
+        $revised_array[] = $this->projects[] = array("name"=>$newName,"path"=>$this->path);
 		
         // Save array back to JSON
-        saveJSON('projects.php',$revised_array);
+        zipJSON($this->path, $newName);//$revised_array);
 		
-        // Response
-        echo formatJSEND("success",null);
+		// Response
+		echo formatJSEND("success",null);	
     }
 
     //////////////////////////////////////////////////////////////////

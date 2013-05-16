@@ -163,6 +163,35 @@
             fwrite($write, $data);
             fclose($write);
         }
+		
+        //////////////////////////////////////////////////////////////////
+        // LF: Zip JSON : Zips a workspace project into a .zip file in the project directory
+        //////////////////////////////////////////////////////////////////
+
+        public static function zipJSON($folderName, $projectName) {//$data,$namespace=""){
+            //$namespace = "f1";
+            //$path = WORKSPACE . "/";
+			$path = "../../workspace/" . $folderName . "/";
+            //if($namespace != ""){
+            //    $path = $path . $namespace . "/";
+            //    $path = preg_replace('#/+#','/',$path);
+            //    if(!is_dir($path)) mkdir($path);
+            //}
+			
+			$zipFile = $projectName. ".zip"; "./testZip.zip";
+			$zipArchive = new ZipArchive();
+
+			if (!$zipArchive->open($zipFile, ZIPARCHIVE::OVERWRITE))
+			    die("Failed to create archive\n");
+
+			$zipArchive->addGlob($path . "./*.*");
+			if (!$zipArchive->status == ZIPARCHIVE::ER_OK) {
+			    exit('{"status":"error","message":"Error submitting file."}');
+				//echo "Failed to write files to zip\n";
+			}
+
+			$zipArchive->close();		
+        }
 
         //////////////////////////////////////////////////////////////////
         // Format JSEND Response
@@ -238,6 +267,7 @@
     function checkSession(){ Common::checkSession(); }
     function getJSON($file,$namespace=""){ return Common::getJSON($file,$namespace); }
     function saveJSON($file,$data,$namespace=""){ Common::saveJSON($file,$data,$namespace); }
+	function zipJSON($file,$data,$namespace=""){ Common::zipJSON($file,$data,$namespace); }
     function formatJSEND($status,$data=false){ return Common::formatJSEND($status,$data); }
     function checkAccess() { return Common::checkAccess(); }
     function isAvailable($func) { return Common::isAvailable($func); }

@@ -269,7 +269,7 @@
 	                    if (renameResponse != 'error') {
 	                        codiad.message.success(i18n('Project submited'));
 	                        _this.loadSide();
-	                        $('#file-manager a[data-type="root"]').html(comments);
+	                        $('#file-manager a[data-type="root"]').html();
 	                        codiad.modal.unload();
 	                    }
 	                });
