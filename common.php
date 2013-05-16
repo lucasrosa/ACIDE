@@ -168,17 +168,10 @@
         // LF: Zip JSON : Zips a workspace project into a .zip file in the project directory
         //////////////////////////////////////////////////////////////////
 
-        public static function zipJSON($folderName, $projectName) {//$data,$namespace=""){
-            //$namespace = "f1";
-            //$path = WORKSPACE . "/";
+        public static function zipJSON($folderName, $projectName) {
 			$path = "../../workspace/" . $folderName . "/";
-            //if($namespace != ""){
-            //    $path = $path . $namespace . "/";
-            //    $path = preg_replace('#/+#','/',$path);
-            //    if(!is_dir($path)) mkdir($path);
-            //}
 			
-			$zipFile = $projectName. ".zip"; "./testZip.zip";
+			$zipFile = $projectName. ".zip"; //"./testZip.zip";
 			$zipArchive = new ZipArchive();
 
 			if (!$zipArchive->open($zipFile, ZIPARCHIVE::OVERWRITE))

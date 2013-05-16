@@ -83,7 +83,7 @@
 
     if($_GET['action']=='submit'){
         $Project->path = $_GET['project_path'];
-		$Project->comments = $_GET['comments'];
+		$Project->assignmentName = $_GET['assignmentName'];
 		$Project->name = $_GET['project_path'];
         $Project->Submit();
     }

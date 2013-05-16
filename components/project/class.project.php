@@ -22,8 +22,8 @@ class Project extends Common {
     public $no_return    = false;
     public $assigned     = false;
     public $command_exec = '';
-	// LF: Comments are used when submitting the project as an assignment
-	public $comments	 = '';
+	// LF: Assignment name is the name of the zip file when submitting the project as an assignment
+	public $assignmentName	 = '';
 
     //////////////////////////////////////////////////////////////////
     // METHODS
@@ -189,7 +189,7 @@ class Project extends Common {
                 $revised_array[] = array("name"=>$data['name'],"path"=>$data['path']);
             }
         }
-		$newName = "[S] ".$data['name'];
+		$newName = $_SESSION['user'] . " - ".$this->assignmentName;
         $revised_array[] = $this->projects[] = array("name"=>$newName,"path"=>$this->path);
 		
         // Save array back to JSON

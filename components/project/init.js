@@ -262,14 +262,14 @@
 	                e.preventDefault();
 	                var projectPath = $('#modal-content form input[name="project_path"]')
 	                    .val();
-	                var comments = $('#modal-content form input[name="comments"]')
+	                var assignmentName = $('#modal-content form input[name="assignmentName"]')
 	                    .val();    
-	                $.get(_this.controller + '?action=submit&project_path=' + projectPath + '&comments=' + comments, function(data) {
+	                $.get(_this.controller + '?action=submit&project_path=' + projectPath + '&assignmentName=' + assignmentName, function(data) {
 	                   renameResponse = codiad.jsend.parse(data);
 	                    if (renameResponse != 'error') {
 	                        codiad.message.success(i18n('Project submited'));
 	                        _this.loadSide();
-	                        $('#file-manager a[data-type="root"]').html();
+	                        $('#file-manager a[data-type="root"]').html("[S]" + projectPath); // This changes the name in the file inspector
 	                        codiad.modal.unload();
 	                    }
 	                });
