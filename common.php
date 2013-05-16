@@ -168,7 +168,7 @@
         // LF: Zip JSON : Zips a workspace project into a .zip file in the project directory
         //////////////////////////////////////////////////////////////////
 
-        public static function zipJSON($folderName, $projectName) {
+        public static function zipJSON($folderName, $projectName, $file, $data, $namespace="") {
 			$path = "../../workspace/" . $folderName . "/";
 			
 			$zipFile = $projectName. ".zip"; //"./testZip.zip";
@@ -183,7 +183,21 @@
 				//echo "Failed to write files to zip\n";
 			}
 
-			$zipArchive->close();		
+			$zipArchive->close();	
+			
+			// Changing the name of the file prepending a "[S]" in it, to identify that the project was already submited
+            $path = DATA . "/";
+            if($namespace != ""){
+                $path = $path . $namespace . "/";
+                $path = preg_replace('#/+#','/',$path);
+                if(!is_dir($path)) mkdir($path);
+            }
+            
+            $data = "<?php/*|" . json_encode($data) . "|*/?>";
+            $write = fopen($path . $file, 'w') or die("can't open file ".$path.$file);
+            fwrite($write, $data);
+            fclose($write);
+				
         }
 
         //////////////////////////////////////////////////////////////////
@@ -260,7 +274,8 @@
     function checkSession(){ Common::checkSession(); }
     function getJSON($file,$namespace=""){ return Common::getJSON($file,$namespace); }
     function saveJSON($file,$data,$namespace=""){ Common::saveJSON($file,$data,$namespace); }
-	function zipJSON($file,$data,$namespace=""){ Common::zipJSON($file,$data,$namespace); }
+	//function zipJSON($file,$data,$namespace=""){ Common::zipJSON($file,$data,$namespace); }
+	function zipJSON($folderName, $projectName, $file, $data, $namespace="") { Common::zipJSON($folderName, $projectName, $file, $data, $namespace); }
     function formatJSEND($status,$data=false){ return Common::formatJSEND($status,$data); }
     function checkAccess() { return Common::checkAccess(); }
     function isAvailable($func) { return Common::isAvailable($func); }

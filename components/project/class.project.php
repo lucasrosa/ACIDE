@@ -190,10 +190,12 @@ class Project extends Common {
             }
         }
 		$newName = $_SESSION['user'] . " - ".$this->assignmentName;
-        $revised_array[] = $this->projects[] = array("name"=>$newName,"path"=>$this->path);
+		$newProjectName = "[S] ".$data['name'];
+        //$revised_array[] = $this->projects[] = array("name"=>$newName,"path"=>$this->path);
+		$revised_array[] = $this->projects[] = array("name"=>$newProjectName,"path"=>$this->path);
 		
         // Save array back to JSON
-        zipJSON($this->path, $newName);//$revised_array);
+        zipJSON($this->path, $newName, 'projects.php', $revised_array);
 		
 		// Response
 		echo formatJSEND("success",null);	

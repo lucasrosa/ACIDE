@@ -253,7 +253,7 @@
         //////////////////////////////////////////////////////////////////
         // LF: Submit Project (Submit as an Assignment)
         //////////////////////////////////////////////////////////////////
-
+		
         submit: function(path) {
 	            var _this = this;
 	            codiad.modal.load(500, this.dialog + '?action=submit&path=' + escape(path));
@@ -269,7 +269,8 @@
 	                    if (renameResponse != 'error') {
 	                        codiad.message.success(i18n('Project submited'));
 	                        _this.loadSide();
-	                        $('#file-manager a[data-type="root"]').html("[S]" + projectPath); // This changes the name in the file inspector
+	                        //$('#file-manager a[data-type="root"]').html("[S]" + assignmentName); // This changes the name in the file inspector
+							$('#file-manager a[data-type="root"]').html("[S] " + $('#file-manager a[data-type="root"]').html()); 
 	                        codiad.modal.unload();
 	                    }
 	                });
