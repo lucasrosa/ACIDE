@@ -191,7 +191,6 @@ class Project extends Common {
         }
 		$newName = $_SESSION['user'] . " - ".$this->assignmentName;
 		$newProjectName = "[S] ".$data['name'];
-        //$revised_array[] = $this->projects[] = array("name"=>$newName,"path"=>$this->path);
 		$revised_array[] = $this->projects[] = array("name"=>$newProjectName,"path"=>$this->path);
 		
         // Save array back to JSON

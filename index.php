@@ -280,8 +280,20 @@ if(!file_exists(DATA . '/plugins.php')) {
             </div>
             <div id="root-editor-wrapper"></div>
             <div id="editor-bottom-bar">
-				<!-- Terminal is inserted here via jQuery -->
+				<!-- Terminal -->
+				<div id='terminal_container' style='height:90%'>
+					<div style='font-size: 15px;'>
+						<span id='terminal-close-button' class='icon-cancel-circled bigger-icon' style='padding-top:2px;'></span>
+						<span style='padding-left:10px;'>Terminal</span>
+					</div>
+					<div style='width:100%; height:87%;'>
+						<iframe id='terminal' width='100%' height='100%' src='components/terminal/emulator/index.php?id=kd9kdi8nundj' style='height: 100%;'></iframe>
+					</div>
+				</div>
+				
                 <a id="settings" class="ico-wrapper"><span class="icon-doc-text"></span>Settings</a>
+                <div id="terminal-open-button-divider" class="divider"></div>
+                <a id="terminal-open-button" class="ico-wrapper"><span class="icon-layout"></span>Terminal</a>
                 <div class="divider"></div>
                 <a id="split" class="ico-wrapper"><span class="icon-layout"></span>Split</a>
                 <div class="divider"></div>

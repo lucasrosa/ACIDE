@@ -180,7 +180,6 @@
 			$zipArchive->addGlob($path . "./*.*");
 			if (!$zipArchive->status == ZIPARCHIVE::ER_OK) {
 			    exit('{"status":"error","message":"Error submitting file."}');
-				//echo "Failed to write files to zip\n";
 			}
 
 			$zipArchive->close();	
