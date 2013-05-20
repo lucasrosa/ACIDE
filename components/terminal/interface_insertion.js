@@ -1,4 +1,4 @@
-// LF: Modifying the interface to fit the terminal between the editor and the bottom bar
+	// LF: Modifying the interface to fit the terminal between the editor and the bottom bar
 	$(document).ready(function() {
 		
 		// LF: Decreasing the size of the editor
@@ -8,27 +8,24 @@
 		// Removing the annoying left bar (this code doesn't work, to remove the z-index has to be set in the .js file of the Ace Editor')
 		$(".ace_gutter").css('z-index', '0');
 		
-		//$("#root-editor-wrapper").first().attr('id', 'editor');
-		$('.editor').attr('id', 'editor');
-		
 		// Adding the function to the Terminal close button
 		$("#terminal-close-button").on('click', function () {			
 			$("#terminal_container").toggle();
-			
 			
 			$("#editor-bottom-bar").css("height", "4%");
 			$("#root-editor-wrapper").attr('style', 'height:91% !important');
 			$(".editor").attr('style', 'height:100% !important');
 			$(".ace_layer").attr('style', 'height:110% !important');
 			
-			$("#terminal-open-button-divider").toggle();
-			$("#terminal-open-button").toggle();
+			$("#terminal-open-button-divider").slideToggle("slow");
+			$("#terminal-open-button").slideToggle("slow");
 			
 			$('.editor').attr('id', 'editor');
 			var aceEditor = ace.edit("editor");
 			aceEditor.resize();
 		});
 		
+		// LF: Adding the function to the Terminal open button
 		$("#terminal-open-button").on('click', function () {			
 			$("#terminal_container").toggle();
 			
@@ -37,8 +34,8 @@
 			$("#root-editor-wrapper").attr('style', 'height:70% !important');
 			$(".ace_gutter").css('z-index', '0');
 			
-			$("#terminal-open-button-divider").toggle();
-			$("#terminal-open-button").toggle();
+			$("#terminal-open-button-divider").slideToggle("slow");
+			$("#terminal-open-button").slideToggle("slow");
 			
 			$('.editor').attr('id', 'editor');
 			var aceEditor = ace.edit("editor");

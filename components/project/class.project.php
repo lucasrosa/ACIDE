@@ -14,14 +14,18 @@ class Project extends Common {
     // PROPERTIES
     //////////////////////////////////////////////////////////////////
 
-    public $name         = '';
-    public $path         = '';
-    public $gitrepo      = false;
-    public $gitbranch    = '';
-    public $projects     = '';
-    public $no_return    = false;
-    public $assigned     = false;
-    public $command_exec = '';
+    public $name         		= '';
+    public $path         		= '';
+    public $gitrepo      		= false;
+    public $gitbranch    		= '';
+    public $projects     		= '';
+	// LF: Private projects
+	//public $private_projects	= '';
+	// LF: Project Privacy: Can be 'public' or 'private'
+	public $privacy				= '';
+    public $no_return    		= false;
+    public $assigned     		= false;
+    public $command_exec 		= '';
 	// LF: Assignment name is the name of the zip file when submitting the project as an assignment
 	public $assignmentName	 = '';
 
@@ -37,6 +41,7 @@ class Project extends Common {
 
     public function __construct(){
         $this->projects = getJSON('projects.php');
+		//$this->private_projects = getJSON('private_projects.php');
         if(file_exists(BASE_PATH . "/data/" . $_SESSION['user'] . '_acl.php')){
             $this->assigned = getJSON($_SESSION['user'] . '_acl.php');
         }
@@ -138,9 +143,9 @@ class Project extends Common {
                         }
                     }
                 }
-                $this->projects[] = array("name"=>$this->name,"path"=>$this->path);
+                $this->projects[] = array("name"=>$this->name,"path"=>$this->path,"privacy"=>$this->privacy,"user"=>$_SESSION['user']);
                 saveJSON('projects.php',$this->projects);
-                
+				
                 // Pull from Git Repo?
                 if($this->gitrepo){
                     if(!$this->isAbsPath($this->path)) {
@@ -168,10 +173,10 @@ class Project extends Common {
         $revised_array = array();
         foreach($this->projects as $project=>$data){
             if($data['path']!=$this->path){
-                $revised_array[] = array("name"=>$data['name'],"path"=>$data['path']);
+                $revised_array[] = array("name"=>$data['name'],"path"=>$data['path'],"privacy"=>$data['privacy'],"user"=>$data['user']);
             }
         }
-        $revised_array[] = $this->projects[] = array("name"=>$_GET['project_name'],"path"=>$this->path);
+        $revised_array[] = $this->projects[] = array("name"=>$_GET['project_name'],"path"=>$this->path,"privacy"=>$data['privacy'],"user"=>$data['user']);
         // Save array back to JSON
         saveJSON('projects.php',$revised_array);
         // Response
@@ -186,12 +191,12 @@ class Project extends Common {
 		$revised_array = array();
         foreach($this->projects as $project=>$data){
             if($data['path']!=$this->path){
-                $revised_array[] = array("name"=>$data['name'],"path"=>$data['path']);
+                $revised_array[] = array("name"=>$data['name'],"path"=>$data['path'],"privacy"=>$data['privacy'],"user"=>$data['user']);
             }
         }
 		$newName = $_SESSION['user'] . " - ".$this->assignmentName;
 		$newProjectName = "[S] ".$data['name'];
-		$revised_array[] = $this->projects[] = array("name"=>$newProjectName,"path"=>$this->path);
+		$revised_array[] = $this->projects[] = array("name"=>$newProjectName,"path"=>$this->path,"privacy"=>$data['privacy'],"user"=>$data['user']);
 		
         // Save array back to JSON
         zipJSON($this->path, $newName, 'projects.php', $revised_array);
@@ -208,7 +213,7 @@ class Project extends Common {
         $revised_array = array();
         foreach($this->projects as $project=>$data){
             if($data['path']!=$this->path){
-                $revised_array[] = array("name"=>$data['name'],"path"=>$data['path']);
+                $revised_array[] = array("name"=>$data['name'],"path"=>$data['path'],"privacy"=>$data['privacy'],"user"=>$data['user']);
             }
         }
         // Save array back to JSON

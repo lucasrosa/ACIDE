@@ -127,6 +127,7 @@ if(!file_exists(DATA . '/plugins.php')) {
 
         $users = file_exists($path . "/data/users.php");
         $projects = file_exists($path . "/data/projects.php");
+		//$private_projects = file_exists($path . "/data/private_projects.php");
         $active = file_exists($path . "/data/active.php");
 
         if(!$users && !$projects && !$active){
@@ -255,7 +256,9 @@ if(!file_exists(DATA . '/plugins.php')) {
                         <?php } ?>
                     </div>
                     
-                    <div class="sb-projects-content"></div>
+                    <div class="sb-projects-content">
+                    	<div> Public Folder</div>
+                    </div>
                     
                 </div>
             </div>
@@ -283,7 +286,7 @@ if(!file_exists(DATA . '/plugins.php')) {
 				<!-- Terminal -->
 				<div id='terminal_container' style='height:90%'>
 					<div style='font-size: 15px;'>
-						<span id='terminal-close-button' class='icon-cancel-circled bigger-icon' style='padding-top:2px;'></span>
+						<a id='terminal-close-button' class='icon-cancel-circled bigger-icon' style='padding-top:2px;'></a>
 						<span style='padding-left:10px;'>Terminal</span>
 					</div>
 					<div style='width:100%; height:87%;'>

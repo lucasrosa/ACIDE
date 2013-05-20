@@ -29,39 +29,73 @@
             }
             
             ?>  
-                    
-            <ul>
+            <div id='public-projects-containter'>        
+	            <ul>
+					<lh>Public Projects</lh>
+	            <?php
             
-            <?php
-            
-            // Get projects JSON data
-            $projects = getJSON('projects.php');
-            sort($projects);
-            foreach($projects as $project=>$data){
-                $show = true;
-                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
-                if($show){
-                ?>
-                <li>
-					<div>
-						<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
-							<div class="icon-archive icon"></div>
-							<?php echo($data['name']); ?>
-						</span>
-						<!-- Adding a button to Submit the project as an assignment -->
-						<span  onclick="codiad.project.submit('<?php echo($data['path']); ?>');">
-							<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
-						</span>
-					</div>
-				</li>
+	            // Get projects JSON data
+	            $projects = getJSON('projects.php');
+	            sort($projects);
+	            foreach($projects as $project=>$data){
+	                $show = true;
+	                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
+	                if($show && $data['privacy'] == 'public'){
+	                ?>
+	                <li>
+						<div>
+							<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
+								<div class="icon-archive icon"></div>
+								<?php echo($data['name']); ?>
+							</span>
+							<!-- Adding a button to Submit the project as an assignment -->
+							<span  onclick="codiad.project.submit('<?php echo($data['path']); ?>');">
+								<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
+							</span>
+						</div>
+					</li>
                 
-                <?php
-                }
-            } 
-            ?>
+	                <?php
+	                }
+	            } 
+	            ?>
             
-            </ul>
-                    
+	            </ul>
+			</div>
+			<!-- LF: Private Projects List -->
+			<div id='private-projects-containter'>
+	            <ul>
+					<lh>Private Projects</lh>
+	            <?php
+            
+	            // Get projects JSON data
+	            $projects = getJSON('projects.php');
+	            sort($projects);
+	            foreach($projects as $project=>$data){
+	                $show = true;
+	                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
+	                if($show && $data['privacy'] == 'private' && $data['user'] == $_SESSION['user']){
+	                ?>
+	                <li>
+						<div>
+							<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
+								<div class="icon-archive icon"></div>
+								<?php echo($data['name']); ?>
+							</span>
+							<!-- Adding a button to Submit the project as an assignment -->
+							<span  onclick="codiad.project.submit('<?php echo($data['path']); ?>');">
+								<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
+							</span>
+						</div>
+					</li>
+                
+	                <?php
+	                }
+	            } 
+	            ?>
+            
+	            </ul>
+			</div>       
             <?php
             
             break;
@@ -137,6 +171,14 @@
             <form>
             <label>Project Name</label>
             <input name="project_name" autofocus="autofocus" autocomplete="off">
+			<label>Project Privacy</label>
+			
+			
+			<select name="project_privacy">
+			  <option value="public" selected >Public</option>
+			  <option value="private">Private</option>
+			</select>
+			
             <?php if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') { ?>
             <label>Folder Name or Absolute Path</label>
             <input name="project_path" autofocus="off" autocomplete="off">
