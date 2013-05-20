@@ -104,7 +104,8 @@
 			 * a message "echo ERROR: Command not allowed" is showed in the terminal.
 			 */ 
 			
-			$result = array_intersect($allowed_commands, $command_parts);
+			$first_command = $command_parts[0];
+			$result = in_array($first_command, $allowed_commands);
 			
 			if (!empty($result)) {
 	            // Handle 'cd' command
