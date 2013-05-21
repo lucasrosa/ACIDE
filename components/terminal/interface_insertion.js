@@ -70,5 +70,4 @@
 		$("#terminal-open-button").toggle();
 		
 		$('.editor').attr('id', 'editor');
-		
 	});

@@ -34,17 +34,13 @@ checkSession();
     
         <div id="command">
             <div id="prompt">&gt;</div>
-            <input id="prompt_text" type="text">
+			<!-- LF: Setting the color of the terminal line to white -> needs the !important tag -->
+            <input id="prompt_text" style="color:white !important;" type="text">
         </div>
     
     </div>
 
     <script src="js/jquery-1.8.2.js"></script>
-	<script>
-		// LF: Setting the color of the prompt line before login in --> doens't work
-		//$("#prompt_text").css('background-color', 'white');
-		//$("#command").append("<input class=\"prompt_text_class\" type=\"text\">");
-	</script>
     <script src="js/system.js"></script>
 	
 </body>
