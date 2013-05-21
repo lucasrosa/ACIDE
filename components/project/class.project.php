@@ -19,8 +19,8 @@ class Project extends Common {
     public $gitrepo      		= false;
     public $gitbranch    		= '';
     public $projects     		= '';
-	// LF: Private projects
-	//public $private_projects	= '';
+	// LF: ProjectUser :: The user who created the project
+	public $user 				= '';
 	// LF: Project Privacy: Can be 'public' or 'private'
 	public $privacy				= '';
     public $no_return    		= false;
@@ -59,18 +59,22 @@ class Project extends Common {
                 if(in_array($data['path'],$this->assigned)){
                     $this->name = $data['name'];
                     $this->path = $data['path'];
+					$this->privacy = $data['privacy'];
+					$this->user = $data['user'];
                     break;
                 }
             }
         }else{
             $this->name = $this->projects[0]['name'];
             $this->path = $this->projects[0]['path'];
+			$this->privacy = $this->projects[0]['privacy'];
+			$this->user = $this->projects[0]['user'];
         }
         // Set Sessions
         $_SESSION['project'] = $this->path;
 
         if(!$this->no_return){
-            echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path));
+            echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path, "privacy"=>$this->privacy, "user"=>$this->user));
         }
     }
 
@@ -82,6 +86,8 @@ class Project extends Common {
         foreach($this->projects as $project=>$data){
             if($data['path']==$this->path){
                 $this->name = $data['name'];
+				$this->privacy = $data['privacy'];
+				$this->user = $data['user'];
             }
         }
         return $this->name;
@@ -97,11 +103,13 @@ class Project extends Common {
             if($data['path']==$this->path){
                 $pass = true;
                 $this->name = $data['name'];
+				$this->privacy = $data['privacy'];
+				$this->user = $data['user'];
                 $_SESSION['project'] = $data['path'];
             }
         }
         if($pass){
-            echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path));
+			echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path, "privacy"=>$this->privacy, "user"=>$this->user));
         }else{
             echo formatJSEND("error","Error Opening Project");
         }
@@ -174,9 +182,12 @@ class Project extends Common {
         foreach($this->projects as $project=>$data){
             if($data['path']!=$this->path){
                 $revised_array[] = array("name"=>$data['name'],"path"=>$data['path'],"privacy"=>$data['privacy'],"user"=>$data['user']);
+            } else {
+            	$this->privacy = $data['privacy'];
+				$this->user = $data['user'];
             }
         }
-        $revised_array[] = $this->projects[] = array("name"=>$_GET['project_name'],"path"=>$this->path,"privacy"=>$data['privacy'],"user"=>$data['user']);
+        $revised_array[] = $this->projects[] = array("name"=>$_GET['project_name'],"path"=>$this->path,"privacy"=>$this->privacy,"user"=>$this->user);
         // Save array back to JSON
         saveJSON('projects.php',$revised_array);
         // Response
@@ -192,11 +203,15 @@ class Project extends Common {
         foreach($this->projects as $project=>$data){
             if($data['path']!=$this->path){
                 $revised_array[] = array("name"=>$data['name'],"path"=>$data['path'],"privacy"=>$data['privacy'],"user"=>$data['user']);
+            } else {
+				$this->name = $data['name'];
+            	$this->privacy = $data['privacy'];
+				$this->user = $data['user'];
             }
         }
 		$newName = $_SESSION['user'] . " - ".$this->assignmentName;
-		$newProjectName = "[S] ".$data['name'];
-		$revised_array[] = $this->projects[] = array("name"=>$newProjectName,"path"=>$this->path,"privacy"=>$data['privacy'],"user"=>$data['user']);
+		$newProjectName = '[S] ' . $this->name;
+		$revised_array[] = $this->projects[] = array("name"=>$newProjectName,"path"=>$this->path,"privacy"=>$this->privacy,"user"=>$this->user);
 		
         // Save array back to JSON
         zipJSON($this->path, $newName, 'projects.php', $revised_array);

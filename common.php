@@ -170,7 +170,7 @@
 
         public static function zipJSON($folderName, $projectName, $file, $data, $namespace="") {
 			$path = "../../workspace/" . $folderName . "/";
-			
+
 			$zipFile = $projectName. ".zip"; //"./testZip.zip";
 			$zipArchive = new ZipArchive();
 
@@ -183,7 +183,7 @@
 			}
 
 			$zipArchive->close();	
-			
+				
 			// Changing the name of the file prepending a "[S]" in it, to identify that the project was already submited
             $path = DATA . "/";
             if($namespace != ""){
@@ -260,6 +260,37 @@
         public static function isAbsPath( $path ) {
             return ($path[0] === '/')?true:false;
         }
+		
+		// LF: Function to recursively add a directory, 
+		// LF: sub-directories and files to a zip archive 
+		/*
+		public static function addFolderToZip($path, $zipArchive, $zipdir = ''){ 
+			if (is_dir($path)) { 
+		        if ($dh = opendir($path)) { 
+
+		            //Add the directory 
+		            if(!empty($zipdir)) $zipArchive->addEmptyDir($zipdir); 
+   
+		            // Loop through all the files 
+		            while (($file = readdir($dh)) !== false) { 
+   
+		                //If it's a folder, run the function again! 
+		                if(!is_file($path . $file)){ 
+		                    // Skip parent and root directories 
+		                    if( ($file !== ".") && ($file !== "..")){ 
+		                        addFolderToZip($path . $file . "/", $zipArchive, $zipdir . $file . "/"); 
+		                    } 
+           
+		                }else{ 
+		                    // Add the files 
+		                    $zipArchive->addFile($path . $file, $zipdir . $file); 
+           
+		                } 
+		            } 
+		        } 
+			}
+		}
+		*/
             
     }
     
@@ -273,9 +304,9 @@
     function checkSession(){ Common::checkSession(); }
     function getJSON($file,$namespace=""){ return Common::getJSON($file,$namespace); }
     function saveJSON($file,$data,$namespace=""){ Common::saveJSON($file,$data,$namespace); }
-	//function zipJSON($file,$data,$namespace=""){ Common::zipJSON($file,$data,$namespace); }
 	function zipJSON($folderName, $projectName, $file, $data, $namespace="") { Common::zipJSON($folderName, $projectName, $file, $data, $namespace); }
     function formatJSEND($status,$data=false){ return Common::formatJSEND($status,$data); }
     function checkAccess() { return Common::checkAccess(); }
     function isAvailable($func) { return Common::isAvailable($func); }
+	//function addFolderToZip($path, $zipArchive, $zipdir = ''){ return Common::addFolderToZip($path, $zipArchive, $zipdir = ''); }
 ?>
