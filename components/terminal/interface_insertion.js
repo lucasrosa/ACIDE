@@ -2,24 +2,22 @@
 	$(document).ready(function() {
 		
 		// LF: Decreasing the size of the editor
-		$("#root-editor-wrapper").attr('style', 'height:70% !important');
+		$("#root-editor-wrapper").attr('style', 'height:71% !important');
 		// LF: Increasing the size of the bottom bar
 		$("#editor-bottom-bar").css("height", "24%");
-		// Removing the annoying left bar (this code doesn't work, to remove the z-index has to be set in the .js file of the Ace Editor')
-		$(".ace_gutter").css('z-index', '0');
 		
 		// Adding the function to the Terminal close button
 		$("#terminal-close-button").on('click', function () {			
+			// LF: Changing the status of the terminal container to hidden
 			$("#terminal_container").toggle();
-			
+			// LF: Decreasing the size of the bottom bar
 			$("#editor-bottom-bar").css("height", "4%");
+			// LF: Increasing the size of the editor
 			$("#root-editor-wrapper").attr('style', 'height:91% !important');
-			$(".editor").attr('style', 'height:100% !important');
-			$(".ace_layer").attr('style', 'height:110% !important');
-			
+			// LF: Showing the Terminal open button and its divider
 			$("#terminal-open-button-divider").slideToggle("slow");
 			$("#terminal-open-button").slideToggle("slow");
-			
+			// LF: Calling the resize function of the Editor
 			$('.editor').attr('id', 'editor');
 			var aceEditor = ace.edit("editor");
 			aceEditor.resize();
@@ -27,16 +25,16 @@
 		
 		// LF: Adding the function to the Terminal open button
 		$("#terminal-open-button").on('click', function () {			
+			// LF: Changing the status of the terminal container to visible
 			$("#terminal_container").toggle();
-			
-			
+			// LF: Increasing the size of the bottom bar
 			$("#editor-bottom-bar").css("height", "24%");
-			$("#root-editor-wrapper").attr('style', 'height:70% !important');
-			$(".ace_gutter").css('z-index', '0');
-			
+			// LF: Decreasing the size of the editor
+			$("#root-editor-wrapper").attr('style', 'height:71% !important');
+			// LF: Hiding the Terminal open button and its divider
 			$("#terminal-open-button-divider").slideToggle("slow");
 			$("#terminal-open-button").slideToggle("slow");
-			
+			// LF: Calling the resize function of the Editor
 			$('.editor').attr('id', 'editor');
 			var aceEditor = ace.edit("editor");
 			aceEditor.resize();
