@@ -300,9 +300,9 @@ if(!file_exists(DATA . '/plugins.php')) {
                 <div class="divider"></div>
                 <a id="split" class="ico-wrapper"><span class="icon-layout"></span>Split</a>
                 <div class="divider"></div>
-                <a id="current-mode"><span class="icon-layout"></span></a>
+                <a id="current-mode"><span class="icon-layout"></span>Text</a>
                 <div class="divider"></div>
-                <div id="current-file"></div>	
+                <div id="current-file"></div>
             </div>
             <div id="changemode-menu" class="options-menu">
             </div>

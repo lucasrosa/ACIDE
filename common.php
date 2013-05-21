@@ -169,21 +169,15 @@
         //////////////////////////////////////////////////////////////////
 
         public static function zipJSON($folderName, $projectName, $file, $data, $namespace="") {
+			// Zipping the file
 			$path = "../../workspace/" . $folderName . "/";
 
-			$zipFile = $projectName. ".zip"; //"./testZip.zip";
+			$zipFile = './' . $projectName. ".zip";
 			$zipArchive = new ZipArchive();
-
-			if (!$zipArchive->open($zipFile, ZIPARCHIVE::OVERWRITE))
-			    die("Failed to create archive\n");
-
-			$zipArchive->addGlob($path . "./*.*");
-			if (!$zipArchive->status == ZIPARCHIVE::ER_OK) {
-			    exit('{"status":"error","message":"Error submitting file."}');
-			}
-
-			$zipArchive->close();	
-				
+			$include_dir = true;
+			
+			Common::Zip($path, $zipFile, $include_dir);
+			
 			// Changing the name of the file prepending a "[S]" in it, to identify that the project was already submited
             $path = DATA . "/";
             if($namespace != ""){
@@ -261,36 +255,75 @@
             return ($path[0] === '/')?true:false;
         }
 		
-		// LF: Function to recursively add a directory, 
-		// LF: sub-directories and files to a zip archive 
-		/*
-		public static function addFolderToZip($path, $zipArchive, $zipdir = ''){ 
-			if (is_dir($path)) { 
-		        if ($dh = opendir($path)) { 
+        //////////////////////////////////////////////////////////////////
+        // LF: Recursively Zip a directory :: Used to submit a project
+        //////////////////////////////////////////////////////////////////
+		
+		public static function Zip($source, $destination, $include_dir = false)
+		{
 
-		            //Add the directory 
-		            if(!empty($zipdir)) $zipArchive->addEmptyDir($zipdir); 
-   
-		            // Loop through all the files 
-		            while (($file = readdir($dh)) !== false) { 
-   
-		                //If it's a folder, run the function again! 
-		                if(!is_file($path . $file)){ 
-		                    // Skip parent and root directories 
-		                    if( ($file !== ".") && ($file !== "..")){ 
-		                        addFolderToZip($path . $file . "/", $zipArchive, $zipdir . $file . "/"); 
-		                    } 
-           
-		                }else{ 
-		                    // Add the files 
-		                    $zipArchive->addFile($path . $file, $zipdir . $file); 
-           
-		                } 
-		            } 
-		        } 
-			}
+		    if (!extension_loaded('zip') || !file_exists($source)) {
+		        return false;
+		    }
+
+		    if (file_exists($destination)) {
+		        unlink ($destination);
+		    }
+
+		    $zip = new ZipArchive();
+		    if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
+		        return false;
+		    }
+		    $source = str_replace('\\', '/', realpath($source));
+
+		    if (is_dir($source) === true)
+		    {
+
+		        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
+
+		        if ($include_dir) {
+
+		            $arr = explode("/",$source);
+		            $maindir = $arr[count($arr)- 1];
+
+		            $source = "";
+		            for ($i=0; $i < count($arr) - 1; $i++) { 
+		                $source .= '/' . $arr[$i];
+		            }
+
+		            $source = substr($source, 1);
+
+		            $zip->addEmptyDir($maindir);
+
+		        }
+
+		        foreach ($files as $file)
+		        {
+		            $file = str_replace('\\', '/', $file);
+
+		            // Ignore "." and ".." folders
+		            if( in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) )
+		                continue;
+
+		            $file = realpath($file);
+
+		            if (is_dir($file) === true)
+		            {
+		                $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+		            }
+		            else if (is_file($file) === true)
+		            {
+		                $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+		            }
+		        }
+		    }
+		    else if (is_file($source) === true)
+		    {
+		        $zip->addFromString(basename($source), file_get_contents($source));
+		    }
+
+		    return $zip->close();
 		}
-		*/
             
     }
     
@@ -308,5 +341,4 @@
     function formatJSEND($status,$data=false){ return Common::formatJSEND($status,$data); }
     function checkAccess() { return Common::checkAccess(); }
     function isAvailable($func) { return Common::isAvailable($func); }
-	//function addFolderToZip($path, $zipArchive, $zipdir = ''){ return Common::addFolderToZip($path, $zipArchive, $zipdir = ''); }
 ?>

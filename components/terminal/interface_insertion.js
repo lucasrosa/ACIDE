@@ -42,25 +42,7 @@
 			aceEditor.resize();
 		});
 		
-		//$(".editor").attr('style', 'height:70% !important');
-		//$(".ace_editor").attr('style', 'height:70% !important');
-		//$(".ace_nobold").attr('style', 'height:70% !important');
-		//$(".ace-twilight").attr('style', 'height:70% !important');
-		//$(".ace_dark").attr('style', 'height:70% !important');
-		//$(".ace_nobold").attr('style', 'height:70% !important');
-		//$(".ace_text-input").attr('style', 'height:70% !important');
-		//$(".ace_gutter").attr('style', 'height:70% !important');
-		//$(".ace_folding-enabled").attr('style', 'height:70% !important');
-		//$(".ace_gutter-layer").attr('style', 'height:70% !important');
-		//$(".ace_layer").attr('style', 'height:70% !important');
-		//$(".ace_gutter").attr('style', 'height:70% !important');
-		//$(".ace_scroller").attr('style', 'height:70% !important');
 		
-		
-		//$("#editor-bottom-bar").prepend("<div id='terminal_container' style='height:95%'><iframe src='components/terminal/emulator/container.php'> </iframe></div>");
-		// LF: Adding content to the terminal container
-		//$("#terminal_container").append("<div style='font-size: 15px;'><span class='icon-cancel-circled bigger-icon' style='padding-top:2px;'></span><span style='padding-left:10px;'>Terminal</span></div><div style='width:100%; height:87%;'><iframe id='terminal' width='100%' height='100%' src='components/terminal/emulator/index.php?id=kd9kdi8nundj' style='height: 100%;'></iframe></div>");
-		//$("#terminal_container").append("");
 		// LF: Removing the split option that is currently bugged
 		$("#editor-bottom-bar").find(".divider")[2].remove();
 		$("#split").remove();
