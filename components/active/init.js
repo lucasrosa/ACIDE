@@ -52,7 +52,7 @@
             if (focus === undefined) {
                 focus = true;
             }
-			
+            
             var _this = this;
             
             if (this.isOpen(path)) {
