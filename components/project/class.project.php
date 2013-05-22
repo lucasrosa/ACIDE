@@ -14,22 +14,14 @@ class Project extends Common {
     // PROPERTIES
     //////////////////////////////////////////////////////////////////
 
-    public $name         		= '';
-    public $path         		= '';
-    public $gitrepo      		= false;
-    public $gitbranch    		= '';
-    public $projects     		= '';
-	// LF: ProjectUser :: The user who created the project
-	public $user 				= '';
-	// LF: Project Privacy: Can be 'public' or 'private'
-	public $privacy				= '';
-    public $no_return    		= false;
-    public $assigned     		= false;
-    public $command_exec 		= '';
-	// LF: Assignment name is the name of the zip file when submitting the project as an assignment
-	public $assignmentName	 	= '';
-	// LF: Submitted identifies if a project was already submitted or not :: can be true or false
-	public $submitted 			= '';
+    public $name         = '';
+    public $path         = '';
+    public $gitrepo      = false;
+    public $gitbranch    = '';
+    public $projects     = '';
+    public $no_return    = false;
+    public $assigned     = false;
+    public $command_exec = '';
 
     //////////////////////////////////////////////////////////////////
     // METHODS
@@ -43,7 +35,6 @@ class Project extends Common {
 
     public function __construct(){
         $this->projects = getJSON('projects.php');
-		//$this->private_projects = getJSON('private_projects.php');
         if(file_exists(BASE_PATH . "/data/" . $_SESSION['user'] . '_acl.php')){
             $this->assigned = getJSON($_SESSION['user'] . '_acl.php');
         }
@@ -61,22 +52,18 @@ class Project extends Common {
                 if(in_array($data['path'],$this->assigned)){
                     $this->name = $data['name'];
                     $this->path = $data['path'];
-					$this->privacy = $data['privacy'];
-					$this->user = $data['user'];
                     break;
                 }
             }
         }else{
             $this->name = $this->projects[0]['name'];
             $this->path = $this->projects[0]['path'];
-			$this->privacy = $this->projects[0]['privacy'];
-			$this->user = $this->projects[0]['user'];
         }
         // Set Sessions
         $_SESSION['project'] = $this->path;
 
         if(!$this->no_return){
-            echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path, "privacy"=>$this->privacy, "user"=>$this->user));
+            echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path));
         }
     }
 
@@ -88,8 +75,6 @@ class Project extends Common {
         foreach($this->projects as $project=>$data){
             if($data['path']==$this->path){
                 $this->name = $data['name'];
-				$this->privacy = $data['privacy'];
-				$this->user = $data['user'];
             }
         }
         return $this->name;
@@ -105,13 +90,11 @@ class Project extends Common {
             if($data['path']==$this->path){
                 $pass = true;
                 $this->name = $data['name'];
-				$this->privacy = $data['privacy'];
-				$this->user = $data['user'];
                 $_SESSION['project'] = $data['path'];
             }
         }
         if($pass){
-			echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path, "privacy"=>$this->privacy, "user"=>$this->user));
+            echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path));
         }else{
             echo formatJSEND("error","Error Opening Project");
         }
@@ -127,48 +110,52 @@ class Project extends Common {
             if(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' || !$this->isAbsPath($this->path)) {
                 $this->path = $this->SanitizePath();
             }
-            $pass = $this->checkDuplicate();
-            if($pass){
-                if(!$this->isAbsPath($this->path)) {
-                    mkdir(WORKSPACE . '/' . $this->path);
-                } else {
-                    if(defined('WHITEPATHS')) {
-                        $allowed = false;
-                        foreach (explode(",",WHITEPATHS) as $whitepath) {
-                            if(strpos($this->path, $whitepath) === 0) {
-                                $allowed = true;
+            if($this->path != '') {
+                $pass = $this->checkDuplicate();
+                if($pass){
+                    if(!$this->isAbsPath($this->path)) {
+                        mkdir(WORKSPACE . '/' . $this->path);
+                    } else {
+                        if(defined('WHITEPATHS')) {
+                            $allowed = false;
+                            foreach (explode(",",WHITEPATHS) as $whitepath) {
+                                if(strpos($this->path, $whitepath) === 0) {
+                                    $allowed = true;
+                                }
+                            }
+                            if(!$allowed) {
+                                die(formatJSEND("error","Absolute Path Only Allowed for ".WHITEPATHS));
                             }
                         }
-                        if(!$allowed) {
-                            die(formatJSEND("error","Absolute Path Only Allowed for ".WHITEPATHS));
+                        if(!file_exists($this->path)) {
+                            if(!mkdir($this->path.'/', 0755, true)) {
+                                die(formatJSEND("error","Unable to create Absolute Path"));
+                            }
+                        } else {
+                            if(!is_writable($this->path) || !is_readable($this->path)) {
+                                die(formatJSEND("error","No Read/Write Permission"));
+                            }
                         }
                     }
-                    if(!file_exists($this->path)) {
-                        if(!mkdir($this->path.'/', 0755, true)) {
-                            die(formatJSEND("error","Unable to create Absolute Path"));
+                    $this->projects[] = array("name"=>$this->name,"path"=>$this->path);
+                    saveJSON('projects.php',$this->projects);
+                    
+                    // Pull from Git Repo?
+                    if($this->gitrepo){
+                        if(!$this->isAbsPath($this->path)) {
+                            $this->command_exec = "cd " . WORKSPACE . '/' . $this->path . " && git init && git remote add origin " . $this->gitrepo . " && git pull origin " . $this->gitbranch;
+                        } else {
+                            $this->command_exec = "cd " . $this->path . " && git init && git remote add origin " . $this->gitrepo . " && git pull origin " . $this->gitbranch;
                         }
-                    } else {
-                        if(!is_writable($this->path) || !is_readable($this->path)) {
-                            die(formatJSEND("error","No Read/Write Permission"));
-                        }
+                        $this->ExecuteCMD();
                     }
+                    
+                    echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path));
+                }else{
+                    echo formatJSEND("error","A Project With the Same Name or Path Exists");
                 }
-                $this->projects[] = array("name"=>$this->name,"path"=>$this->path,"privacy"=>$this->privacy,"user"=>$_SESSION['user']);
-                saveJSON('projects.php',$this->projects);
-
-                // Pull from Git Repo?
-                if($this->gitrepo){
-                    if(!$this->isAbsPath($this->path)) {
-                        $this->command_exec = "cd " . WORKSPACE . '/' . $this->path . " && git init && git remote add origin " . $this->gitrepo . " && git pull origin " . $this->gitbranch;
-                    } else {
-                        $this->command_exec = "cd " . $this->path . " && git init && git remote add origin " . $this->gitrepo . " && git pull origin " . $this->gitbranch;
-                    }
-                    $this->ExecuteCMD();
-                }
-                
-                echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path));
-            }else{
-                echo formatJSEND("error","A Project With the Same Name or Path Exists");
+            } else {
+                echo formatJSEND("error","Project Name/Folder not allowed");
             }
         } else {
              echo formatJSEND("error","Project Name/Folder is empty");
@@ -183,43 +170,14 @@ class Project extends Common {
         $revised_array = array();
         foreach($this->projects as $project=>$data){
             if($data['path']!=$this->path){
-                $revised_array[] = array("name"=>$data['name'],"path"=>$data['path'],"privacy"=>$data['privacy'],"user"=>$data['user']);
-            } else {
-            	$this->privacy = $data['privacy'];
-				$this->user = $data['user'];
+                $revised_array[] = array("name"=>$data['name'],"path"=>$data['path']);
             }
         }
-        $revised_array[] = $this->projects[] = array("name"=>$_GET['project_name'],"path"=>$this->path,"privacy"=>$this->privacy,"user"=>$this->user);
+        $revised_array[] = $this->projects[] = array("name"=>$_GET['project_name'],"path"=>$this->path);
         // Save array back to JSON
         saveJSON('projects.php',$revised_array);
         // Response
         echo formatJSEND("success",null);
-    }
-	
-    //////////////////////////////////////////////////////////////////
-    // LF: Submit Project
-    //////////////////////////////////////////////////////////////////
-
-    public function Submit(){
-		$revised_array = array();
-        foreach($this->projects as $project=>$data){
-            if($data['path']!=$this->path){
-                $revised_array[] = array("name"=>$data['name'],"path"=>$data['path'],"privacy"=>$data['privacy'],"user"=>$data['user']);
-            } else {
-				$this->name = $data['name'];
-            	$this->privacy = $data['privacy'];
-				$this->user = $data['user'];
-            }
-        }
-		$newName = $_SESSION['user'] . " - ".$this->assignmentName;
-		$newProjectName = '[S] ' . $this->name;
-		$revised_array[] = $this->projects[] = array("name"=>$newProjectName,"path"=>$this->path,"privacy"=>$this->privacy,"user"=>$this->user);
-		
-        // Save array back to JSON
-        zipJSON($this->path, $newName, 'projects.php', $revised_array);
-		
-		// Response
-		echo formatJSEND("success",null);	
     }
 
     //////////////////////////////////////////////////////////////////
@@ -230,7 +188,7 @@ class Project extends Common {
         $revised_array = array();
         foreach($this->projects as $project=>$data){
             if($data['path']!=$this->path){
-                $revised_array[] = array("name"=>$data['name'],"path"=>$data['path'],"privacy"=>$data['privacy'],"user"=>$data['user']);
+                $revised_array[] = array("name"=>$data['name'],"path"=>$data['path']);
             }
         }
         // Save array back to JSON
