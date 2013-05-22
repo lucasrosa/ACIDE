@@ -134,6 +134,8 @@
                     .val(),
                     projectPath = $('#modal-content form input[name="project_path"]')
                     .val(),
+                    projectPrivacy = $('#modal-content form select[name="project_privacy"]')
+                    .val(),
                     gitRepo = $('#modal-content form input[name="git_repo"]')
                     .val(),
                     gitBranch = $('#modal-content form input[name="git_branch"]')
@@ -142,7 +144,7 @@
                         create = confirm('Do you really want to create project with absolute path "' + projectPath + '"?');
                     }
                 if(create) {    
-                    $.get(_this.controller + '?action=create&project_name=' + projectName + '&project_path=' + projectPath + '&git_repo=' + gitRepo + '&git_branch=' + gitBranch, function(data) {
+                    $.get(_this.controller + '?action=create&project_name=' + projectName + '&project_path=' + projectPath + '&project_privacy=' + projectPrivacy + '&git_repo=' + gitRepo + '&git_branch=' + gitBranch, function(data) {
                         createResponse = codiad.jsend.parse(data);
                         if (createResponse != 'error') {
                             _this.open(createResponse.path);
@@ -248,6 +250,37 @@
                 } 
              });
             return currentResponse;
+        },
+		
+        //////////////////////////////////////////////////////////////////
+        // LF: Submit Project (Submit as an Assignment)
+        //////////////////////////////////////////////////////////////////
+		
+        submit: function(path) {
+	            var _this = this;
+	            codiad.modal.load(500, this.dialog + '?action=submit&path=' + escape(path));
+	            $('#modal-content form')
+	                .live('submit', function(e) {
+	                e.preventDefault();
+	                var projectPath = $('#modal-content form input[name="project_path"]')
+	                    .val();
+	                var assignmentName = $('#modal-content form input[name="assignmentName"]')
+	                    .val();    
+						
+	                $.get(_this.controller + '?action=submit&project_path=' + projectPath + '&assignmentName=' + assignmentName, function(data) {
+	                   renameResponse = codiad.jsend.parse(data);
+	                    if (renameResponse != 'error') {
+	                        codiad.message.success(i18n('Project submited'));
+	                        _this.loadSide();
+							//$('#file-manager a[data-type="root"]').html("[S] " + $('#file-manager a[data-type="root"]').html());  // This changes the name (of the active project) in the file inspector
+	                        codiad.modal.unload();
+	                    }
+	                });
+	            });
         }
+        
+		
+		
+		
     };
 })(this, jQuery);

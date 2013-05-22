@@ -163,6 +163,35 @@
             fwrite($write, $data);
             fclose($write);
         }
+		
+        //////////////////////////////////////////////////////////////////
+        // LF: Zip JSON : Zips a workspace project into a .zip file in the project directory
+        //////////////////////////////////////////////////////////////////
+
+        public static function zipJSON($folderName, $projectName, $file, $data, $namespace="") {
+			// Zipping the file
+			$path = "../../workspace/" . $folderName . "/";
+
+			$zipFile = './' . $projectName. ".zip";
+			$zipArchive = new ZipArchive();
+			$include_dir = true;
+			
+			Common::Zip($path, $zipFile, $include_dir);
+			
+			// Changing the name of the file prepending a "[S]" in it, to identify that the project was already submited
+            $path = DATA . "/";
+            if($namespace != ""){
+                $path = $path . $namespace . "/";
+                $path = preg_replace('#/+#','/',$path);
+                if(!is_dir($path)) mkdir($path);
+            }
+            
+            $data = "<?php/*|" . json_encode($data) . "|*/?>";
+            $write = fopen($path . $file, 'w') or die("can't open file ".$path.$file);
+            fwrite($write, $data);
+            fclose($write);
+				
+        }
 
         //////////////////////////////////////////////////////////////////
         // Format JSEND Response
@@ -225,6 +254,76 @@
         public static function isAbsPath( $path ) {
             return ($path[0] === '/')?true:false;
         }
+		
+        //////////////////////////////////////////////////////////////////
+        // LF: Recursively Zip a directory :: Used to submit a project
+        //////////////////////////////////////////////////////////////////
+		
+		public static function Zip($source, $destination, $include_dir = false)
+		{
+
+		    if (!extension_loaded('zip') || !file_exists($source)) {
+		        return false;
+		    }
+
+		    if (file_exists($destination)) {
+		        unlink ($destination);
+		    }
+
+		    $zip = new ZipArchive();
+		    if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
+		        return false;
+		    }
+		    $source = str_replace('\\', '/', realpath($source));
+
+		    if (is_dir($source) === true)
+		    {
+
+		        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
+
+		        if ($include_dir) {
+
+		            $arr = explode("/",$source);
+		            $maindir = $arr[count($arr)- 1];
+
+		            $source = "";
+		            for ($i=0; $i < count($arr) - 1; $i++) { 
+		                $source .= '/' . $arr[$i];
+		            }
+
+		            $source = substr($source, 1);
+
+		            $zip->addEmptyDir($maindir);
+
+		        }
+
+		        foreach ($files as $file)
+		        {
+		            $file = str_replace('\\', '/', $file);
+
+		            // Ignore "." and ".." folders
+		            if( in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) )
+		                continue;
+
+		            $file = realpath($file);
+
+		            if (is_dir($file) === true)
+		            {
+		                $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+		            }
+		            else if (is_file($file) === true)
+		            {
+		                $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+		            }
+		        }
+		    }
+		    else if (is_file($source) === true)
+		    {
+		        $zip->addFromString(basename($source), file_get_contents($source));
+		    }
+
+		    return $zip->close();
+		}
             
     }
     
@@ -238,6 +337,7 @@
     function checkSession(){ Common::checkSession(); }
     function getJSON($file,$namespace=""){ return Common::getJSON($file,$namespace); }
     function saveJSON($file,$data,$namespace=""){ Common::saveJSON($file,$data,$namespace); }
+	function zipJSON($folderName, $projectName, $file, $data, $namespace="") { Common::zipJSON($folderName, $projectName, $file, $data, $namespace); }
     function formatJSEND($status,$data=false){ return Common::formatJSEND($status,$data); }
     function checkAccess() { return Common::checkAccess(); }
     function isAvailable($func) { return Common::isAvailable($func); }

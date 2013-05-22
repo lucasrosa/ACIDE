@@ -127,6 +127,7 @@ if(!file_exists(DATA . '/plugins.php')) {
 
         $users = file_exists($path . "/data/users.php");
         $projects = file_exists($path . "/data/projects.php");
+		//$private_projects = file_exists($path . "/data/private_projects.php");
         $active = file_exists($path . "/data/active.php");
 
         if(!$users && !$projects && !$active){
@@ -255,7 +256,9 @@ if(!file_exists(DATA . '/plugins.php')) {
                         <?php } ?>
                     </div>
                     
-                    <div class="sb-projects-content"></div>
+                    <div class="sb-projects-content">
+                    	<div> Public Folder</div>
+                    </div>
                     
                 </div>
             </div>
@@ -278,15 +281,26 @@ if(!file_exists(DATA . '/plugins.php')) {
                 <ul id="dropdown-list-active-files"></ul>
                 <div class="bar"></div>
             </div>
-
             <div id="root-editor-wrapper"></div>
-
             <div id="editor-bottom-bar">
+				<!-- Terminal -->
+				<div id='terminal_container' style='height:90%'>
+					<div style='font-size: 15px;'>
+						<a id='terminal-close-button' class='icon-cancel-circled bigger-icon' style='padding-top:2px;'></a>
+						<span style='padding-left:10px;'>Terminal</span>
+					</div>
+					<div style='width:100%; height:87%;'>
+						<iframe id='terminal' width='100%' height='100%' src='components/terminal/emulator/index.php?id=kd9kdi8nundj' style='height: 100%;'></iframe>
+					</div>
+				</div>
+				
                 <a id="settings" class="ico-wrapper"><span class="icon-doc-text"></span>Settings</a>
+                <div id="terminal-open-button-divider" class="divider"></div>
+                <a id="terminal-open-button" class="ico-wrapper"><span class="icon-layout"></span>Terminal</a>
                 <div class="divider"></div>
                 <a id="split" class="ico-wrapper"><span class="icon-layout"></span>Split</a>
                 <div class="divider"></div>
-                <a id="current-mode"><span class="icon-layout"></span></a>
+                <a id="current-mode"><span class="icon-layout"></span>Text</a>
                 <div class="divider"></div>
                 <div id="current-file"></div>
             </div>
@@ -357,7 +371,8 @@ if(!file_exists(DATA . '/plugins.php')) {
 
     <!-- ACE -->
     <script src="components/editor/ace-editor/ace.js"></script>
-
+	<!-- Terminal -->
+	<script src="components/terminal/interface_insertion.js"></script>
     <!-- COMPONENTS -->
     <?php
 
@@ -381,6 +396,5 @@ if(!file_exists(DATA . '/plugins.php')) {
     }
 
     ?>
-
 </body>
 </html>

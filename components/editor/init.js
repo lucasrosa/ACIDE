@@ -494,7 +494,7 @@
             var _splitOptionsMenu = $('#split-options-menu');
 
             this.initMenuHandler($('#split'),_splitOptionsMenu);
-
+			
             $('#split-horizontally a').click(function(e){
                 e.stopPropagation();
                 _this.addInstance(_this.activeInstance.getSession(), 'bottom');
