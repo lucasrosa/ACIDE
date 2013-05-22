@@ -266,6 +266,7 @@
 	                    .val();
 	                var assignmentName = $('#modal-content form input[name="assignmentName"]')
 	                    .val();    
+						
 	                $.get(_this.controller + '?action=submit&project_path=' + projectPath + '&assignmentName=' + assignmentName, function(data) {
 	                   renameResponse = codiad.jsend.parse(data);
 	                    if (renameResponse != 'error') {

@@ -27,7 +27,9 @@ class Project extends Common {
     public $assigned     		= false;
     public $command_exec 		= '';
 	// LF: Assignment name is the name of the zip file when submitting the project as an assignment
-	public $assignmentName	 = '';
+	public $assignmentName	 	= '';
+	// LF: Submitted identifies if a project was already submitted or not :: can be true or false
+	public $submitted 			= '';
 
     //////////////////////////////////////////////////////////////////
     // METHODS
@@ -153,7 +155,7 @@ class Project extends Common {
                 }
                 $this->projects[] = array("name"=>$this->name,"path"=>$this->path,"privacy"=>$this->privacy,"user"=>$_SESSION['user']);
                 saveJSON('projects.php',$this->projects);
-				
+
                 // Pull from Git Repo?
                 if($this->gitrepo){
                     if(!$this->isAbsPath($this->path)) {

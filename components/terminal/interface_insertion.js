@@ -1,3 +1,10 @@
+/*
+	$(document).ready(function() {
+		var tern = $('.editor')[1];
+		$(tern).text('a');
+	});
+*/
+
 	// LF: Modifying the interface to fit the terminal between the editor and the bottom bar
 	$(document).ready(function() {
 		
