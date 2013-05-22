@@ -54,8 +54,6 @@
     if($_GET['action']=='create'){
         if(checkAccess()) {
             $Project->name = $_GET['project_name'];
-			$Project->privacy = $_GET['project_privacy'];
-			
             if($_GET['project_path'] != '') {
                 $Project->path = $_GET['project_path'];
             } else {
@@ -66,12 +64,6 @@
                 $Project->gitrepo = $_GET['git_repo'];
                 $Project->gitbranch = $_GET['git_branch'];
             }
-			
-			// LF: Define the name of the path
-			if($_GET['project_privacy'] == 'private') {
-				$Project->path = $_SESSION['user'] . "-" . $Project->path;
-			}
-			
             $Project->Create();
         }
     }
@@ -83,16 +75,6 @@
     if($_GET['action']=='rename'){
         $Project->path = $_GET['project_path'];
         $Project->Rename();
-    }
-	
-    //////////////////////////////////////////////////////////////////
-    // LF: Submit Project
-    //////////////////////////////////////////////////////////////////
-
-    if($_GET['action']=='submit'){
-        $Project->path = $_GET['project_path'];
-		$Project->assignmentName = $_GET['assignmentName'];
-        $Project->Submit();
     }
 
     //////////////////////////////////////////////////////////////////

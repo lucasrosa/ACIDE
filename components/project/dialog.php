@@ -29,73 +29,28 @@
             }
             
             ?>  
-            <div id='public-projects-containter'>        
-	            <ul>
-					<lh>Public Projects</lh>
-	            <?php
+                    
+            <ul>
             
-	            // Get projects JSON data
-	            $projects = getJSON('projects.php');
-	            sort($projects);
-	            foreach($projects as $project=>$data){
-	                $show = true;
-	                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
-	                if($show && $data['privacy'] == 'public'){
-	                ?>
-	                <li>
-						<div>
-							<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
-								<div class="icon-archive icon"></div>
-								<?php echo($data['name']); ?>
-							</span>
-							<!-- Adding a button to Submit the project as an assignment -->
-							<span  onclick="codiad.project.submit('<?php echo($data['path']); ?>');">
-								<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
-							</span>
-						</div>
-					</li>
+            <?php
+            
+            // Get projects JSON data
+            $projects = getJSON('projects.php');
+            sort($projects);
+            foreach($projects as $project=>$data){
+                $show = true;
+                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
+                if($show){
+                ?>
+                <li onclick="codiad.project.open('<?php echo($data['path']); ?>');"><div class="icon-archive icon"></div><?php echo($data['name']); ?></li>
                 
-	                <?php
-	                }
-	            } 
-	            ?>
+                <?php
+                }
+            } 
+            ?>
             
-	            </ul>
-			</div>
-			<!-- LF: Private Projects List -->
-			<div id='private-projects-containter'>
-	            <ul>
-					<lh>Private Projects</lh>
-	            <?php
-            
-	            // Get projects JSON data
-	            $projects = getJSON('projects.php');
-	            sort($projects);
-	            foreach($projects as $project=>$data){
-	                $show = true;
-	                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
-	                if($show && $data['privacy'] == 'private' && $data['user'] == $_SESSION['user']){
-	                ?>
-	                <li>
-						<div>
-							<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
-								<div class="icon-archive icon"></div>
-								<?php echo($data['name']); ?>
-							</span>
-							<!-- Adding a button to Submit the project as an assignment -->
-							<span  onclick="codiad.project.submit('<?php echo($data['path']); ?>');">
-								<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
-							</span>
-						</div>
-					</li>
-                
-	                <?php
-	                }
-	            } 
-	            ?>
-            
-	            </ul>
-			</div>       
+            </ul>
+                    
             <?php
             
             break;
@@ -171,14 +126,6 @@
             <form>
             <label>Project Name</label>
             <input name="project_name" autofocus="autofocus" autocomplete="off">
-			<label>Project Privacy</label>
-			
-			
-			<select name="project_privacy">
-			  <option value="public" selected >Public</option>
-			  <option value="private">Private</option>
-			</select>
-			
             <?php if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') { ?>
             <label>Folder Name or Absolute Path</label>
             <input name="project_path" autofocus="off" autocomplete="off">
@@ -226,21 +173,6 @@
         <label><span class="icon-pencil"></span>Rename Project</label>    
         <input type="text" name="project_name" autofocus="autofocus" autocomplete="off" value="<?php echo($_GET['project_name']); ?>">  
         <button class="btn-left">Rename</button>&nbsp;<button class="btn-right" onclick="codiad.modal.unload(); return false;">Cancel</button>
-        <form>
-        <?php
-        break;
-		
-        //////////////////////////////////////////////////////////////////
-        // LF: Submit Project
-        //////////////////////////////////////////////////////////////////
-        case 'submit':
-		
-        ?>
-        <form>
-        <input type="hidden" name="project_path" value="<?php echo($_GET['path']); ?>">
-        <label><span class="icon-graduation-cap"></span>Assignment name:</label>    
-        <input type="text" name="assignmentName" autofocus="autofocus" autocomplete="off" value="<?php echo($_GET['assignmentName']); ?>">  
-        <button class="btn-left">Submit</button>&nbsp;<button class="btn-right" onclick="codiad.modal.unload(); return false;">Cancel</button>
         <form>
         <?php
         break;       
