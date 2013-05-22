@@ -17,6 +17,7 @@
     $workspace = $path . "/workspace";
     $users = $path . "/data/users.php";
     $projects = $path . "/data/projects.php";
+	//$private_projects = $path . "/data/private_projects.php";
     $active = $path . "/data/active.php";
     $pluginpath = $path . "/plugins";
     $plugins = $path . "/data/plugins.php";
@@ -79,6 +80,8 @@ if(!file_exists($users) && !file_exists($projects) && !file_exists($active)){
     } else {
         $project_path = $project_name;
     }
+	
+	
     $timezone = $_POST['timezone'];
 
     //////////////////////////////////////////////////////////////////
@@ -108,6 +111,7 @@ if(!file_exists($users) && !file_exists($projects) && !file_exists($active)){
     $project_data = array("name"=>$project_name,"path"=>$project_path);
 
     saveJSON($projects,array($project_data));
+	
     
     //////////////////////////////////////////////////////////////////
     // Create Users file
