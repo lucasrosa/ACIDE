@@ -10,4 +10,5 @@ plugins/
 .settings/
 .svn/
 components/update/version.json
+.DS_Store
 
