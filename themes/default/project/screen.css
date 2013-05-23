@@ -54,21 +54,8 @@
     padding: 15px;
 }
 
-/* LF */
-
-.sb-projects-content lh {
-	font-size: 15px;
-}
-
-.sb-projects-content li {
-	padding-left:15px;
-}
-
 .sb-projects-content li:hover {
     background-color: #333;
-}
-
-.sb-projects-content span:hover {
     cursor: pointer;
 }
 
