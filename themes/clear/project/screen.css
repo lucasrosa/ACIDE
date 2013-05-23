@@ -46,8 +46,21 @@
     position: absolute;
 }
 
+/* LF */
+
+.sb-projects-content lh {
+	font-size: 15px;
+}
+
+.sb-projects-content li {
+	padding-left:15px;
+}
+
 .sb-projects-content li:hover {
     background-color: #fff;
+}
+
+.sb-projects-content span:hover {
     cursor: pointer;
 }
 
