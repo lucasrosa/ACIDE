@@ -206,36 +206,14 @@ class Project extends Common {
 	
 	public function Submit(){
 		
-		$newName = $_SESSION['user'] . " - ".$this->assignmentName;
+		$projectName = $_SESSION['user'] . " - ".$this->assignmentName;
 		$this->name = '[S] ' . $this->name;
-		$this->assignment[0]["submitted_date"] = new MongoDate(strtotime(date("Y-m-d H:i:s")));
-		error_log("nn------ DATE: " . $this->assignment[0]["submitted_date"]);
+		$this->assignment["submitted_date"] = new MongoDate(strtotime(date("Y-m-d H:i:s")));
+		unset($this->assignment[0]);
 		$this->save();
 		
         // Save array back to JSON
-        zipJSON($this->path, $newName);
-		
-		// Response
-		echo formatJSEND("success",null);	
-    }
-	
-    public function Submit_old(){
-		$revised_array = array();
-        foreach($this->projects as $project=>$data){
-            if($data['path']!=$this->path){
-                $revised_array[] = array("name"=>$data['name'],"path"=>$data['path'],"privacy"=>$data['privacy'],"user"=>$data['user']);
-            } else {
-				$this->name = $data['name'];
-            	$this->privacy = $data['privacy'];
-				$this->user = $data['user'];
-            }
-        }
-		$newName = $_SESSION['user'] . " - ".$this->assignmentName;
-		$newProjectName = '[S] ' . $this->name;
-		$revised_array[] = $this->projects[] = array("name"=>$newProjectName,"path"=>$this->path,"privacy"=>$this->privacy,"user"=>$this->user);
-		
-        // Save array back to JSON
-        zipJSON($this->path, $newName, 'projects.php', $revised_array);
+        zipJSON($this->path, $projectName);
 		
 		// Response
 		echo formatJSEND("success",null);	
