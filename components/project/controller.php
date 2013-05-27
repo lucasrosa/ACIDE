@@ -44,6 +44,8 @@
 
     if($_GET['action']=='open'){
         $Project->path = $_GET['path'];
+		// LF : Set the user of the project to be open
+		$Project->user = $_SESSION['user'];
         $Project->Open();
     }
 
@@ -82,6 +84,9 @@
 
     if($_GET['action']=='rename'){
         $Project->path = $_GET['project_path'];
+		$Project->user = $_SESSION['user'];
+		$Project->load();
+		$Project->name = $_GET['project_name'];
         $Project->Rename();
     }
 	

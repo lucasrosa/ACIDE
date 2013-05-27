@@ -32,6 +32,10 @@ class Project extends Common {
 	public $submitted 			= '';
 	// LF: Actual database
 	public $database			= '';
+	// LF: The members of the group with access to this project
+	public $group_members		= '';
+	// LF: The assignment related to this project
+	public $assignment 			= '';
 	
     //////////////////////////////////////////////////////////////////
     // METHODS
@@ -100,12 +104,42 @@ class Project extends Common {
         }
         return $this->name;
     }
-
+	
+	//////////////////////////////////////////////////////////////////
+    // LF: Load Project
+    //////////////////////////////////////////////////////////////////
+	public function Load() {
+		$pass = false;
+        
+		$collection = $this->database->users;
+		
+		$user = $collection->findOne(array("username" => $this->user));
+		for ($i = 0; $i < count($user["projects"]); $i++) {
+			if ($user["projects"][$i]["path"] == $this->path) {
+				$pass = true;
+	            $this->name = $user["projects"][$i]["name"];
+				$this->privacy = $user["projects"][$i]["privacy"];
+				$this->group_members = $user["projects"][$i]["group_members"];
+				$this->assignment = $user["projects"][$i]["assignment"];
+	            $_SESSION['project'] = $user["projects"][$i]["path"];
+			}
+		}
+		
+		return $pass;
+	}
     //////////////////////////////////////////////////////////////////
     // Open Project
     //////////////////////////////////////////////////////////////////
 
     public function Open(){
+        if($this->load()){
+			echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path, "privacy"=>$this->privacy, "user"=>$this->user));
+        }else{
+            echo formatJSEND("error","Error Opening Project");
+        }
+    }
+    
+    public function Open_old(){
         $pass = false;
         foreach($this->projects as $project=>$data){
             if($data['path']==$this->path){
@@ -185,7 +219,15 @@ class Project extends Common {
     // Rename
     //////////////////////////////////////////////////////////////////
 
-    public function Rename(){
+	public function Rename(){
+		// Updating on database
+		if ($this->Save()) {
+			// Response
+        	echo formatJSEND("success",null);	
+		}
+    }
+	
+    public function Rename_old(){
         $revised_array = array();
         foreach($this->projects as $project=>$data){
             if($data['path']!=$this->path){
@@ -251,6 +293,7 @@ class Project extends Common {
     //////////////////////////////////////////////////////////////////
 
     public function CheckDuplicate(){
+    	// must check the user's project name and all the projects paths
         $pass = true;
         foreach($this->projects as $project=>$data){
             if($data['name']==$this->name || $data['path']==$this->path){
@@ -320,4 +363,25 @@ class Project extends Common {
 		$user = $collection->findOne(array("username" => $username), array("_id" => FALSE, "projects" => TRUE));
 		return $user["projects"];
     }
+	
+	//////////////////////////////////////////////////////////////////
+    // Save this project
+    //////////////////////////////////////////////////////////////////
+    		
+	public function Save() {
+		$collection = $this->database->users;
+		
+		$user = $collection->findOne(array("username" => $this->user));
+			for ($i = 0; $i < count($user["projects"]); $i++) {
+				if ($user["projects"][$i]["path"] == $this->path) {
+					$user["projects"][$i]["name"] = $this->name;
+					$user["projects"][$i]["privacy"] = $this->privacy;
+					$user["projects"][$i]["group_members"] = $this->group_members;
+					$user["projects"][$i]["assignment"] = $this->assignment;
+				}
+			}
+			
+			return $collection->update(array("username" => $this->user), $user);
+    }
+	
 }
