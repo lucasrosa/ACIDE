@@ -129,9 +129,37 @@ class Project extends Common {
             echo formatJSEND("error","Error Opening Project");
         }
     }
-
+	
+	//////////////////////////////////////////////////////////////////
+    // LF: Init project on database
     //////////////////////////////////////////////////////////////////
-    // Create
+
+    public function CreateProjectOnDatabase(){
+    	$this->user = $_SESSION['user'];
+        $project = array(
+						"name" => $this->name,
+						"path" => $this->path,
+						"privacy" => $this->privacy,
+						"group_members" => array(
+													array(
+															"username" => $this->user,
+														 )														
+												),
+						"assignment" => ''
+					 );
+					 
+		$collection = $this->database->users;
+		// LF: Find the current user
+		$user = $collection->findOne(array("username" => $this->user));
+		// LF: Push the new project in the end of the project's array
+		array_push($user["projects"], $project);
+		// LF: Saves the new array in the database by overwriting the previous user
+		$collection->update(array("username" => $this->user), $user);
+		
+    }
+	
+    //////////////////////////////////////////////////////////////////
+    // LF: Create
     //////////////////////////////////////////////////////////////////
 
     public function Create(){
@@ -166,9 +194,10 @@ class Project extends Common {
                         }
                     }
                 }
-                $this->projects[] = array("name"=>$this->name,"path"=>$this->path,"privacy"=>$this->privacy,"user"=>$_SESSION['user']);
-                saveJSON('projects.php',$this->projects);
-
+                //$this->projects[] = array("name"=>$this->name,"path"=>$this->path,"privacy"=>$this->privacy,"user"=>$_SESSION['user']);
+                //saveJSON('projects.php',$this->projects);
+				$this->CreateProjectOnDatabase();
+				
                 // Pull from Git Repo?
                 if($this->gitrepo){
                     if(!$this->isAbsPath($this->path)) {
@@ -249,6 +278,33 @@ class Project extends Common {
     public function CheckDuplicate(){
     	// must check the user's project name and all the projects paths
         $pass = true;
+        $collection = $this->database->users;
+		
+		// LF: Find the current user and verifies the name of all of its projects
+		$user = $collection->findOne(array("username" => $this->user));
+		for ($i = 0; $i < count($user["projects"]); $i++) {
+			if ($user["projects"][$i]["name"] == $this->name) {
+				$pass = false;
+			}	
+		}
+		
+		// LF: Looking if the current path is equal of at least one of the saved paths
+		$user = '';
+		$users = $collection->find();
+		foreach ($users as $user) {
+			for ($i = 0; $i < count($user["projects"]); $i++) {
+				if ($user["projects"][$i]["path"] == $this->path) {
+					$pass = false;
+				}
+			}
+		}	
+
+        return $pass;
+    }
+
+    public function CheckDuplicate_old(){
+    	// must check the user's project name and all the projects paths
+        $pass = true;
         foreach($this->projects as $project=>$data){
             if($data['name']==$this->name || $data['path']==$this->path){
                 $pass = false;
@@ -327,15 +383,15 @@ class Project extends Common {
 		
 		// LF: Find the current user
 		$user = $collection->findOne(array("username" => $this->user));
-			for ($i = 0; $i < count($user["projects"]); $i++) {
-				// LF: The project is selected based on the path :-> As it is the project's id
-				if ($user["projects"][$i]["path"] == $this->path) {
-					$user["projects"][$i]["name"] = $this->name;
-					$user["projects"][$i]["privacy"] = $this->privacy;
-					$user["projects"][$i]["group_members"] = $this->group_members;
-					$user["projects"][$i]["assignment"] = $this->assignment;
-				}
+		for ($i = 0; $i < count($user["projects"]); $i++) {
+			// LF: The project is selected based on the path :-> As it is the project's id
+			if ($user["projects"][$i]["path"] == $this->path) {
+				$user["projects"][$i]["name"] = $this->name;
+				$user["projects"][$i]["privacy"] = $this->privacy;
+				$user["projects"][$i]["group_members"] = $this->group_members;
+				$user["projects"][$i]["assignment"] = $this->assignment;
 			}
+		}
 		// LF: Updating in the database : Overwriting the user document 	
 		return $collection->update(array("username" => $this->user), $user);
     }
