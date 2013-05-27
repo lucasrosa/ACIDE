@@ -21,7 +21,7 @@ class Project extends Common {
     public $projects     		= '';
 	// LF: ProjectUser :: The user who created the project
 	public $user 				= '';
-	// LF: Project Privacy: Can be 'public' or 'private'
+	// LF: Project Privacy: Can be 'public', 'private' or 'shared'
 	public $privacy				= '';
     public $no_return    		= false;
     public $assigned     		= false;
@@ -30,7 +30,9 @@ class Project extends Common {
 	public $assignmentName	 	= '';
 	// LF: Submitted identifies if a project was already submitted or not :: can be true or false
 	public $submitted 			= '';
-
+	// LF: Actual database
+	public $database			= '';
+	
     //////////////////////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////////////////////
@@ -42,8 +44,12 @@ class Project extends Common {
     //////////////////////////////////////////////////////////////////
 
     public function __construct(){
-        $this->projects = getJSON('projects.php');
-		//$this->private_projects = getJSON('private_projects.php');
+    	$this->database = getDatabase();
+		
+        //$this->projects = getJSON('projects.php');
+		//error_log("LOG: " . serialize($this->GetProjectsForUser("lucasfurlani"))); // Testing the method
+		$this->projects = $this->GetProjectsForUser($_SESSION['user']);
+		
         if(file_exists(BASE_PATH . "/data/" . $_SESSION['user'] . '_acl.php')){
             $this->assigned = getJSON($_SESSION['user'] . '_acl.php');
         }
@@ -303,6 +309,15 @@ class Project extends Common {
         else if(function_exists('shell_exec')){
             shell_exec($this->command_exec);
         }
+	}
+	
+    //////////////////////////////////////////////////////////////////
+    // Get projects for a certain user
+    //////////////////////////////////////////////////////////////////
+    		
+	public function GetProjectsForUser($username) {
+		$collection = $this->database->users;
+		$user = $collection->findOne(array("username" => $username), array("_id" => FALSE, "projects" => TRUE));
+		return $user["projects"];
     }
-
 }

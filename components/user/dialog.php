@@ -97,7 +97,8 @@
         case 'projects':
         
             // Get project list
-            $projects = getJSON('projects.php');
+            //$projects = getJSON('projects.php');
+            $projects = getProjectsForUser("lucasfurlani");
             // Get control list (if exists)
             $projects_assigned = false;
             if(file_exists(BASE_PATH . "/data/" . $_GET['username'] . '_acl.php')){

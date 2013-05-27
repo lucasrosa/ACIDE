@@ -35,7 +35,9 @@
 	            <?php
             
 	            // Get projects JSON data
-	            $projects = getJSON('projects.php');
+	            //$projects = getJSON('projects.php');
+				$projects = getProjectsForUser($_SESSION['user']);
+	            
 	            sort($projects);
 	            foreach($projects as $project=>$data){
 	                $show = true;
@@ -69,12 +71,13 @@
 	            <?php
             
 	            // Get projects JSON data
-	            $projects = getJSON('projects.php');
+	            //$projects = getJSON('projects.php'); 
+				$projects = getProjectsForUser($_SESSION['user']);
 	            sort($projects);
 	            foreach($projects as $project=>$data){
 	                $show = true;
 	                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
-	                if($show && $data['privacy'] == 'private' && $data['user'] == $_SESSION['user']){
+	                if($show && $data['privacy'] == 'private'){ //: needed when not using getUserProjects && $data['user'] == $_SESSION['user']){
 	                ?>
 	                <li>
 						<div>
@@ -125,7 +128,8 @@
             <?php
             
             // Get projects JSON data
-            $projects = getJSON('projects.php');
+            //$projects = getJSON('projects.php'); 
+            $projects = getProjectsForUser($_SESSION['user']);
             sort($projects);
             foreach($projects as $project=>$data){
                 $show = true;

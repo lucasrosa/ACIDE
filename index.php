@@ -348,7 +348,7 @@ if(!file_exists(DATA . '/plugins.php')) {
                                 }
                              }
                         }
-                    } else{
+                    } else {
                         echo('<a onclick="'.$data['onclick'].'"><span class="'.$data['icon'].' bigger-icon"></span>'.get_i18n($data['title']).'</a>');
                     }
 
@@ -369,7 +369,7 @@ if(!file_exists(DATA . '/plugins.php')) {
 
     <div id="autocomplete"><ul id="suggestions"></ul></div>
 
-    <!-- ACE -->
+    <!-- ACE Editor -->
     <script src="components/editor/ace-editor/ace.js"></script>
 	<!-- Terminal -->
 	<script src="components/terminal/interface_insertion.js"></script>

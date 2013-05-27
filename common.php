@@ -324,7 +324,24 @@
 
 		    return $zip->close();
 		}
-            
+
+		//////////////////////////////////////////////////////////////////
+        // LF: Return the database
+        //////////////////////////////////////////////////////////////////
+        
+		public static function getDatabase() {
+			// connect
+			$mongo_client = new MongoClient();
+			// select a database
+			return $mongo_client->codiad_database;
+		}
+		
+        public function getProjectsForUser($username) {
+        	$mongo_client = new MongoClient();
+			$collection = $mongo_client->codiad_database->users;
+			$user = $collection->findOne(array("username" => $username), array("_id" => FALSE, "projects" => TRUE));
+			return $user["projects"];
+    	}   
     }
     
     //////////////////////////////////////////////////////////////////
@@ -341,4 +358,6 @@
     function formatJSEND($status,$data=false){ return Common::formatJSEND($status,$data); }
     function checkAccess() { return Common::checkAccess(); }
     function isAvailable($func) { return Common::isAvailable($func); }
+	function getDatabase(){ return Common::getDatabase(); }
+	function getProjectsForUser($username) { return Common::getProjectsForUser($username); }
 ?>
