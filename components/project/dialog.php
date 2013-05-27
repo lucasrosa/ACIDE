@@ -243,7 +243,7 @@
         <form>
         <input type="hidden" name="project_path" value="<?php echo($_GET['path']); ?>">
         <label><span class="icon-graduation-cap"></span>Assignment name:</label>    
-        <input type="text" name="assignmentName" autofocus="autofocus" autocomplete="off" value="<?php echo($_GET['assignmentName']); ?>">  
+        <input type="text" name="assignmentName" autofocus="autofocus" autocomplete="off" value="">  
         <button class="btn-left">Submit</button>&nbsp;<button class="btn-right" onclick="codiad.modal.unload(); return false;">Cancel</button>
         <form>
         <?php

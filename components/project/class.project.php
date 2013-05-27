@@ -49,8 +49,6 @@ class Project extends Common {
 
     public function __construct(){
     	$this->database = getDatabase();
-		
-        //$this->projects = getJSON('projects.php');
 		//error_log("LOG: " . serialize($this->GetProjectsForUser("lucasfurlani"))); // Testing the method
 		$this->projects = $this->GetProjectsForUser($_SESSION['user']);
 		
@@ -95,13 +93,6 @@ class Project extends Common {
     //////////////////////////////////////////////////////////////////
 
     public function GetName(){
-        foreach($this->projects as $project=>$data){
-            if($data['path']==$this->path){
-                $this->name = $data['name'];
-				$this->privacy = $data['privacy'];
-				$this->user = $data['user'];
-            }
-        }
         return $this->name;
     }
 	
@@ -133,24 +124,6 @@ class Project extends Common {
 
     public function Open(){
         if($this->load()){
-			echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path, "privacy"=>$this->privacy, "user"=>$this->user));
-        }else{
-            echo formatJSEND("error","Error Opening Project");
-        }
-    }
-    
-    public function Open_old(){
-        $pass = false;
-        foreach($this->projects as $project=>$data){
-            if($data['path']==$this->path){
-                $pass = true;
-                $this->name = $data['name'];
-				$this->privacy = $data['privacy'];
-				$this->user = $data['user'];
-                $_SESSION['project'] = $data['path'];
-            }
-        }
-        if($pass){
 			echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path, "privacy"=>$this->privacy, "user"=>$this->user));
         }else{
             echo formatJSEND("error","Error Opening Project");
@@ -227,28 +200,26 @@ class Project extends Common {
 		}
     }
 	
-    public function Rename_old(){
-        $revised_array = array();
-        foreach($this->projects as $project=>$data){
-            if($data['path']!=$this->path){
-                $revised_array[] = array("name"=>$data['name'],"path"=>$data['path'],"privacy"=>$data['privacy'],"user"=>$data['user']);
-            } else {
-            	$this->privacy = $data['privacy'];
-				$this->user = $data['user'];
-            }
-        }
-        $revised_array[] = $this->projects[] = array("name"=>$_GET['project_name'],"path"=>$this->path,"privacy"=>$this->privacy,"user"=>$this->user);
-        // Save array back to JSON
-        saveJSON('projects.php',$revised_array);
-        // Response
-        echo formatJSEND("success",null);
-    }
-	
     //////////////////////////////////////////////////////////////////
     // LF: Submit Project
     //////////////////////////////////////////////////////////////////
-
-    public function Submit(){
+	
+	public function Submit(){
+		
+		$newName = $_SESSION['user'] . " - ".$this->assignmentName;
+		$this->name = '[S] ' . $this->name;
+		$this->assignment[0]["submitted_date"] = new MongoDate(strtotime(date("Y-m-d H:i:s")));
+		error_log("nn------ DATE: " . $this->assignment[0]["submitted_date"]);
+		$this->save();
+		
+        // Save array back to JSON
+        zipJSON($this->path, $newName);
+		
+		// Response
+		echo formatJSEND("success",null);	
+    }
+	
+    public function Submit_old(){
 		$revised_array = array();
         foreach($this->projects as $project=>$data){
             if($data['path']!=$this->path){

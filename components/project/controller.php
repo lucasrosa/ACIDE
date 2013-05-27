@@ -33,6 +33,8 @@
         }else{
             // Load current
             $Project->path = $_SESSION['project'];
+			$Project->user = $_SESSION['user'];
+			$Project->load();
             $project_name = $Project->GetName();
             if(!$no_return){ echo formatJSEND("success",array("name"=>$project_name,"path"=>$_SESSION['project'])); }
         }
@@ -97,6 +99,8 @@
     if($_GET['action']=='submit'){
         $Project->path = $_GET['project_path'];
 		$Project->assignmentName = $_GET['assignmentName'];
+		$Project->user = $_SESSION['user'];
+		$Project->load();
         $Project->Submit();
     }
 

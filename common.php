@@ -167,8 +167,19 @@
         //////////////////////////////////////////////////////////////////
         // LF: Zip JSON : Zips a workspace project into a .zip file in the project directory
         //////////////////////////////////////////////////////////////////
+		
+		public static function zipJSON($folderName, $projectName) {
+			// Zipping the file
+			$path = "../../workspace/" . $folderName . "/";
 
-        public static function zipJSON($folderName, $projectName, $file, $data, $namespace="") {
+			$zipFile = './' . $projectName. ".zip";
+			$zipArchive = new ZipArchive();
+			$include_dir = true;
+			
+			Common::Zip($path, $zipFile, $include_dir);
+        }
+		
+        public static function zipJSON_old($folderName, $projectName, $file, $data, $namespace="") {
 			// Zipping the file
 			$path = "../../workspace/" . $folderName . "/";
 
@@ -354,7 +365,8 @@
     function checkSession(){ Common::checkSession(); }
     function getJSON($file,$namespace=""){ return Common::getJSON($file,$namespace); }
     function saveJSON($file,$data,$namespace=""){ Common::saveJSON($file,$data,$namespace); }
-	function zipJSON($folderName, $projectName, $file, $data, $namespace="") { Common::zipJSON($folderName, $projectName, $file, $data, $namespace); }
+	function zipJSON($folderName, $projectName) { Common::zipJSON($folderName, $projectName); }
+	//function zipJSON($folderName, $projectName, $file, $data, $namespace="") { Common::zipJSON($folderName, $projectName, $file, $data, $namespace); }
     function formatJSEND($status,$data=false){ return Common::formatJSEND($status,$data); }
     function checkAccess() { return Common::checkAccess(); }
     function isAvailable($func) { return Common::isAvailable($func); }
