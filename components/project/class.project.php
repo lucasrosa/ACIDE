@@ -123,7 +123,7 @@ class Project extends Common {
     //////////////////////////////////////////////////////////////////
 
     public function Open(){
-        if($this->load()){
+    	if($this->load()){
 			echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path, "privacy"=>$this->privacy, "user"=>$this->user));
         }else{
             echo formatJSEND("error","Error Opening Project");
@@ -189,7 +189,7 @@ class Project extends Common {
     }
     
     //////////////////////////////////////////////////////////////////
-    // Rename
+    // LF: Rename
     //////////////////////////////////////////////////////////////////
 
 	public function Rename(){
@@ -209,7 +209,6 @@ class Project extends Common {
 		$projectName = $_SESSION['user'] . " - ".$this->assignmentName;
 		$this->name = '[S] ' . $this->name;
 		$this->assignment["submitted_date"] = new MongoDate(strtotime(date("Y-m-d H:i:s")));
-		unset($this->assignment[0]);
 		$this->save();
 		
         // Save array back to JSON
@@ -220,22 +219,28 @@ class Project extends Common {
     }
 
     //////////////////////////////////////////////////////////////////
-    // Delete Project
+    // LF:  Delete Project
     //////////////////////////////////////////////////////////////////
-
-    public function Delete(){
-        $revised_array = array();
-        foreach($this->projects as $project=>$data){
-            if($data['path']!=$this->path){
-                $revised_array[] = array("name"=>$data['name'],"path"=>$data['path'],"privacy"=>$data['privacy'],"user"=>$data['user']);
-            }
-        }
-        // Save array back to JSON
-        saveJSON('projects.php',$revised_array);
-        // Response
-        echo formatJSEND("success",null);
+	
+	public function Delete(){
+        $collection = $this->database->users;
+		
+		// LF: Find the current user
+		$user = $collection->findOne(array("username" => $this->user));
+			for ($i = 0; $i < count($user["projects"]); $i++) {
+				// LF: The project is selected based on the path :-> As it is the project's id
+				if ($user["projects"][$i]["path"] == $this->path) {
+					// LF: Remove the project from the projects array
+					unset($user["projects"][$i]);
+					$user["projects"] = array_values($user["projects"]);
+				}
+			}
+		// LF: Updating in the database : Overwriting the user document 	
+		if($collection->update(array("username" => $this->user), $user)) {
+			// Response
+        	echo formatJSEND("success",null);	
+		}
     }
-
 
     //////////////////////////////////////////////////////////////////
     // Check Duplicate
@@ -320,8 +325,10 @@ class Project extends Common {
 	public function Save() {
 		$collection = $this->database->users;
 		
+		// LF: Find the current user
 		$user = $collection->findOne(array("username" => $this->user));
 			for ($i = 0; $i < count($user["projects"]); $i++) {
+				// LF: The project is selected based on the path :-> As it is the project's id
 				if ($user["projects"][$i]["path"] == $this->path) {
 					$user["projects"][$i]["name"] = $this->name;
 					$user["projects"][$i]["privacy"] = $this->privacy;
@@ -329,8 +336,8 @@ class Project extends Common {
 					$user["projects"][$i]["assignment"] = $this->assignment;
 				}
 			}
-			
-			return $collection->update(array("username" => $this->user), $user);
+		// LF: Updating in the database : Overwriting the user document 	
+		return $collection->update(array("username" => $this->user), $user);
     }
 	
 }

@@ -98,8 +98,8 @@
 
     if($_GET['action']=='submit'){
         $Project->path = $_GET['project_path'];
-		$Project->assignmentName = $_GET['assignmentName'];
 		$Project->user = $_SESSION['user'];
+		$Project->assignmentName = $_GET['assignmentName'];
 		$Project->load();
         $Project->Submit();
     }
@@ -111,6 +111,7 @@
     if($_GET['action']=='delete'){
         if(checkAccess()) {
             $Project->path = $_GET['project_path'];
+			$Project->user = $_SESSION['user'];
             $Project->Delete();
         }
     }
