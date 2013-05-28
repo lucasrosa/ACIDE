@@ -139,24 +139,23 @@
 		
 		$group_users = $_POST['group_user'];
 		$formated_group_users = array();
+		$number_of_users = count($group_users);
 		
-		for($i = 0; $i < count($group_users); $i++) {
-			$formated_group_users[$i] = array("username" => str_replace("\r", "", (str_replace("\n", "", str_replace("\t", "", $group_users[$i])))));
+		$formated_group_users[0] = array("username" => $Project->user);
+		
+		for($i = 0; $i < $number_of_users; $i++) {
+			$formated_group_users[$i+1] = array("username" => str_replace("\r", "", (str_replace("\n", "", str_replace("\t", "", $group_users[$i])))));
 		}
-
+		
+		if ($number_of_users > 0) {
+			$Project->privacy = "shared";
+		} else {
+			$Project->privacy = "private";
+		}
+		
 		$Project->group_members = $formated_group_users;
+		
 		$Project->Save();
-        /*
-        //error_log("path" . $_POST["project_path"]); 
-		$aDoor = $_POST['group_user']; 
-		$N = count($aDoor);
- 
-	    for($i=0; $i < $N; $i++)
-	    {
-	      error_log($i . "---" . $aDoor[$i] . " ");
-	    }
-		 * 
-		 */
     }
 
 ?>

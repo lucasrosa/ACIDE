@@ -374,7 +374,7 @@
 						}
 			        ?>
          	</table> 
-        	<button class="btn-right" onclick="send_group_users_form(); codiad.modal.unload();">ahia</button>&nbsp;<button class="btn-right" onclick="codiad.modal.unload(); return false;">Cancel</button>
+        	<button class="btn-right" onclick="send_group_users_form(); codiad.modal.unload();">Save</button>&nbsp;<button class="btn-right" onclick="codiad.modal.unload(); return false;">Cancel</button>
         
         <script>
 		    function send_group_users_form() {
