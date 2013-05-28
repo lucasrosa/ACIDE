@@ -252,8 +252,10 @@ class Project extends Common {
 	public function Delete(){
         $collection = $this->database->users;
 		
-		// LF: Find the current user
-		$user = $collection->findOne(array("username" => $this->user));
+		$users = $collection->find();
+		$update_successful = TRUE;
+		
+		foreach ($users as $user) {
 			for ($i = 0; $i < count($user["projects"]); $i++) {
 				// LF: The project is selected based on the path :-> As it is the project's id
 				if ($user["projects"][$i]["path"] == $this->path) {
@@ -262,8 +264,14 @@ class Project extends Common {
 					$user["projects"] = array_values($user["projects"]);
 				}
 			}
-		// LF: Updating in the database : Overwriting the user document 	
-		if($collection->update(array("username" => $this->user), $user)) {
+			// LF: Updating in the database : Overwriting the user document  
+			if (!$collection->update(array("username" => $user["username"]), $user)){
+				$update_successful = FALSE;	
+			}
+		}
+		
+		// LF: If everything is okay returns success 	
+		if($update_successful) {
 			// Response
         	echo formatJSEND("success",null);	
 		}
