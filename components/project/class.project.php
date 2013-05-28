@@ -149,12 +149,23 @@ class Project extends Common {
 					 );
 					 
 		$collection = $this->database->users;
-		// LF: Find the current user
-		$user = $collection->findOne(array("username" => $this->user));
-		// LF: Push the new project in the end of the project's array
-		array_push($user["projects"], $project);
-		// LF: Saves the new array in the database by overwriting the previous user
-		$collection->update(array("username" => $this->user), $user);
+		if ($this->privacy == 'private') {
+			// LF: Find the current user
+			$user = $collection->findOne(array("username" => $this->user));
+			// LF: Push the new project in the end of the project's array
+			array_push($user["projects"], $project);
+			// LF: Saves the new array in the database by overwriting the previous user
+			$collection->update(array("username" => $this->user), $user);
+		} else { // public project
+			$users = $collection->find();
+			foreach ($users as $user) {
+				// LF: Push the new project in the end of the project's array
+				array_push($user["projects"], $project);
+				// LF: Saves the new array in the database by overwriting the previous user
+				$collection->update(array("username" => $user["username"]), $user);
+			}
+		}
+		
 		
     }
 	
