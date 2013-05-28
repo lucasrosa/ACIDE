@@ -380,7 +380,7 @@ class Project extends Common {
 					$user["projects"][$i]["assignment"] = $this->assignment;
 				}
 			}
-			// LF: Updating in the database : Overwriting the user document
+			// LF: Updating in the database : Overwriting the user document  
 			if (!$collection->update(array("username" => $user["username"]), $user)){
 				$update_successful = FALSE;	
 			}
