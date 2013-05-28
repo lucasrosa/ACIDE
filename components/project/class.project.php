@@ -368,19 +368,24 @@ class Project extends Common {
 	public function Save() {
 		$collection = $this->database->users;
 		
-		// LF: Find the current user
-		$user = $collection->findOne(array("username" => $this->user));
-		for ($i = 0; $i < count($user["projects"]); $i++) {
-			// LF: The project is selected based on the path :-> As it is the project's id
-			if ($user["projects"][$i]["path"] == $this->path) {
-				$user["projects"][$i]["name"] = $this->name;
-				$user["projects"][$i]["privacy"] = $this->privacy;
-				$user["projects"][$i]["group_members"] = $this->group_members;
-				$user["projects"][$i]["assignment"] = $this->assignment;
+		$users = $collection->find();
+		$update_successful = TRUE;
+		foreach ($users as $user) {
+			for ($i = 0; $i < count($user["projects"]); $i++) {
+				// LF: The project is selected based on the path :-> As it is the project's id
+				if ($user["projects"][$i]["path"] == $this->path) {
+					$user["projects"][$i]["name"] = $this->name;
+					$user["projects"][$i]["privacy"] = $this->privacy;
+					$user["projects"][$i]["group_members"] = $this->group_members;
+					$user["projects"][$i]["assignment"] = $this->assignment;
+				}
+			}
+			// LF: Updating in the database : Overwriting the user document
+			if (!$collection->update(array("username" => $user["username"]), $user)){
+				$update_successful = FALSE;	
 			}
 		}
-		// LF: Updating in the database : Overwriting the user document 	
-		return $collection->update(array("username" => $this->user), $user);
+		return $update_successful;
     }
 	
 	public function GetUsersInProject() {
