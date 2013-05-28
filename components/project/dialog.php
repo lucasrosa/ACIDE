@@ -8,7 +8,8 @@
 
 
     require_once('../../common.php');
-    
+    require_once('../user/class.user.php');
+	
     //////////////////////////////////////////////////////////////////
     // Verify Session or Key
     //////////////////////////////////////////////////////////////////
@@ -29,13 +30,13 @@
             }
             
             ?>  
+            <!-- LF: Public Projects List -->
             <div id='public-projects-containter'>        
 	            <ul>
 					<lh>Public Projects</lh>
 	            <?php
             
 	            // Get projects JSON data
-	            //$projects = getJSON('projects.php');
 				$projects = getProjectsForUser($_SESSION['user']);
 	            
 	            sort($projects);
@@ -50,10 +51,17 @@
 								<div class="icon-archive icon"></div>
 								<?php echo($data['name']); ?>
 							</span>
-							<!-- Adding a button to Submit the project as an assignment -->
+							
+							<!-- Adding a button to Submit the project as an assignment, only if it has an assignment attached to it -->
+							<?php
+							if ($data['assignment'] != '') {
+							?>
 							<span  onclick="codiad.project.submit('<?php echo($data['path']); ?>');">
 								<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
 							</span>
+							<?php 
+							}
+							?>
 						</div>
 					</li>
                 
@@ -71,7 +79,6 @@
 	            <?php
             
 	            // Get projects JSON data
-	            //$projects = getJSON('projects.php'); 
 				$projects = getProjectsForUser($_SESSION['user']);
 	            sort($projects);
 	            foreach($projects as $project=>$data){
@@ -85,10 +92,58 @@
 								<div class="icon-archive icon"></div>
 								<?php echo($data['name']); ?>
 							</span>
-							<!-- Adding a button to Submit the project as an assignment -->
+							<!-- Adding a button to Submit the project as an assignment, only if it has an assignment attached to it -->
+							<?php
+							if ($data['assignment'] != '') {
+							?>
 							<span  onclick="codiad.project.submit('<?php echo($data['path']); ?>');">
 								<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
 							</span>
+							<?php 
+							}
+							?>
+						</div>
+					</li>
+                
+	                <?php
+	                }
+	            } 
+	            ?>
+            
+	            </ul>
+			</div>
+			<!-- LF: Shared Projects List -->
+			<div id='private-projects-containter'>
+	            <ul>
+					<lh>Shared Projects</lh>
+	            <?php
+            
+	            // Get projects JSON data
+				$projects = getProjectsForUser($_SESSION['user']);
+	            sort($projects);
+	            foreach($projects as $project=>$data){
+	                $show = true;
+	                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
+	                if($show && $data['privacy'] == 'shared'){ //: needed when not using getUserProjects && $data['user'] == $_SESSION['user']){
+	                ?>
+	                <li>
+						<div>
+							<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
+								<div class="icon-archive icon"></div>
+								<?php echo($data['name']); ?>
+							</span>
+							
+							<!-- Adding a button to Submit the project as an assignment, only if it has an assignment attached to it -->
+							<?php
+							if ($data['assignment'] != '') {
+							?>
+							<span  onclick="codiad.project.submit('<?php echo($data['path']); ?>');">
+								<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
+							</span>
+							<?php 
+							}
+							?>
+							
 						</div>
 					</li>
                 
@@ -123,12 +178,12 @@
                     <th width="5">Open</th>
                     <th>Project Name</th>
                     <th>Path</th>
+                    <th>Group Members</th>
                     <?php if(checkAccess()){ ?><th width="5">Delete</th><?php } ?>
                 </tr>
             <?php
             
             // Get projects JSON data
-            //$projects = getJSON('projects.php'); 
             $projects = getProjectsForUser($_SESSION['user']);
             sort($projects);
             foreach($projects as $project=>$data){
@@ -140,6 +195,7 @@
                     <td><a onclick="codiad.project.open('<?php echo($data['path']); ?>');" class="icon-folder bigger-icon"></a></td>
                     <td><?php echo($data['name']); ?></td>
                     <td><?php echo($data['path']); ?></td>
+                    <td><a onclick="codiad.modal.unload(); codiad.project.manage_users('<?php echo($data['path']); ?>');" class="icon-users bigger-icon"></a></td>
                     <?php
                         if(checkAccess()){
                             if($_SESSION['project'] == $data['path']){
@@ -267,7 +323,43 @@
             <button class="btn-left">Confirm</button><button class="btn-right" onclick="codiad.project.list();return false;">Cancel</button>
             <?php
             break;
-        
+     	
+		//////////////////////////////////////////////////////////////////
+        // LF: Manage Users
+        //////////////////////////////////////////////////////////////////
+        case 'manage_users':
+		
+        ?>
+        <form>
+        <input type="hidden" name="project_path" value="<?php echo($_GET['path']); ?>">
+        <label><span class="icon-users"></span>Manage Users:</label>
+	        <table width="100%">
+	                <tr>
+	                    <th align="center">Username</th>
+	                    <th align="center">Permitted</th>
+	                </tr>    
+			        <?php 
+			        	$User = new User();
+						$User->users = getJSON('users.php');
+						$users = $User->users;
+						foreach($users as $user) {
+							if($user['username'] == $_SESSION['user']) {
+								?>
+								<tr>
+									<td align="center"><?php echo $user['username']; ?></td>
+									<td align="center"><input type="checkbox" /></td>
+								</tr>
+								<?php
+							} 
+						}
+							
+			        ?>
+         	</table> 
+        <button class="btn-left">Submit</button>&nbsp;<button class="btn-right" onclick="codiad.modal.unload(); return false;">Cancel</button>
+        <form>
+        <?php
+        break;       
+           
     }
     
 ?>

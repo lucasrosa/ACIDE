@@ -277,8 +277,34 @@
 	                    }
 	                });
 	            });
-        }
+        },
         
+        //////////////////////////////////////////////////////////////////
+        // LF: Manage users of the Project
+        //////////////////////////////////////////////////////////////////
+		
+        manage_users: function(path) {
+	            var _this = this;
+	            codiad.modal.load(500, this.dialog + '?action=manage_users&path=' + escape(path));
+	            $('#modal-content form')
+	                .live('submit', function(e) {
+	                e.preventDefault();
+	                var projectPath = $('#modal-content form input[name="project_path"]')
+	                    .val();
+	                var assignmentName = $('#modal-content form input[name="assignmentName"]')
+	                    .val();    
+						
+	                $.get(_this.controller + '?action=manage_users&project_path=' + projectPath + '&assignmentName=' + assignmentName, function(data) {
+	                   renameResponse = codiad.jsend.parse(data);
+	                    if (renameResponse != 'error') {
+	                        codiad.message.success(i18n('Project submited'));
+	                        _this.loadSide();
+							//$('#file-manager a[data-type="root"]').html("[S] " + $('#file-manager a[data-type="root"]').html());  // This changes the name (of the active project) in the file inspector
+	                        codiad.modal.unload();
+	                    }
+	                });
+	            });
+        }
 		
 		
 		

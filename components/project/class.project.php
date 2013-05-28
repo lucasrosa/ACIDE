@@ -194,8 +194,6 @@ class Project extends Common {
                         }
                     }
                 }
-                //$this->projects[] = array("name"=>$this->name,"path"=>$this->path,"privacy"=>$this->privacy,"user"=>$_SESSION['user']);
-                //saveJSON('projects.php',$this->projects);
 				$this->CreateProjectOnDatabase();
 				
                 // Pull from Git Repo?
@@ -240,7 +238,7 @@ class Project extends Common {
 		$this->assignment["submitted_date"] = new MongoDate(strtotime(date("Y-m-d H:i:s")));
 		$this->save();
 		
-        // Save array back to JSON
+        // Saves the project in a zip file
         zipJSON($this->path, $projectName);
 		
 		// Response
@@ -299,17 +297,6 @@ class Project extends Common {
 			}
 		}	
 
-        return $pass;
-    }
-
-    public function CheckDuplicate_old(){
-    	// must check the user's project name and all the projects paths
-        $pass = true;
-        foreach($this->projects as $project=>$data){
-            if($data['name']==$this->name || $data['path']==$this->path){
-                $pass = false;
-            }
-        }
         return $pass;
     }
 
