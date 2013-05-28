@@ -383,4 +383,19 @@ class Project extends Common {
 		return $collection->update(array("username" => $this->user), $user);
     }
 	
+	public function GetUsersInProject() {
+		$collection = $this->database->users;
+		
+		$users = $collection->find();
+		foreach ($users as $user) {
+			for ($i = 0; $i < count($user["projects"]); $i++) {
+				if ($user["projects"][$i]["path"] == $this->path) {
+					return $user["projects"][$i]["group_members"];
+				}
+			}
+		}
+		 	
+		return null;
+    }
+	
 }

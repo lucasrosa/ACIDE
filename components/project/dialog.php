@@ -9,6 +9,7 @@
 
     require_once('../../common.php');
     require_once('../user/class.user.php');
+	require_once('class.project.php');
 	
     //////////////////////////////////////////////////////////////////
     // Verify Session or Key
@@ -195,7 +196,18 @@
                     <td><a onclick="codiad.project.open('<?php echo($data['path']); ?>');" class="icon-folder bigger-icon"></a></td>
                     <td><?php echo($data['name']); ?></td>
                     <td><?php echo($data['path']); ?></td>
-                    <td><a onclick="codiad.modal.unload(); codiad.project.manage_users('<?php echo($data['path']); ?>');" class="icon-users bigger-icon"></a></td>
+                    <?php
+                    if($data['privacy'] != 'public') {
+                    ?> 
+                    	<td><a onclick="codiad.project.manage_users('<?php echo($data['path']); ?>');" class="icon-users bigger-icon"></a></td>
+                    <?php
+					} else {
+                    ?>
+                    	<td><span class="icon-user bigger-icon"></span></td>
+                    <?php
+					}
+                    ?>
+                    
                     <?php
                         if(checkAccess()){
                             if($_SESSION['project'] == $data['path']){
@@ -237,6 +249,7 @@
 			<select name="project_privacy">
 			  <option value="public" selected >Public</option>
 			  <option value="private">Private</option>
+			  <!-- There is not need to shared projects here because a project turns to shared when new users are added -->
 			</select>
 			
             <?php if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') { ?>
@@ -330,36 +343,56 @@
         case 'manage_users':
 		
         ?>
-        <form>
+        <form id="group_users_form">
         <input type="hidden" name="project_path" value="<?php echo($_GET['path']); ?>">
         <label><span class="icon-users"></span>Manage Users:</label>
 	        <table width="100%">
 	                <tr>
-	                    <th align="center">Username</th>
-	                    <th align="center">Permitted</th>
+	                    <th>Username</th>
+	                    <th>Permitted</th>
 	                </tr>    
 			        <?php 
+			        	$Project = new Project();
+						$Project->path = $_GET['path'];
+						$Project->user = $_SESSION['user'];
+						$users_in_project = $Project->GetUsersInProject();
+						
 			        	$User = new User();
 						$User->users = getJSON('users.php');
 						$users = $User->users;
 						foreach($users as $user) {
-							if($user['username'] == $_SESSION['user']) {
+							if($user['username'] != $_SESSION['user']) {
 								?>
 								<tr>
-									<td align="center"><?php echo $user['username']; ?></td>
-									<td align="center"><input type="checkbox" /></td>
+									<td><?=$user['username']; ?></td>
+									<td><input type="checkbox" name="group_user[]" value="<?=$user['username']; ?> 
+										<? if(in_array($user['username'], $users_in_project)) { echo 'selected'; } ?>"/>
+									</td>
 								</tr>
 								<?php
 							} 
 						}
-							
 			        ?>
          	</table> 
-        <button class="btn-left">Submit</button>&nbsp;<button class="btn-right" onclick="codiad.modal.unload(); return false;">Cancel</button>
-        <form>
+        	<button class="btn-right" onclick="send_group_users_form(); codiad.modal.unload();">ahia</button>&nbsp;<button class="btn-right" onclick="codiad.modal.unload(); return false;">Cancel</button>
+        
+        <script>
+		    function send_group_users_form() {
+		    	var form = $('#group_users_form');
+		    	$.ajax( {
+			      type: "POST",
+			      url: 'components/project/controller.php?action=manage_users',
+			      data: form.serialize(),
+			      success: function( response ) {
+			        console.log( response );
+			      }
+			    } );
+			}
+		    </script>
+        	
+        	
         <?php
         break;       
-           
     }
     
 ?>

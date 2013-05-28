@@ -581,12 +581,12 @@ table [class^="icon-"], [class*=" icon-"] {
     top: 33px;
     left: 0;
     right: 10px;
-    bottom: 276px;
+    bottom: 400px;
 }
 
 .sb-left-projects {
     position:absolute;
-    height:276px;
+    height:400px;
     bottom:0;
     left:0;
     right:10px;

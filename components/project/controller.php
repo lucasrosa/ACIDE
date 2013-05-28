@@ -9,7 +9,7 @@
 
     require_once('../../common.php');
     require_once('class.project.php');
-
+	error_log("controller.php EXECUTED");
     //////////////////////////////////////////////////////////////////
     // Verify Session or Key
     //////////////////////////////////////////////////////////////////
@@ -126,6 +126,37 @@
         }else{
             echo formatJSEND("error","No Project Returned");
         }
+    }
+	
+	//////////////////////////////////////////////////////////////////
+    // Manage Users
+    //////////////////////////////////////////////////////////////////
+
+    if($_GET['action']=='manage_users'){
+    	$Project->user = $_SESSION["user"];
+		$Project->path = $_POST["project_path"];
+		$Project->Load();
+		
+		$group_users = $_POST['group_user'];
+		$formated_group_users = array();
+		
+		for($i = 0; $i < count($group_users); $i++) {
+			$formated_group_users[$i] = array("username" => str_replace("\r", "", (str_replace("\n", "", str_replace("\t", "", $group_users[$i])))));
+		}
+
+		$Project->group_members = $formated_group_users;
+		$Project->Save();
+        /*
+        //error_log("path" . $_POST["project_path"]); 
+		$aDoor = $_POST['group_user']; 
+		$N = count($aDoor);
+ 
+	    for($i=0; $i < $N; $i++)
+	    {
+	      error_log($i . "---" . $aDoor[$i] . " ");
+	    }
+		 * 
+		 */
     }
 
 ?>
