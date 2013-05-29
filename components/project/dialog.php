@@ -378,7 +378,7 @@
 								<tr>
 									<td><?=$username; ?></td>
 									<td><input type="checkbox" name="group_user[]" value="<?=$username; ?>"
-										<? if(in_array($username, $users_in_project)) { echo "checked=\"checked\""; } else { echo "asdasda"; } ?>/>
+										<? if(in_array($username, $users_in_project)) { echo "checked=\"checked\""; } ?>/>
 									</td>
 								</tr>
 								<?php

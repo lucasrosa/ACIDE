@@ -158,12 +158,15 @@
 		}
 		
 		$Project->group_members = $formated_group_users;
-		if ($Project->assignment != '') {
-			if ( ($number_of_users + 1) <= $Project->assignment['maximum_number_group_members']) {
-				$Project->Save();	
+		
+		$maximum_number_group_members = $Project->GetMaximumNumberGroupMembers();
+		
+		if ($maximum_number_group_members > 0) {
+			if (($number_of_users + 1) <= $maximum_number_group_members) {
+				$Project->Save();
 			} else {
 				error_log("   ERROR:   Number of users is greater than the assignment allows.");
-			}	
+			}
 		} else {
 			$Project->Save();
 		}
