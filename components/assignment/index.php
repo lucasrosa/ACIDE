@@ -59,61 +59,63 @@
 	<div style="margin-top: 50px;"></div>
 	<div id="modal" style="display: block; width: 700px; margin:0 auto;" >
 		<div id="modal-content">
-			<label>New Assignment</label>
-			<div id="project-list">
-				<table width="100%">
-					<tbody>
-						<tr>
-							<th>ID / Folder</th>
-							<td><input type="text" name="id" /></td>
-						</tr>
-						<tr>
-							<th>Assignment / Project Name</th>
-							<td><input type="text" name="project_name"/></td>
-						</tr>
-						<tr>
-							<th>Due Date</th>
-							<td><input type="text" name="due_date" id="datepicker" readonly="readonly" /></td>
-						</tr>
-						<tr>
-							<th>Late submission days</th>
-							<td>
-								<select name="late_submission_days">
-									<?php
-									for($i = 0; $i <= 10; $i++){
-									?>
-								 		<option value="<?=$i?>"><?=$i?></option>
-								  	<?
-								  	}
-								  	?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th>Description File</th>
-							<td><input name="description_file" type="file" accept=".pdf"  /></td>
-						</tr>
-						<tr>
-							<th>Maximum number of group members</th>
-							<td>
-								<select name="maximum_number_of_group_members">
-									<?php
-									for($i = 0; $i <= 100; $i++){
-									?>
-								 		<option value="<?=$i?>"><?=$i?></option>
-								  	<?
-								  	}
-								  	?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-					</tbody>
-				</table>
-			</div>
-			<button class="btn-left" onclick="alert('hi!');">
-				Create
-			</button>
+			<form method="post" name="assignment_form">
+				<label>New Assignment</label>
+				<div id="project-list">
+					<table width="100%">
+						<tbody>
+							<tr>
+								<th>ID / Folder</th>
+								<td><input type="text" name="id" /></td>
+							</tr>
+							<tr>
+								<th>Assignment / Project Name</th>
+								<td><input type="text" name="project_name"/></td>
+							</tr>
+							<tr>
+								<th>Due Date</th>
+								<td><input type="text" name="due_date" id="datepicker" readonly="readonly" /></td>
+							</tr>
+							<tr>
+								<th>Late submission days</th>
+								<td>
+									<select name="late_submission_days">
+										<?php
+										for($i = 0; $i <= 10; $i++){
+										?>
+									 		<option value="<?=$i?>"><?=$i?></option>
+									  	<?
+									  	}
+									  	?>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th>Description File</th>
+								<td><input name="description_file" type="file" accept=".pdf"  /></td>
+							</tr>
+							<tr>
+								<th>Maximum number of group members</th>
+								<td>
+									<select name="maximum_number_of_group_members">
+										<?php
+										for($i = 0; $i <= 100; $i++){
+										?>
+									 		<option value="<?=$i?>"><?=$i?></option>
+									  	<?
+									  	}
+									  	?>
+									</select>
+								</td>
+							</tr>
+							<tr>
+						</tbody>
+					</table>
+				</div>
+				<button class="btn-left" onclick="$('form#assignment_form').submit()">
+					Create
+				</button>
+			</form>
 		</div>
 	</div>
 </body>
