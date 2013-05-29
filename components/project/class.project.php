@@ -437,4 +437,11 @@ class Project extends Common {
 		}
     }
 	
+	public function GetMaximumNumberGroupMembers() {
+		if ($this->assignment != '') {
+			return $this->assignment['maximum_number_group_members'];
+		} else {
+			return 0;
+		}	
+	}
 }

@@ -342,21 +342,32 @@
         //////////////////////////////////////////////////////////////////
         case 'manage_users':
 		
+		$Project = new Project();
+		$Project->path = $_GET['path'];
+		$Project->user = $_SESSION['user'];
+		$Project->Load();
+		$users_in_project = $Project->GetUsersInProject();
+						
+						
         ?>
         <form id="group_users_form">
         <input type="hidden" name="project_path" value="<?php echo($_GET['path']); ?>">
         <label><span class="icon-users"></span>Manage Users:</label>
+        <?
+        $maximum_number_group_members = $Project->GetMaximumNumberGroupMembers();
+        if ($maximum_number_group_members > 0) {
+        ?>
+        	<label class="sb-dialog-warning">This assignment has a maximum of <?=$maximum_number_group_members?> users. </label>
+	    <?
+		}
+	    ?>
 	        <table width="100%">
 	                <tr>
 	                    <th>Username</th>
 	                    <th>Permitted</th>
 	                </tr>    
 			        <?php 
-			        	$Project = new Project();
-						$Project->path = $_GET['path'];
-						$Project->user = $_SESSION['user'];
-						$users_in_project = $Project->GetUsersInProject();
-						
+			        	
 			        	$User = new User();
 						$User->users = getJSON('users.php');
 						$users = $User->users;

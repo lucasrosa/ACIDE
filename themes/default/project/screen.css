@@ -96,3 +96,6 @@
 #git-clone td { border: none; padding: 0; margin: 0; }
 
 .note { padding: 10px 0; color: #a8a6a8; }
+.sb-dialog-warning {
+	color: #F3F781;
+}
