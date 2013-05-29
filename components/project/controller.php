@@ -136,7 +136,12 @@
 		$Project->path = $_POST["project_path"];
 		$Project->Load();
 		
-		$group_users = $_POST['group_user'];
+		if (isset($_POST['group_user'])) {
+			$group_users = $_POST['group_user'];	
+		}else {
+			$group_users = array();
+		}
+		
 		$formated_group_users = array();
 		$number_of_users = count($group_users);
 		
@@ -153,8 +158,15 @@
 		}
 		
 		$Project->group_members = $formated_group_users;
-		
-		$Project->Save();
+		if ($Project->assignment != '') {
+			if ( ($number_of_users + 1) <= $Project->assignment['maximum_number_group_members']) {
+				$Project->Save();	
+			} else {
+				error_log("   ERROR:   Number of users is greater than the assignment allows.");
+			}	
+		} else {
+			$Project->Save();
+		}
     }
 
 ?>
