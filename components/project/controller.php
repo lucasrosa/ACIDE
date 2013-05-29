@@ -161,15 +161,28 @@
 		
 		$maximum_number_group_members = $Project->GetMaximumNumberGroupMembers();
 		
+		header('Content-type: application/json');
+		
 		if ($maximum_number_group_members > 0) {
 			if (($number_of_users + 1) <= $maximum_number_group_members) {
-				$Project->Save();
+				if ($Project->Save()) {
+					$response_array['status'] = 'success'; 	
+				} else {
+					$response_array['status'] = 'error_database';
+				}
 			} else {
-				error_log("   ERROR:   Number of users is greater than the assignment allows.");
+				$response_array['status'] = 'error_user_maximum_reached'; 
 			}
 		} else {
-			$Project->Save();
+			if ($Project->Save()) {
+				$response_array['status'] = 'success'; 	
+			} else {
+				$response_array['status'] = 'error_database';
+			}
 		}
+		echo json_encode($response_array);
+		
+		
     }
 
 ?>

@@ -386,17 +386,30 @@
 						}
 			        ?>
          	</table> 
-        	<button class="btn-right" onclick="send_group_users_form(); codiad.modal.unload();">Save</button>&nbsp;<button class="btn-right" onclick="codiad.modal.unload(); return false;">Cancel</button>
+        	<button class="btn-right" onclick="send_group_users_form(); return false;">Save</button>&nbsp;<button class="btn-right" onclick="codiad.modal.unload(); return false;">Cancel</button>
         
         <script>
 		    function send_group_users_form() {
 		    	var form = $('#group_users_form');
+		    	//var codiad = global.codiad;
 		    	$.ajax( {
 			      type: "POST",
 			      url: 'components/project/controller.php?action=manage_users',
 			      data: form.serialize(),
+			      dataType: 'json', 
 			      success: function( response ) {
-			        console.log( response );
+			        codiad.modal.unload();
+			        if(response.status == 'success') {
+			        	codiad.message.success(i18n('Project updated'));
+			        } else if(response.status == 'error_user_maximum_reached') {
+			        	codiad.message.error(i18n('Maximum limit of users reached.'));
+			        } else if(response.status == 'error_database') {
+			        	codiad.message.error(i18n('Changes couldn\'t be saved on database.'));
+			        }
+			      },
+			      error: function( response ) {
+			        codiad.modal.unload();
+			        codiad.message.error(i18n('An unexpected error ocurred. Please try again.'));
 			      }
 			    } );
 			}
