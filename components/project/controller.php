@@ -148,7 +148,7 @@
 		$formated_group_users[0] = array("username" => $Project->user);
 		
 		for($i = 0; $i < $number_of_users; $i++) {
-			$formated_group_users[$i+1] = array("username" => str_replace("\r", "", (str_replace("\n", "", str_replace("\t", "", $group_users[$i])))));
+			$formated_group_users[$i+1] = array("username" => $group_users[$i]);
 		}
 		
 		if ($number_of_users > 0) {

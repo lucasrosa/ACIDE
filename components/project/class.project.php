@@ -407,19 +407,34 @@ class Project extends Common {
 		return $update_successful;
     }
 	
+	//////////////////////////////////////////////////////////////////
+    // LF: Returns an array with the usernames of all the users in a project
+    //////////////////////////////////////////////////////////////////
+	
 	public function GetUsersInProject() {
 		$collection = $this->database->users;
+		$users_in_project = array();
+		$users_in_project_formated = array();
 		
 		$users = $collection->find();
 		foreach ($users as $user) {
 			for ($i = 0; $i < count($user["projects"]); $i++) {
 				if ($user["projects"][$i]["path"] == $this->path) {
-					return $user["projects"][$i]["group_members"];
+					$users_in_project =  $user["projects"][$i]["group_members"];
 				}
 			}
 		}
-		 	
-		return null;
+		
+		// Formating the returning array
+		for ($i = 0; $i < count($users_in_project); $i++) {
+			$users_in_project_formated[$i] = $users_in_project[$i]['username'];
+		}
+		
+		if (count($users_in_project) > 0) {
+			return $users_in_project_formated;
+		} else {
+			return null;	
+		}
     }
 	
 }

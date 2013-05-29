@@ -362,11 +362,12 @@
 						$users = $User->users;
 						foreach($users as $user) {
 							if($user['username'] != $_SESSION['user']) {
+								$username = $user['username'];
 								?>
 								<tr>
-									<td><?=$user['username']; ?></td>
-									<td><input type="checkbox" name="group_user[]" value="<?=$user['username']; ?> 
-										<? if(in_array($user['username'], $users_in_project)) { echo 'selected'; } ?>"/>
+									<td><?=$username; ?></td>
+									<td><input type="checkbox" name="group_user[]" value="<?=$username; ?>"
+										<? if(in_array($username, $users_in_project)) { echo "checked=\"checked\""; } else { echo "asdasda"; } ?>/>
 									</td>
 								</tr>
 								<?php
