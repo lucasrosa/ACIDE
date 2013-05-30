@@ -6,7 +6,7 @@
 
 require_once('../../common.php');
 
-class Project extends Common {
+class Assignment extends Common {
 
     //////////////////////////////////////////////////////////////////
     // PROPERTIES

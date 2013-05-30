@@ -134,8 +134,13 @@ class Project extends Common {
     // LF: Init project on database
     //////////////////////////////////////////////////////////////////
 
-    public function CreateProjectOnDatabase(){
-    	$this->user = $_SESSION['user'];
+    public function CreateProjectOnDatabase($user = ''){
+    	if ($user == '') {
+    		$this->user = $_SESSION['user'];
+			// LF: The assignment is defined as nothing here because when the user is not defined it means it's not an assignment
+			$this->assignment = ''; 
+		}
+		
         $project = array(
 						"name" => $this->name,
 						"path" => $this->path,
@@ -145,7 +150,7 @@ class Project extends Common {
 															"username" => $this->user,
 														 )														
 												),
-						"assignment" => ''
+						"assignment" => $this->assignment
 					 );
 					 
 		$collection = $this->database->users;
@@ -155,25 +160,51 @@ class Project extends Common {
 			// LF: Push the new project in the end of the project's array
 			array_push($user["projects"], $project);
 			// LF: Saves the new array in the database by overwriting the previous user
-			$collection->update(array("username" => $this->user), $user);
+			return $collection->update(array("username" => $this->user), $user);
 		} else { // public project
 			$users = $collection->find();
 			foreach ($users as $user) {
 				// LF: Push the new project in the end of the project's array
 				array_push($user["projects"], $project);
 				// LF: Saves the new array in the database by overwriting the previous user
-				$collection->update(array("username" => $user["username"]), $user);
+				return $collection->update(array("username" => $user["username"]), $user);
 			}
 		}
 		
 		
     }
 	
+	//////////////////////////////////////////////////////////////////
+    // LF: Init project on database
+    //////////////////////////////////////////////////////////////////
+
+    public function CreateProjectsOnDatabaseWithAssignments() {
+    	$collection = $this->database->users;
+    	$users = $collection->find();
+		$return = "success";
+		foreach ($users as $user) {
+			
+			$this->path = "AS_" . $user['username'] ."_" . $this->assignment["id"] ;
+			$result = $this->Create($user['username']);
+			if ($result != 'success') {
+				$return = $result;
+			}
+		}
+		return $result;
+	}
+	
+	
     //////////////////////////////////////////////////////////////////
     // LF: Create
     //////////////////////////////////////////////////////////////////
 
-    public function Create(){
+    public function Create($user = ''){
+    	if (isset($this->assignment["id"])) {
+    		$has_assignment = TRUE;
+    	} else {
+    		$has_assignment = FALSE;	
+    	}
+		
         if($this->name != '' && $this->path != '') {
             $this->path = $this->cleanPath();
             if(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' || !$this->isAbsPath($this->path)) {
@@ -205,7 +236,20 @@ class Project extends Common {
                         }
                     }
                 }
-				$this->CreateProjectOnDatabase();
+				if ($has_assignment) {
+					if ($this->CreateProjectOnDatabase($user)) {
+						return "success";
+					} else {
+						return "Could not create the project in the database.";
+					}
+				} else {
+					if ($this->CreateProjectOnDatabase()) {
+						return "success";
+					} else {
+						return "Could not create the project in the database.";
+					}
+				}
+				
 				
                 // Pull from Git Repo?
                 if($this->gitrepo){
@@ -216,10 +260,17 @@ class Project extends Common {
                     }
                     $this->ExecuteCMD();
                 }
-                
-                echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path));
+                if ($has_assignment) {
+					return "success";	
+				} else {
+                	echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path));
+				}
             }else{
-                echo formatJSEND("error","A Project With the Same Name or Path Exists");
+            	if ($has_assignment) {
+					return "A Project With the Same Name or Path Exists";
+				} else {
+                	echo formatJSEND("error","A Project With the Same Name or Path Exists");
+				}
             }
         } else {
              echo formatJSEND("error","Project Name/Folder is empty");

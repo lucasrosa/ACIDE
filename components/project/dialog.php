@@ -366,7 +366,7 @@
 	                    <th>Username</th>
 	                    <th>Permitted</th>
 	                </tr>    
-			        <?php 
+			      <?php 
 			        	
 			        	$User = new User();
 						$User->users = getJSON('users.php');
