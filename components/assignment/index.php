@@ -32,7 +32,7 @@
 			
 			$Assignment["owner"] = $_SESSION["user"];
 			$Assignment["id"] = $Project->path;
-			$Assignment['due_date'] = $_POST['due_date'];
+			$Assignment['due_date'] = date("Y-m-d H:i:s", strtotime($_POST['due_date'] . " " . $_POST['due_time']));
 			$Assignment['allow_late_submission'] = $_POST['late_submission_days'];
 			$Assignment['maximum_number_group_members'] = $_POST['maximum_number_of_group_members'];
 			
@@ -89,6 +89,26 @@
 			
 		}
 	}
+
+	/*
+	$date1 = date("Y-m-d H:i:s");
+	$add_days = 0;
+	$date2 = date('Y-m-d H:i:s',strtotime($date1) + (24*3600*$add_days));
+	
+	echo "Date 1 : " . $date1 . "<br />";
+	echo "Date 2 : " . $date2 . "<br />";
+	
+	if ($date2 > $date1) {
+		echo "<br /> Date 2 is greater. ";
+	} else if ($date2 < $date1) {
+		echo "<br /> Date 1 is greater. ";
+	} else {
+		echo "<br /> Both dates are the same. ";
+	}
+	
+	$date = "05/31/2013 05:00 PM";
+	echo "<br />" . date("Y-m-d  H:i:s", strtotime($date));
+	*/
 ?>
 <!doctype html>
 
@@ -100,12 +120,18 @@
 	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   	<script src="/Codiad/components/assignment/init.js"></script>
+  	<!-- Timepicker -->
+  	<link rel="stylesheet" type="text/css" href="timepicker/jquery.ptTimeSelect.css" />
+    <script type="text/javascript" src="timepicker/jquery.ptTimeSelect.js" /></script>
+        
   	<script>
   	$(document).ready(function() {
   		
   		$(function() {
 		    $( "#datepicker" ).datepicker({minDate: new Date()});
-		}); 
+		});
+		$('input[name="due_time"]').ptTimeSelect();
+		 
 	});
   	</script>
 </head>
@@ -187,14 +213,23 @@
 							</tr>
 							<tr>
 								<th>Due Date</th>
-								<td><input type="text" name="due_date" id="datepicker" readonly="readonly" /></td>
+								<td>
+									<table>
+										<tr>
+											<td style="border:0px;">Date</td>
+											<td style="border:0px;"><input type="text" name="due_date" id="datepicker" readonly="readonly" /></td>
+										</tr>
+											<td style="border:0px;">Time</td>
+											<td style="border:0px;"><input type="text" name="due_time" id="due_time"   readonly="readonly"  /></td>
+									</table>
+								</td>
 							</tr>
 							<tr>
 								<th>Late submission days</th>
 								<td>
 									<select name="late_submission_days">
 										<?php
-										for($i = 0; $i <= 10; $i++){
+										for($i = 0; $i <= 31; $i++){
 										?>
 									 		<option value="<?=$i?>"><?=$i?></option>
 									  	<?
@@ -203,7 +238,6 @@
 									</select>
 								</td>
 							</tr>
-							<tr>
 								<th>Description File</th>
 								<td><input name="file" type="file" accept=".pdf"  /></td>
 							</tr>

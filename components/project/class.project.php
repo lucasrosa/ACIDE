@@ -308,7 +308,9 @@ class Project extends Common {
 		
 		$projectName = $_SESSION['user'] . " - ".$this->assignmentName;
 		$this->name = '[S] ' . $this->name;
-		$this->assignment["submitted_date"] = new MongoDate(strtotime(date("Y-m-d H:i:s")));
+		//$this->assignment["submitted_date"] = new MongoDate(strtotime(date("Y-m-d H:i:s")));
+		// Set the date (current time) as a string
+		$this->assignment["submitted_date"] = date("Y-m-d H:i:s");
 		$this->save();
 		
         // Saves the project in a zip file
