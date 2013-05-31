@@ -139,6 +139,8 @@ class Project extends Common {
     		$this->user = $_SESSION['user'];
 			// LF: The assignment is defined as nothing here because when the user is not defined it means it's not an assignment
 			$this->assignment = ''; 
+		} else {
+			$this->user = $user;
 		}
 		
         $project = array(
@@ -188,6 +190,9 @@ class Project extends Common {
 			$result = $this->Create($user['username']);
 			if ($result != 'success') {
 				$return = $result;
+				error_log ("Project " . $this->name . " not created for " . $user['username']);
+			} else {
+				error_log ("Project " . $this->name . " created for " . $user['username']);
 			}
 		}
 		return $result;
@@ -210,7 +215,13 @@ class Project extends Common {
             if(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' || !$this->isAbsPath($this->path)) {
                 $this->path = $this->SanitizePath();
             }
-            $pass = $this->checkDuplicate();
+			if ($has_assignment) {
+				$pass = $this->checkDuplicate(FALSE); // False stands for check name
+			} else {
+				$pass = $this->checkDuplicate();	
+			}
+            
+			
             if($pass){
                 if(!$this->isAbsPath($this->path)) {
                     mkdir(WORKSPACE . '/' . $this->path);
@@ -343,16 +354,18 @@ class Project extends Common {
     // Check Duplicate
     //////////////////////////////////////////////////////////////////
 
-    public function CheckDuplicate(){
+    public function CheckDuplicate($check_name = TRUE){
     	// must check the user's project name and all the projects paths
         $pass = true;
         $collection = $this->database->users;
 		
-		// LF: Find the current user and verifies the name of all of its projects
-		$user = $collection->findOne(array("username" => $this->user));
-		for ($i = 0; $i < count($user["projects"]); $i++) {
-			if ($user["projects"][$i]["name"] == $this->name) {
-				$pass = false;
+		if ($check_name) {
+			// LF: Find the current user and verifies the name of all of its projects
+			$user = $collection->findOne(array("username" => $this->user));
+			for ($i = 0; $i < count($user["projects"]); $i++) {
+				if ($user["projects"][$i]["name"] == $this->name) {
+					$pass = false;
+				}	
 			}	
 		}
 		
