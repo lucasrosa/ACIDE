@@ -111,6 +111,10 @@
 </head>
 <body>
 	<h1  align="center">Assignments</h1>
+	
+	
+	
+	
 	<div id="modal" style="display: block; width: 800px; margin:0 auto;" >
 		<div id="modal-content">
 			<label>Assignment List</label>
@@ -124,18 +128,46 @@
 							<th>Description</th>
 							<th>Maximum number of group members</th>
 						</tr>
+						<?
+						//////////////////////////////////////////////////////////////////
+					    // LF: List all assignments which this user is the owner
+					    //////////////////////////////////////////////////////////////////
+					    $Project = new Project();
+					    $assignments = $Project->GetAssignmentsForOwner($_SESSION['user']);
+						
+						for ($k = 0; $k < count($assignments); $k++) {
+						?>
 						<tr>
-							<td>Assignment 1</td>
-							<td>2010-01-15 00:00:00</td>
-							<td>Yes, 2 days.</td>
-							<td>Download</td>
-							<td>2</td>
+							<td><?=$assignments[$k]['id']?></td>
+							<td><?=$assignments[$k]['due_date']?></td>
+							<td>
+								<?
+									if ($assignments[$k]['allow_late_submission'] == 0) {
+										echo 'No';
+									} else {
+										echo 'Yes, ' . $assignments[$k]['allow_late_submission'] . ' day';
+										if ($assignments[$k]['allow_late_submission'] > 1) {
+											echo 's';
+										}
+									}
+									
+									echo '.';
+								?>
+							</td>
+							<td><a href="<?=$assignments[$k]['description_url']?>" target='_blank'>View</a></td>
+							<td><?=$assignments[$k]['maximum_number_group_members']?></td>
 						</tr>
+						<?
+						}
+						?>
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
+	
+	
+	
 	<div style="margin-top: 50px;"></div>
 	<div id="modal" style="display: block; width: 700px; margin:0 auto;" >
 		<div id="modal-content">

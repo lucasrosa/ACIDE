@@ -398,8 +398,8 @@
 			      data: form.serialize(),
 			      dataType: 'json', 
 			      success: function( response ) {
-			        codiad.modal.unload();
 			        if(response.status == 'success') {
+			        	codiad.modal.unload();
 			        	codiad.message.success(i18n('Project updated'));
 			        } else if(response.status == 'error_user_maximum_reached') {
 			        	codiad.message.error(i18n('Maximum limit of users reached.'));
@@ -421,4 +421,3 @@
     }
     
 ?>
-        

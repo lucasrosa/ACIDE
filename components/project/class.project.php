@@ -501,6 +501,10 @@ class Project extends Common {
 		}
     }
 	
+	//////////////////////////////////////////////////////////////////
+    // LF: Returns the maximum number of group members allowed to this assignment
+    //////////////////////////////////////////////////////////////////
+	
 	public function GetMaximumNumberGroupMembers() {
 		if ($this->assignment != '') {
 			return $this->assignment['maximum_number_group_members'];
@@ -508,4 +512,50 @@ class Project extends Common {
 			return 0;
 		}	
 	}
+	
+	//////////////////////////////////////////////////////////////////
+    // LF: Returns all the assignments for a certain user
+    //////////////////////////////////////////////////////////////////
+	
+	public function GetAssignmentsForOwner ($owner) {
+		$assignments = array();
+		
+		$collection = $this->database->users;
+		
+		$users = $collection->find();
+		foreach ($users as $user) {
+			for ($i = 0; $i < count($user["projects"]); $i++) {
+				if ($user["projects"][$i]["assignment"]["owner"] == $owner) {
+					$assignment_added = FALSE;
+					
+					for ($k = 0; $k < count($assignments); $k++) {
+						if ($user["projects"][$i]["assignment"]["id"] == $assignments[$k]["id"]) {
+							$assignment_added = TRUE;
+						}
+					}
+					// If the assignment isn't added yet, add it
+					if (!$assignment_added) {
+						array_push($assignments, $user["projects"][$i]["assignment"]);												
+					}
+				}
+			}
+		}
+		
+		return $assignments;	
+		}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
