@@ -391,7 +391,6 @@
         <script>
 		    function send_group_users_form() {
 		    	var form = $('#group_users_form');
-		    	//var codiad = global.codiad;
 		    	$.ajax( {
 			      type: "POST",
 			      url: 'components/project/controller.php?action=manage_users',

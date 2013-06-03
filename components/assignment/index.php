@@ -74,7 +74,6 @@
 			
 			// If there is no errors until now, the operation continues, if there is, just print the error,
 			if ($error == '') {
-				//$Assignment["description_url"];
 				$Project->assignment = $Assignment;
 				$creation_result = $Project->CreateProjectsOnDatabaseWithAssignments();
 				if ($creation_result == "success") {
@@ -122,16 +121,14 @@
   	<script src="/Codiad/components/assignment/init.js"></script>
   	<!-- Timepicker -->
   	<link rel="stylesheet" type="text/css" href="timepicker/jquery.ptTimeSelect.css" />
-    <script type="text/javascript" src="timepicker/jquery.ptTimeSelect.js" /></script>
-        
+    <script type="text/javascript" src="timepicker/jquery.ptTimeSelect.js" /></script>   
   	<script>
   	$(document).ready(function() {
   		
   		$(function() {
 		    $( "#datepicker" ).datepicker({minDate: new Date()});
 		});
-		$('input[name="due_time"]').ptTimeSelect();
-		 
+		$('input[name="due_time"]').ptTimeSelect();		 
 	});
   	</script>
 </head>

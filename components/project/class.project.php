@@ -309,15 +309,33 @@ class Project extends Common {
 		$projectName = $_SESSION['user'] . " - ".$this->assignmentName;
 		$this->name = '[S] ' . $this->name;
 		//$this->assignment["submitted_date"] = new MongoDate(strtotime(date("Y-m-d H:i:s")));
-		// Set the date (current time) as a string
-		$this->assignment["submitted_date"] = date("Y-m-d H:i:s");
-		$this->save();
 		
-        // Saves the project in a zip file
-        zipJSON($this->path, $projectName);
+		$date_submitted = date("Y-m-d H:i:s");
+		$due_date = $this->assignment["due_date"];	
+		$allow_late_submission = intval($this->assignment["allow_late_submission"]);
+		$late_date = date('Y-m-d H:i:s', strtotime($due_date) + (24*3600*$allow_late_submission));
 		
-		// Response
-		echo formatJSEND("success",null);	
+		// Verifies if the user isn't sending the assignment in a late date
+		if ($date_submitted <= $late_date) {
+			// Set the date (current time) as a string
+			$this->assignment["submitted_date"] = $date_submitted;
+			// Verifies if the user is sending the project in a late (but allowed) date
+			if ($date_submitted > $due_date) {
+				$this->assignment["submitted_late"] = "TRUE";
+			} else {
+				$this->assignment["submitted_late"] = "FALSE";
+			}
+			// Save the project in the database
+			$this->save();
+		
+	        // Saves the project in a zip file
+	        zipJSON($this->path, $projectName);
+			
+			// Response
+			echo formatJSEND("success",null);
+		} else {
+			echo formatJSEND("error", "The project can't be submitted after the deadline.");	
+		}	
     }
 
     //////////////////////////////////////////////////////////////////
@@ -527,17 +545,19 @@ class Project extends Common {
 		$users = $collection->find();
 		foreach ($users as $user) {
 			for ($i = 0; $i < count($user["projects"]); $i++) {
-				if ($user["projects"][$i]["assignment"]["owner"] == $owner) {
-					$assignment_added = FALSE;
-					
-					for ($k = 0; $k < count($assignments); $k++) {
-						if ($user["projects"][$i]["assignment"]["id"] == $assignments[$k]["id"]) {
-							$assignment_added = TRUE;
+				if (isset($user["projects"][$i]) && isset($user["projects"][$i]["assignment"]["owner"])) {	
+					if ($user["projects"][$i]["assignment"]["owner"] == $owner) {
+						$assignment_added = FALSE;
+						
+						for ($k = 0; $k < count($assignments); $k++) {
+							if ($user["projects"][$i]["assignment"]["id"] == $assignments[$k]["id"]) {
+								$assignment_added = TRUE;
+							}
 						}
-					}
-					// If the assignment isn't added yet, add it
-					if (!$assignment_added) {
-						array_push($assignments, $user["projects"][$i]["assignment"]);												
+						// If the assignment isn't added yet, add it
+						if (!$assignment_added) {
+							array_push($assignments, $user["projects"][$i]["assignment"]);												
+						}
 					}
 				}
 			}
