@@ -325,6 +325,8 @@ class Project extends Common {
 			} else {
 				$this->assignment["submitted_late"] = "FALSE";
 			}
+			
+			$this->assignment["project_file_name"] = $projectName . ".zip"; 
 			// Save the project in the database
 			$this->save();
 		
@@ -564,7 +566,35 @@ class Project extends Common {
 		}
 		
 		return $assignments;	
+	}
+	
+	//////////////////////////////////////////////////////////////////
+    // LF: Returns all the projects for a certain assignment
+    //////////////////////////////////////////////////////////////////
+	
+	public function GetProjectsForAssignment ($id) {
+		$projects = array();
+		
+		$collection = $this->database->users;
+		
+		$users = $collection->find();
+		foreach ($users as $user) {
+			for ($i = 0; $i < count($user["projects"]); $i++) {
+				if (isset($user["projects"][$i]) && isset($user["projects"][$i]["assignment"]["id"])) {
+					if ($user["projects"][$i]["assignment"]["id"] == $id) {
+						if (isset($user["projects"][$i]["assignment"]["submitted_date"])) {
+							if ($user["projects"][$i]["assignment"]["submitted_date"] != "") {
+								array_push($projects, $user["projects"][$i]);
+							}
+						}
+						
+					}
+				}
+			}
 		}
+		
+		return $projects;
+	}
 }
 
 

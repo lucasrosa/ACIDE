@@ -15,7 +15,7 @@
 	//////////////////////////////////////////////////////////////////
     // Verify Session or Key
     //////////////////////////////////////////////////////////////////
-
+	
     checkSession();
 	if (isset($_POST['action'])) {
 		
@@ -32,6 +32,7 @@
 			
 			$Assignment["owner"] = $_SESSION["user"];
 			$Assignment["id"] = $Project->path;
+			$Assignment["name"] = $_POST['project_name'];
 			$Assignment['due_date'] = date("Y-m-d H:i:s", strtotime($_POST['due_date'] . " " . $_POST['due_time']));
 			$Assignment['allow_late_submission'] = $_POST['late_submission_days'];
 			$Assignment['maximum_number_group_members'] = $_POST['maximum_number_of_group_members'];
@@ -145,11 +146,12 @@
 				<table width="100%">
 					<tbody>
 						<tr>
-							<th>ID</th>
+							<th>Name</th>
 							<th>Due Date</th>
 							<th>Late submission days</th>
 							<th>Description</th>
 							<th>Maximum number of group members</th>
+							<th>Submitted Projects</th>
 						</tr>
 						<?
 						//////////////////////////////////////////////////////////////////
@@ -161,7 +163,7 @@
 						for ($k = 0; $k < count($assignments); $k++) {
 						?>
 						<tr>
-							<td><?=$assignments[$k]['id']?></td>
+							<td><?=$assignments[$k]['name']?></td>
 							<td><?=$assignments[$k]['due_date']?></td>
 							<td>
 								<?
@@ -179,6 +181,8 @@
 							</td>
 							<td><a href="<?=$assignments[$k]['description_url']?>" target='_blank'>View</a></td>
 							<td><?=$assignments[$k]['maximum_number_group_members']?></td>
+							<td><a href="submitted_assignments.php?id=<?=$assignments[$k]['id']?>">View</a></form>
+							</td>
 						</tr>
 						<?
 						}
