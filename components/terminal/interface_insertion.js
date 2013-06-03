@@ -49,7 +49,7 @@
 		
 		
 		// LF: Removing the split option that is currently bugged
-		$("#editor-bottom-bar").find(".divider")[2].remove();
+		//$("#editor-bottom-bar").find(".divider")[2].remove();
 		$("#split").remove();
 		
 		// LF: Hiding the Terminal option until someone closes it

@@ -325,8 +325,22 @@
         public function getProjectsForUser($username) {
         	$mongo_client = new MongoClient();
 			$collection = $mongo_client->codiad_database->users;
-			$user = $collection->findOne(array("username" => $username), array("_id" => FALSE, "projects" => TRUE));
-			return $user["projects"];
+			
+			$projects = array();
+			// Get the projects from other users that are being shared with this user
+			$users = $collection->find();
+			$user = '';
+			foreach ($users as $user) {
+				for ($i = 0; $i < count($user["projects"]); $i++) {
+					for ($j = 0; $j < count($user["projects"][$i]["group_members"]); $j++) {
+						if (($user["projects"][$i]["group_members"][$j]['username'] == $username) || $user["projects"][$i]['privacy'] == 'public') {
+							array_push($projects, $user["projects"][$i]);
+						}
+					}
+				}			
+			}
+			
+			return $projects;	 
     	}   
     }
     

@@ -104,19 +104,24 @@ class Project extends Common {
         
 		$collection = $this->database->users;
 		
-		$user = $collection->findOne(array("username" => $this->user));
-		for ($i = 0; $i < count($user["projects"]); $i++) {
-			if ($user["projects"][$i]["path"] == $this->path) {
-				$pass = true;
-	            $this->name = $user["projects"][$i]["name"];
-				$this->privacy = $user["projects"][$i]["privacy"];
-				$this->group_members = $user["projects"][$i]["group_members"];
-				$this->assignment = $user["projects"][$i]["assignment"];
-	            $_SESSION['project'] = $user["projects"][$i]["path"];
+		$users = $collection->find();
+		
+		foreach ($users as $user) {
+		//$user = $collection->findOne(array("username" => $this->user));
+			for ($i = 0; $i < count($user["projects"]); $i++) {
+				if ($user["projects"][$i]["path"] == $this->path) {
+					$pass = true;
+		            $this->name = $user["projects"][$i]["name"];
+					$this->privacy = $user["projects"][$i]["privacy"];
+					$this->group_members = $user["projects"][$i]["group_members"];
+					$this->assignment = $user["projects"][$i]["assignment"];
+		            $_SESSION['project'] = $user["projects"][$i]["path"];
+					return $pass;
+				}
 			}
 		}
 		
-		return $pass;
+		return false;
 	}
     //////////////////////////////////////////////////////////////////
     // Open Project
@@ -462,8 +467,22 @@ class Project extends Common {
     		
 	public function GetProjectsForUser($username) {
 		$collection = $this->database->users;
-		$user = $collection->findOne(array("username" => $username), array("_id" => FALSE, "projects" => TRUE));
-		return $user["projects"];
+		
+		$projects = array();
+		// Get the projects from other users that are being shared with this user
+		$users = $collection->find();
+		$user = '';
+		foreach ($users as $user) {
+			for ($i = 0; $i < count($user["projects"]); $i++) {
+				for ($j = 0; $j < count($user["projects"][$i]["group_members"]); $j++) {
+					if (($user["projects"][$i]["group_members"][$j]['username'] == $username) || $user["projects"][$i]['privacy'] == 'public') {
+						array_push($projects, $user["projects"][$i]);
+					}
+				}
+			}			
+		}
+		
+		return $projects;
     }
 	
 	//////////////////////////////////////////////////////////////////
