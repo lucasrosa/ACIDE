@@ -45,16 +45,11 @@
 				if ($_FILES["file"]["error"] > 0) {
 					$error =  "Return Code: " . $_FILES["file"]["error"] . "<br>";
 				} else {
-				    //echo "Upload: " . $_FILES["file"]["name"] . "<br>";
-				    //echo "Type: " . $_FILES["file"]["type"] . "<br>";
-				    //echo "Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
-				    //echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br>";
 					
 					if (file_exists("../../data/assignments/" . $_FILES["file"]["name"])) {
 						$error = "The description file \"" . $_FILES["file"]["name"] . "\" already exists. ";
 					} else {
 						move_uploaded_file($_FILES["file"]["tmp_name"], "../../data/assignments/" . $_FILES["file"]["name"]);
-						//echo "Stored in: " . "upload/" . $_FILES["file"]["name"];
 						$Assignment["description_url"] = 'http';
 						if ($_SERVER["HTTPS"] == "on") {
 							$Assignment["description_url"] .= "s";
@@ -89,26 +84,6 @@
 			
 		}
 	}
-
-	/*
-	$date1 = date("Y-m-d H:i:s");
-	$add_days = 0;
-	$date2 = date('Y-m-d H:i:s',strtotime($date1) + (24*3600*$add_days));
-	
-	echo "Date 1 : " . $date1 . "<br />";
-	echo "Date 2 : " . $date2 . "<br />";
-	
-	if ($date2 > $date1) {
-		echo "<br /> Date 2 is greater. ";
-	} else if ($date2 < $date1) {
-		echo "<br /> Date 1 is greater. ";
-	} else {
-		echo "<br /> Both dates are the same. ";
-	}
-	
-	$date = "05/31/2013 05:00 PM";
-	echo "<br />" . date("Y-m-d  H:i:s", strtotime($date));
-	*/
 ?>
 <!doctype html>
 
@@ -131,6 +106,7 @@
 		});
 		$('input[name="due_time"]').ptTimeSelect();		 
 	});
+	
   	</script>
 </head>
 <body>
