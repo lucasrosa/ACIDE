@@ -656,8 +656,8 @@ class Project extends Common {
 					if ($user["projects"][$i]["assignment"]["id"] == $assignment['id']) {
 						$user["projects"][$i]["assignment"]["name"] = $assignment['name'];
 						$user["projects"][$i]["assignment"]["due_date"] = $assignment['due_date'];
-						$user["projects"][$i]["assignment"]["allow_late_submission"] = $assignment['allow_late_submission'];
 						$user["projects"][$i]["assignment"]["description_url"] = $assignment['description_url'];
+						$user["projects"][$i]["assignment"]["allow_late_submission"] = $assignment['allow_late_submission'];
 						$user["projects"][$i]["assignment"]["maximum_number_group_members"] = $assignment['maximum_number_group_members'];
 					}
 				}
