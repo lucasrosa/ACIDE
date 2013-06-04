@@ -100,6 +100,12 @@
 								<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
 							</span>
 							<?php 
+							} else if (isset($data['assignment']['submitted_date'])) {
+							?>
+							<span style="cursor: auto;">
+								<div title="The changes made in this assignment will not be submitted to evaluation anymore." class="icon-lock icon" style="position:absolute; right:25px;"></div>
+							</span>
+							<?
 							}
 							?>
 						</div>
@@ -142,6 +148,12 @@
 								<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
 							</span>
 							<?php 
+							} else if (isset($data['assignment']['submitted_date'])) {
+							?>
+							<span style="cursor: auto;">
+								<div title="The changes made in this assignment will not be submitted to evaluation anymore." class="icon-lock icon" style="position:absolute; right:25px;"></div>
+							</span>
+							<?
 							}
 							?>
 							
