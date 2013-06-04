@@ -334,6 +334,14 @@
 				for ($i = 0; $i < count($user["projects"]); $i++) {
 					for ($j = 0; $j < count($user["projects"][$i]["group_members"]); $j++) {
 						if (($user["projects"][$i]["group_members"][$j]['username'] == $username) || $user["projects"][$i]['privacy'] == 'public') {
+								
+							if ($user["projects"][$i]['privacy'] == 'shared' && count($user['projects'][$i]["group_members"]) > 1) {
+								$user['projects'][$i]['name'] .= " (". $user['username'] . ")";
+								error_log("yep!");
+							} else {
+								error_log("nope");
+							}
+							
 							array_push($projects, $user["projects"][$i]);
 						}
 					}
