@@ -17,26 +17,44 @@
     //////////////////////////////////////////////////////////////////
 	
     checkSession();
-	if (isset($_POST['action'])) {
-		
-		$error = "";
-		
-		if ($_POST['action'] == 'create_new_assignment') {
+	$form_action = "create_new_assignment";
+	$form_title = "New Assignment";
+	$form_button_title = "Create";
+	$error = "";
+	$success = "";
+	
+	$editing_assignment = FALSE;
+	
+	$Project = new Project();
+	$Assignment = array();
+	$Assignment["owner"] = '';
+	$Assignment["id"] = '';
+	$Assignment["name"] = '';
+	$Assignment['due_date'] = '';
+	$Assignment['allow_late_submission'] = '';
+	$Assignment['maximum_number_group_members'] = '';
+	$Assignment['due_date_date'] = '';
+	$Assignment['due_date_time'] = '';
+	
+	if (isset($_POST['action'])) {				 
+		if ($_POST['action'] == 'edit_assignment') {
+			$form_action = "save_edited_assignment";
+			$form_title = "Edit Assignment";
+			$form_button_title = "Update";
+			$editing_assignment = TRUE;
+			$Assignment = $Project->GetAssignmentWithId($_POST['id']);
+			$Assignment['due_date_date'] = date("m/d/Y", strtotime($Assignment['due_date']));
+			$Assignment['due_date_time'] = date("H:i A", strtotime($Assignment['due_date']));
 			
-			$Project = new Project();
-			$Assignment = array();
+		} else if (($_POST['action'] == 'create_new_assignment') || ($_POST['action'] == 'save_edited_assignment')) {
 			
-			$Project->path = $_POST['id'];
-			$Project->name = $_POST['project_name'];
-			$Project->privacy = "private"; 
 			
-			$Assignment["owner"] = $_SESSION["user"];
-			$Assignment["id"] = $Project->path;
+			$Assignment["id"] = $_POST['id'];
 			$Assignment["name"] = $_POST['project_name'];
 			$Assignment['due_date'] = date("Y-m-d H:i:s", strtotime($_POST['due_date'] . " " . $_POST['due_time']));
 			$Assignment['allow_late_submission'] = $_POST['late_submission_days'];
 			$Assignment['maximum_number_group_members'] = $_POST['maximum_number_of_group_members'];
-			
+				
 			// Uploading the pdf file
 			$allowedExts = array("pdf");
 			$extension = end(explode(".", $_FILES["file"]["name"]));
@@ -66,21 +84,34 @@
 				$error = "Invalid file";
 			}
 			
-			
-			
-			// If there is no errors until now, the operation continues, if there is, just print the error,
-			if ($error == '') {
-				$Project->assignment = $Assignment;
-				$creation_result = $Project->CreateProjectsOnDatabaseWithAssignments();
-				if ($creation_result == "success") {
-					echo "Assignment created with success!";	
-				} else {
-					echo $creation_result;
+			if ($_POST['action'] == 'create_new_assignment') {
+				$Assignment["id"] = $Project->path;
+				$Assignment["owner"] = $_SESSION["user"];	
+				$Project->path = $_POST['id'];
+				$Project->name = $_POST['project_name'];
+				$Project->privacy = "private"; 
+				
+				
+				// If there is no errors until now, the operation continues
+				if ($error == '') {
+					$Project->assignment = $Assignment;
+					$creation_result = $Project->CreateProjectsOnDatabaseWithAssignments();
+					if ($creation_result == "success") {
+						$success = "Assignment created with success!";
+					} else {
+						$error = $creation_result;
+					}
 				}
 				
-			} else {
-				echo $error;
-			}
+			} else if ($_POST['action'] == 'save_edited_assignment') {
+				if ($error == '') {
+					if ($Project->SaveAssignment($Assignment)) {
+						$success = "Assignment updated with success!";
+					} else {
+						$error = "Error updating the assignment.";
+					}
+				}
+			} 
 			
 		}
 	}
@@ -91,6 +122,7 @@
 	<meta charset="utf-8">
 	<title>CODIAD</title>
 	<link rel="stylesheet" href="../../themes/default/assignment/screen.css">
+	<link rel="stylesheet" href="../../themes/default/fonts.css">
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
@@ -110,6 +142,10 @@
   	</script>
 </head>
 <body>
+	<?
+		echo $error;
+		echo $success;
+	?>
 	<h1  align="center">Assignments</h1>
 	
 	
@@ -128,6 +164,7 @@
 							<th>Description</th>
 							<th>Maximum number of group members</th>
 							<th>Submitted Projects</th>
+							<th>Edit</th>
 						</tr>
 						<?
 						//////////////////////////////////////////////////////////////////
@@ -155,9 +192,16 @@
 									echo '.';
 								?>
 							</td>
-							<td><a href="<?=$assignments[$k]['description_url']?>" target='_blank'>View</a></td>
+							<td><div align='center'><a href="<?=$assignments[$k]['description_url']?>" target='_blank'>View</a></div></td>
 							<td><?=$assignments[$k]['maximum_number_group_members']?></td>
-							<td><a href="submitted_assignments.php?id=<?=$assignments[$k]['id']?>">View</a></form>
+							<td><div align='center'><a href="submitted_assignments.php?id=<?=$assignments[$k]['id']?>">View</a></div></td>
+							<td>
+								<form method="post" name="edit_assignment_form">
+									<input type="hidden" name="action" value="edit_assignment" />
+									<input type="hidden" name="id" value="<?=$assignments[$k]['id']?>" />
+									<button class="btn-left icon-pencil icon" onclick="$('form#edit_assignment_form').submit()">
+									</button>
+								</form>
 							</td>
 						</tr>
 						<?
@@ -175,18 +219,30 @@
 	<div id="modal" style="display: block; width: 700px; margin:0 auto;" >
 		<div id="modal-content">
 			<form method="post" name="assignment_form" enctype="multipart/form-data">
-				<input type="hidden" name="action" value="create_new_assignment" />
-				<label>New Assignment</label>
+				<input type="hidden" name="action" value="<?=$form_action?>" />
+				<label>
+					<?=$form_title;?> 
+				</label>
 				<div id="project-list">
 					<table width="100%">
 						<tbody>
+							<?
+							if (!$editing_assignment) {
+							?>
 							<tr>
 								<th>ID / Folder</th>
 								<td><input type="text" name="id" /></td>
 							</tr>
+							<?
+							} else {
+							?>
+								<input type="hidden" name="id" value="<?=$Assignment['id']?>" />
+							<?
+							}
+							?>
 							<tr>
 								<th>Assignment / Project Name</th>
-								<td><input type="text" name="project_name"/></td>
+								<td><input type="text" name="project_name" value="<?=$Assignment['name']?>" /></td>
 							</tr>
 							<tr>
 								<th>Due Date</th>
@@ -194,10 +250,14 @@
 									<table>
 										<tr>
 											<td style="border:0px;">Date</td>
-											<td style="border:0px;"><input type="text" name="due_date" id="datepicker" readonly="readonly" /></td>
+											<td style="border:0px;">
+												<input type="text" name="due_date" id="datepicker" value="<?=$Assignment['due_date_date']?>" readonly="readonly" />
+											</td>
 										</tr>
 											<td style="border:0px;">Time</td>
-											<td style="border:0px;"><input type="text" name="due_time" id="due_time"   readonly="readonly"  /></td>
+											<td style="border:0px;">
+												<input type="text" name="due_time" id="due_time" value="<?=$Assignment['due_date_time']?>" readonly="readonly"  />
+											</td>
 									</table>
 								</td>
 							</tr>
@@ -208,7 +268,7 @@
 										<?php
 										for($i = 0; $i <= 31; $i++){
 										?>
-									 		<option value="<?=$i?>"><?=$i?></option>
+									 		<option value="<?=$i?>" <? if ($i == $Assignment['allow_late_submission']) echo "selected='selected'"; ?>><?=$i?></option>
 									  	<?
 									  	}
 									  	?>
@@ -225,7 +285,7 @@
 										<?php
 										for($i = 1; $i <= 100; $i++){
 										?>
-									 		<option value="<?=$i?>"><?=$i?></option>
+									 		<option value="<?=$i?>" <? if ($i == $Assignment['maximum_number_group_members']) echo "selected='selected'"; ?>><?=$i?></option>
 									  	<?
 									  	}
 									  	?>
@@ -237,7 +297,7 @@
 					</table>
 				</div>
 				<button class="btn-left" onclick="$('form#assignment_form').submit()">
-					Create
+					<?=$form_button_title?>
 				</button>
 			</form>
 		</div>

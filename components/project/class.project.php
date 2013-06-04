@@ -605,9 +605,6 @@ class Project extends Common {
 							if ($user["projects"][$i]["assignment"]["submitted_date"] != "") {
 								if ($user["projects"][$i]['privacy'] == 'shared' && count($user['projects'][$i]["group_members"]) > 1) {
 									$user['projects'][$i]['name'] .= " (". $user['username'] . ")";
-									error_log("yep!");
-								} else {
-									error_log("nope");
 								}
 								array_push($projects, $user["projects"][$i]);
 							}
@@ -619,6 +616,58 @@ class Project extends Common {
 		}
 		
 		return $projects;
+	}
+	
+	//////////////////////////////////////////////////////////////////
+    // LF: Returns the assignment with that id
+    //////////////////////////////////////////////////////////////////
+	
+	public function GetAssignmentWithId ($id) {
+		$assignments = array();
+		
+		$collection = $this->database->users;
+		
+		$users = $collection->find();
+		foreach ($users as $user) {
+			for ($i = 0; $i < count($user["projects"]); $i++) {
+				if (isset($user["projects"][$i]) && isset($user["projects"][$i]["assignment"]["id"])) {	
+					if ($user["projects"][$i]["assignment"]["id"] == $id) {
+						return $user["projects"][$i]["assignment"];
+					}
+				}
+			}
+		}
+		return NULL;
+	}
+	
+	//////////////////////////////////////////////////////////////////
+    // LF: Saves the assignment
+    //////////////////////////////////////////////////////////////////
+	
+	public function SaveAssignment ($assignment) {
+		
+		$collection = $this->database->users;
+		
+		$users = $collection->find();
+		$update_successful = TRUE;
+		foreach ($users as $user) {
+			for ($i = 0; $i < count($user["projects"]); $i++) {
+				if (isset($user["projects"][$i]) && isset($user["projects"][$i]["assignment"]["id"])) {	
+					if ($user["projects"][$i]["assignment"]["id"] == $assignment['id']) {
+						$user["projects"][$i]["assignment"]["name"] = $assignment['name'];
+						$user["projects"][$i]["assignment"]["due_date"] = $assignment['due_date'];
+						$user["projects"][$i]["assignment"]["allow_late_submission"] = $assignment['allow_late_submission'];
+						$user["projects"][$i]["assignment"]["description_url"] = $assignment['description_url'];
+						$user["projects"][$i]["assignment"]["maximum_number_group_members"] = $assignment['maximum_number_group_members'];
+					}
+				}
+			}
+			// LF: Updating in the database : Overwriting the user document  
+			if (!$collection->update(array("username" => $user["username"]), $user)){
+				$update_successful = FALSE;	
+			}
+		}
+		return $update_successful;
 	}
 }
 
