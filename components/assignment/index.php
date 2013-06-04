@@ -192,16 +192,31 @@
 									echo '.';
 								?>
 							</td>
-							<td><div align='center'><a href="<?=$assignments[$k]['description_url']?>" target='_blank'>View</a></div></td>
-							<td><?=$assignments[$k]['maximum_number_group_members']?></td>
-							<td><div align='center'><a href="submitted_assignments.php?id=<?=$assignments[$k]['id']?>">View</a></div></td>
 							<td>
-								<form method="post" name="edit_assignment_form">
-									<input type="hidden" name="action" value="edit_assignment" />
-									<input type="hidden" name="id" value="<?=$assignments[$k]['id']?>" />
-									<button class="btn-left icon-pencil icon" onclick="$('form#edit_assignment_form').submit()">
-									</button>
-								</form>
+								<div align='center'>
+									<a href="<?=$assignments[$k]['description_url']?>" target='_blank'>
+										<button>View</button>
+									</a>
+								</div>
+							</td>
+							<td><?=$assignments[$k]['maximum_number_group_members']?></td>
+							<td>
+								<div align="center">
+									<form method="post" name="view_submitted_assignments_form" action="submitted_assignments.php">
+										<input type="hidden" name="id" value="<?=$assignments[$k]['id']?>" />
+										<button onclick="$('form#view_submitted_assignments_form').submit()">View</button>
+									</form>
+								</div>
+							</td>
+							<td>
+								<div align="center">
+									<form method="post" name="edit_assignment_form">
+										<input type="hidden" name="action" value="edit_assignment" />
+										<input type="hidden" name="id" value="<?=$assignments[$k]['id']?>" />
+										<button class="icon-pencil icon" onclick="$('form#edit_assignment_form').submit()">
+										</button>
+									</form>
+								</div>
 							</td>
 						</tr>
 						<?
@@ -296,7 +311,7 @@
 						</tbody>
 					</table>
 				</div>
-				<button class="btn-left" onclick="$('form#assignment_form').submit()">
+				<button onclick="$('form#assignment_form').submit()">
 					<?=$form_button_title?>
 				</button>
 			</form>
