@@ -337,9 +337,6 @@
 								
 							if ($user["projects"][$i]['privacy'] == 'shared' && count($user['projects'][$i]["group_members"]) > 1) {
 								$user['projects'][$i]['name'] .= " (". $user['username'] . ")";
-								error_log("yep!");
-							} else {
-								error_log("nope");
 							}
 							
 							array_push($projects, $user["projects"][$i]);

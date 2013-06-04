@@ -27,14 +27,6 @@
 	
 	$Project = new Project();
 	$Assignment = array();
-	$Assignment["owner"] = '';
-	$Assignment["id"] = '';
-	$Assignment["name"] = '';
-	$Assignment['due_date'] = '';
-	$Assignment['allow_late_submission'] = '';
-	$Assignment['maximum_number_group_members'] = '';
-	$Assignment['due_date_date'] = '';
-	$Assignment['due_date_time'] = '';
 	
 	if (isset($_POST['action'])) {				 
 		if ($_POST['action'] == 'edit_assignment') {
@@ -45,13 +37,21 @@
 			$Assignment = $Project->GetAssignmentWithId($_POST['id']);
 			$Assignment['due_date_date'] = date("m/d/Y", strtotime($Assignment['due_date']));
 			$Assignment['due_date_time'] = date("H:i A", strtotime($Assignment['due_date']));
-			
+			$hour = substr($Assignment['due_date_time'], 0 , 2);
+			$hour = intval($hour);
+			if ($hour > 12) {
+				$hour -= 12;
+			}
+			$Assignment['due_date_time'] = $hour . substr($Assignment['due_date_time'], 2 , 6); 
+				
 		} else if (($_POST['action'] == 'create_new_assignment') || ($_POST['action'] == 'save_edited_assignment')) {
 			
 			
 			$Assignment["id"] = $_POST['id'];
 			$Assignment["name"] = $_POST['project_name'];
 			$Assignment['due_date'] = date("Y-m-d H:i:s", strtotime($_POST['due_date'] . " " . $_POST['due_time']));
+			
+			
 			$Assignment['allow_late_submission'] = $_POST['late_submission_days'];
 			$Assignment['maximum_number_group_members'] = $_POST['maximum_number_of_group_members'];
 				
@@ -85,12 +85,11 @@
 			}
 			
 			if ($_POST['action'] == 'create_new_assignment') {
-				$Assignment["id"] = $Project->path;
-				$Assignment["owner"] = $_SESSION["user"];	
 				$Project->path = $_POST['id'];
 				$Project->name = $_POST['project_name'];
 				$Project->privacy = "private"; 
-				
+				$Assignment["id"] = $Project->path;
+				$Assignment["owner"] = $_SESSION["user"];
 				
 				// If there is no errors until now, the operation continues
 				if ($error == '') {
@@ -112,8 +111,25 @@
 					}
 				}
 			} 
-			
+			$Assignment["owner"] = '';
+			$Assignment["id"] = '';
+			$Assignment["name"] = '';
+			$Assignment['due_date'] = '';
+			$Assignment['allow_late_submission'] = '';
+			$Assignment['maximum_number_group_members'] = '';
+			$Assignment['due_date_date'] = '';
+			$Assignment['due_date_time'] = '';
 		}
+	} else {
+		$Assignment["owner"] = '';
+		$Assignment["id"] = '';
+		$Assignment["name"] = '';
+		$Assignment['due_date'] = '';
+		$Assignment['allow_late_submission'] = '';
+		$Assignment['maximum_number_group_members'] = '';
+		$Assignment['due_date_date'] = '';
+		$Assignment['due_date_time'] = '';
+		
 	}
 ?>
 <!doctype html>
