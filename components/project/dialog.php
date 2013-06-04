@@ -94,7 +94,7 @@
 							</span>
 							<!-- Adding a button to Submit the project as an assignment, only if it has an assignment attached to it -->
 							<?php
-							if ($data['assignment'] != '') {
+							if ($data['assignment'] != '' && !isset($data['assignment']['submitted_date'])) {
 							?>
 							<span  onclick="codiad.project.submit('<?php echo($data['path']); ?>');">
 								<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
@@ -136,7 +136,7 @@
 							<!-- Adding a button to Submit the project as an assignment -->
 							<!-- Only if it has an assignment attached to it and if this user is the owner (the first one in the group_members array) -->
 							<?php
-							if ($data['assignment'] != '' && $data['group_members'][0]["username"] == $_SESSION['user']) {
+							if ($data['assignment'] != '' && $data['group_members'][0]["username"] == $_SESSION['user'] && !isset($data['assignment']['submitted_date'])) {
 							?>
 							<span  onclick="codiad.project.submit('<?=($data['path']); ?>');">
 								<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
