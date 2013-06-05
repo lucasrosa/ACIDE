@@ -363,6 +363,7 @@
             $user = $entry->get_field('user');
             $usersAndHeartbeatTime[$user] = $entry->get_value();
         }
+		error_log("&getUsersAndHeartbeatTime returns :" . print_r($usersAndHeartbeatTime, true));
         return $usersAndHeartbeatTime;
     }
 

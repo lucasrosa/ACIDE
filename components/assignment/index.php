@@ -93,7 +93,7 @@
 					}
 				}
 			} else {
-				$error .= "Invalid description file <br />";
+				$error .= "Invalid description file. <br />";
 			}
 			
 			if ($_POST['action'] == 'create_new_assignment') {
@@ -142,6 +142,17 @@
 		$Assignment['due_date_date'] = '';
 		$Assignment['due_date_time'] = '';
 		
+	}
+	
+	if ($error != "") {
+		echo "why not?";
+		$Assignment['id'] = $_POST['id'];
+		$Assignment['name'] = $_POST['project_name'];
+		$Assignment['due_date_date'] = $_POST['due_date'];
+		$Assignment['due_date_time'] = $_POST['due_time'];
+		$Assignment['allow_late_submission'] = $_POST['late_submission_days'];
+		$Assignment['maximum_number_group_members'] = $_POST['maximum_number_of_group_members'];
+		print_r($Assignment);
 	}
 ?>
 <!doctype html>
