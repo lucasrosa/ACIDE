@@ -323,9 +323,9 @@
         ?>
         <form>
         <input type="hidden" name="project_path" value="<?php echo($_GET['path']); ?>">
-        <label><span class="icon-graduation-cap"></span>Assignment name:</label>    
-        <input type="text" name="assignmentName" autofocus="autofocus" autocomplete="off" value="">  
-        <button class="btn-left">Submit</button>&nbsp;<button class="btn-right" onclick="codiad.modal.unload(); return false;">Cancel</button>
+        <label><span class="icon-graduation-cap"></span>Are you sure you want to submit?</label>
+        <label class="sb-dialog-warning">You cannot make changes in the assignment after submitting. </label>    
+        <button class="btn-left">Yes</button>&nbsp;<button class="btn-right" onclick="codiad.modal.unload(); return false;">No</button>
         <form>
         <?php
         break;       

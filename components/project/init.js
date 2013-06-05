@@ -264,10 +264,8 @@
 	                e.preventDefault();
 	                var projectPath = $('#modal-content form input[name="project_path"]')
 	                    .val();
-	                var assignmentName = $('#modal-content form input[name="assignmentName"]')
-	                    .val();    
 						
-	                $.get(_this.controller + '?action=submit&project_path=' + projectPath + '&assignmentName=' + assignmentName, function(data) {
+	                $.get(_this.controller + '?action=submit&project_path=' + projectPath, function(data) {
 	                   renameResponse = codiad.jsend.parse(data);
 	                    if (renameResponse != 'error') {
 	                        codiad.message.success(i18n('Project submited'));

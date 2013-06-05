@@ -26,8 +26,6 @@ class Project extends Common {
     public $no_return    		= false;
     public $assigned     		= false;
     public $command_exec 		= '';
-	// LF: Assignment name is the name of the zip file when submitting the project as an assignment
-	public $assignmentName	 	= '';
 	// LF: Submitted identifies if a project was already submitted or not :: can be true or false
 	public $submitted 			= '';
 	// LF: Actual database
@@ -311,7 +309,7 @@ class Project extends Common {
 	
 	public function Submit(){
 		
-		$projectName = $_SESSION['user'] . " - ".$this->assignmentName;
+		$projectName = $_SESSION['user'] . " - ".$this->name;
 		$date_submitted = date("Y-m-d H:i:s");
 		$due_date = $this->assignment["due_date"];	
 		$allow_late_submission = intval($this->assignment["allow_late_submission"]);

@@ -98,7 +98,6 @@
     if($_GET['action']=='submit'){
         $Project->path = $_GET['project_path'];
 		$Project->user = $_SESSION['user'];
-		$Project->assignmentName = $_GET['assignmentName'];
 		$Project->load();
         $Project->Submit();
     }
