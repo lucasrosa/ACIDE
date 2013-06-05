@@ -181,10 +181,6 @@
   	</script>
 </head>
 <body>
-	<?
-		echo $error;
-		echo $success;
-	?>
 	<h1  align="center">Assignments</h1>
 	
 	
@@ -269,7 +265,20 @@
 	
 	
 	
-	<div style="margin-top: 50px;"></div>
+	<div style="padding-bottom: 25px; padding-top: 25px;">
+		<div align="center">
+			<?
+				$color = "green";
+				$message = $success;
+
+				if ($error != "") {
+					$color = "red";
+					$message = $error;
+				}
+			?>
+			<span style="color: <?=$color?>;"><?=$message?></span>
+		</div>		
+	</div>
 	<div id="modal" style="display: block; width: 700px; margin:0 auto;" >
 		<div id="modal-content">
 			<form method="post" name="assignment_form" enctype="multipart/form-data">
