@@ -272,7 +272,6 @@
 	                    if (renameResponse != 'error') {
 	                        codiad.message.success(i18n('Project submited'));
 	                        _this.loadSide();
-							//$('#file-manager a[data-type="root"]').html("[S] " + $('#file-manager a[data-type="root"]').html());  // This changes the name (of the active project) in the file inspector
 	                        codiad.modal.unload();
 	                    }
 	                });

@@ -312,9 +312,6 @@ class Project extends Common {
 	public function Submit(){
 		
 		$projectName = $_SESSION['user'] . " - ".$this->assignmentName;
-		$this->name = '[S] ' . $this->name;
-		//$this->assignment["submitted_date"] = new MongoDate(strtotime(date("Y-m-d H:i:s")));
-		
 		$date_submitted = date("Y-m-d H:i:s");
 		$due_date = $this->assignment["due_date"];	
 		$allow_late_submission = intval($this->assignment["allow_late_submission"]);

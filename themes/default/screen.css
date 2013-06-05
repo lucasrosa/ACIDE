@@ -507,7 +507,7 @@ table [class^="icon-"], [class*=" icon-"] {
 }
 
 .sidebar#sb-left {
-    width: 300px;
+    width: 350px;
     left: 0;
 }
 #sb-left-title{
