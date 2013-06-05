@@ -48,7 +48,19 @@
 			
 			
 			$Assignment["id"] = $_POST['id'];
+			if ($Assignment["id"] == "") 
+				$error .= "The field ID/Folder cannot be blank. <br />";
+			
 			$Assignment["name"] = $_POST['project_name'];
+			if ($Assignment["name"] == "") 
+				$error .= "The field Assignment / Project Name cannot be blank. <br />";
+			
+			if ($_POST['due_date'] == "") 
+				$error .= "The field Date cannot be blank. <br />";
+			
+			if ($_POST['due_time'] == "") 
+				$error .= "The field Time cannot be blank. <br />";
+			
 			$Assignment['due_date'] = date("Y-m-d H:i:s", strtotime($_POST['due_date'] . " " . $_POST['due_time']));
 			
 			
@@ -61,7 +73,7 @@
 			
 			if (in_array($extension, $allowedExts)) {
 				if ($_FILES["file"]["error"] > 0) {
-					$error =  "Return Code: " . $_FILES["file"]["error"] . "<br>";
+					$error .=  "Return Code: " . $_FILES["file"]["error"] . "<br>";
 				} else {
 					
 					if (file_exists("../../data/assignments/" . $_FILES["file"]["name"])) {
@@ -81,7 +93,7 @@
 					}
 				}
 			} else {
-				$error = "Invalid file";
+				$error .= "Invalid description file <br />";
 			}
 			
 			if ($_POST['action'] == 'create_new_assignment') {
