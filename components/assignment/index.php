@@ -23,13 +23,21 @@
 	$error = "";
 	$success = "";
 	
+	$assignment_blank = FALSE;
 	$editing_assignment = FALSE;
 	
 	$Project = new Project();
 	$Assignment = array();
 	
-	if (isset($_POST['action'])) {				 
-		if ($_POST['action'] == 'edit_assignment') {
+	if (isset($_POST['action'])) {
+		
+		if ($_POST['action'] == 'delete_assignment') {
+			if ($Project->DeleteAssignment($_POST['id'])) {
+				$success = "Assignment deleted with success.";
+				$assignment_blank = TRUE;
+			}
+			
+		}else if ($_POST['action'] == 'edit_assignment') {
 			$form_action = "save_edited_assignment";
 			$form_title = "Edit Assignment";
 			$form_button_title = "Update";
@@ -129,16 +137,22 @@
 					}
 				}
 			} 
-			$Assignment["owner"] = '';
-			$Assignment["id"] = '';
-			$Assignment["name"] = '';
-			$Assignment['due_date'] = '';
-			$Assignment['allow_late_submission'] = '';
-			$Assignment['maximum_number_group_members'] = '';
-			$Assignment['due_date_date'] = '';
-			$Assignment['due_date_time'] = '';
+			$assignment_blank = TRUE;
 		}
 	} else {
+		$assignment_blank = TRUE;
+	}
+	
+	if ($error != "" && !$assignment_blank) {
+		$Assignment['id'] = $_POST['id'];
+		$Assignment['name'] = $_POST['project_name'];
+		$Assignment['due_date_date'] = $_POST['due_date'];
+		$Assignment['due_date_time'] = $_POST['due_time'];
+		$Assignment['allow_late_submission'] = $_POST['late_submission_days'];
+		$Assignment['maximum_number_group_members'] = $_POST['maximum_number_of_group_members'];
+	}
+	
+	if ($assignment_blank == TRUE) {
 		$Assignment["owner"] = '';
 		$Assignment["id"] = '';
 		$Assignment["name"] = '';
@@ -147,16 +161,6 @@
 		$Assignment['maximum_number_group_members'] = '';
 		$Assignment['due_date_date'] = '';
 		$Assignment['due_date_time'] = '';
-		
-	}
-	
-	if ($error != "") {
-		$Assignment['id'] = $_POST['id'];
-		$Assignment['name'] = $_POST['project_name'];
-		$Assignment['due_date_date'] = $_POST['due_date'];
-		$Assignment['due_date_time'] = $_POST['due_time'];
-		$Assignment['allow_late_submission'] = $_POST['late_submission_days'];
-		$Assignment['maximum_number_group_members'] = $_POST['maximum_number_of_group_members'];
 	}
 ?>
 <!doctype html>
@@ -204,6 +208,7 @@
 							<th>Maximum number of group members</th>
 							<th>Submitted Projects</th>
 							<th>Edit</th>
+							<th>Delete</th>
 						</tr>
 						<?
 						//////////////////////////////////////////////////////////////////
@@ -243,7 +248,7 @@
 								<div align="center">
 									<form method="post" name="view_submitted_assignments_form" action="submitted_assignments.php">
 										<input type="hidden" name="id" value="<?=$assignments[$k]['id']?>" />
-										<button onclick="$('form#view_submitted_assignments_form').submit()">View</button>
+										<button>View</button>
 									</form>
 								</div>
 							</td>
@@ -252,8 +257,16 @@
 									<form method="post" name="edit_assignment_form">
 										<input type="hidden" name="action" value="edit_assignment" />
 										<input type="hidden" name="id" value="<?=$assignments[$k]['id']?>" />
-										<button class="icon-pencil icon" onclick="$('form#edit_assignment_form').submit()">
-										</button>
+										<button class="icon-pencil icon"></button>
+									</form>
+								</div>
+							</td>
+							<td>
+								<div align="center">
+									<form method="post" name="delete_assignment_form">
+										<input type="hidden" name="action" value="delete_assignment" />
+										<input type="hidden" name="id" value="<?=$assignments[$k]['id']?>" />
+										<button class="icon-cancel icon"></button>
 									</form>
 								</div>
 							</td>

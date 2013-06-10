@@ -698,6 +698,35 @@ class Project extends Common {
 		return "undefined";
 	}
 	
+	//////////////////////////////////////////////////////////////////
+    // LF: Delete an assignment
+    //////////////////////////////////////////////////////////////////
+    
+    public function DeleteAssignment($id) {
+    	// Just unset the assignment
+    	$collection = $this->database->users;
+		
+		$users = $collection->find();
+		$update_successful = TRUE;
+		
+		foreach ($users as $user) {
+			for ($i = 0; $i < count($user["projects"]); $i++) {
+				if (isset($user["projects"][$i]["assignment"]['id'])) {
+					if ($user["projects"][$i]["assignment"]['id'] == $id) {
+						// LF: Remove the assignment from the project array
+						unset($user["projects"][$i]["assignment"]);
+						$user["projects"] = array_values($user["projects"]);	
+					}
+				}
+			}
+			// LF: Updating in the database : Overwriting the user document  
+			if (!$collection->update(array("username" => $user["username"]), $user)){
+				$update_successful = FALSE;	
+			}
+		}
+		
+		return $update_successful;
+	}
 }
 
 
