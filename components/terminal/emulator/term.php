@@ -189,6 +189,11 @@
     $command = '';
     if(!empty($_POST['command'])){ $command = $_POST['command']; }
     
+	if(! isset($_SESSION['term_auth']) || $_SESSION['term_auth']!='true'){
+		// Removing the password when the terminal opens
+		$_SESSION['term_auth'] = 'true';
+	}
+	
     if(strtolower($command=='exit')){
         
         //////////////////////////////////////////////////////////////
