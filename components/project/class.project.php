@@ -675,6 +675,29 @@ class Project extends Common {
 		}
 		return $update_successful;
 	}
+
+	//////////////////////////////////////////////////////////////////
+    // LF: Get assignment's name
+    //////////////////////////////////////////////////////////////////
+    
+    public function GetAssignmentName($assignment_id) {
+    	$collection = $this->database->users;
+    	$users = $collection->find();
+		
+		// Must check if there is no assignment with the same ID
+		foreach ($users as $user) {
+			for ($i = 0; $i < count($user["projects"]); $i++) {
+				if (isset($user["projects"][$i]["assignment"]['id'])) {
+					if ($user["projects"][$i]["assignment"]['id'] == $assignment_id) {
+						return $user["projects"][$i]["assignment"]['name'];
+					}
+				}
+			}
+		}
+		
+		return "undefined";
+	}
+	
 }
 
 

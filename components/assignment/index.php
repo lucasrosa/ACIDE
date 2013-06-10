@@ -81,8 +81,11 @@
 					} else {
 						move_uploaded_file($_FILES["file"]["tmp_name"], "../../data/assignments/" . $_FILES["file"]["name"]);
 						$Assignment["description_url"] = 'http';
-						if ($_SERVER["HTTPS"] == "on") {
-							$Assignment["description_url"] .= "s";
+						
+						if (isset($_SERVER["HTTPS"])) {
+							if ($_SERVER["HTTPS"] == "on") {
+								$Assignment["description_url"] .= "s";
+							}
 						}
 						$Assignment["description_url"] .= "://";
 						if ($_SERVER["SERVER_PORT"] != "80") {
