@@ -713,9 +713,12 @@ class Project extends Common {
 			for ($i = 0; $i < count($user["projects"]); $i++) {
 				if (isset($user["projects"][$i]["assignment"]['id'])) {
 					if ($user["projects"][$i]["assignment"]['id'] == $id) {
+						//  Get the url of the description url 
+						$url = $user["projects"][$i]["assignment"]['description_url'];
 						// LF: Remove the assignment from the project array
 						unset($user["projects"][$i]["assignment"]);
-						$user["projects"] = array_values($user["projects"]);	
+						$user["projects"][$i]["name"] = "[Deleted] " . $user["projects"][$i]['name'];
+						$user["projects"] = array_values($user["projects"]);
 					}
 				}
 			}
@@ -723,6 +726,12 @@ class Project extends Common {
 			if (!$collection->update(array("username" => $user["username"]), $user)){
 				$update_successful = FALSE;	
 			}
+		}
+		
+		$tokens = explode('/', $url);
+		$description_file_name = $tokens[sizeof($tokens)-1];
+		if ($update_successful) {
+			$update_successful = unlink("../../data/assignments/" . $description_file_name);
 		}
 		
 		return $update_successful;

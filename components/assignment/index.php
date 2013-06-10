@@ -35,6 +35,9 @@
 			if ($Project->DeleteAssignment($_POST['id'])) {
 				$success = "Assignment deleted with success.";
 				$assignment_blank = TRUE;
+			} else {
+				$error = "Assignment could not be removed properly.";
+				$assignment_blank = TRUE;
 			}
 			
 		}else if ($_POST['action'] == 'edit_assignment') {
@@ -152,7 +155,7 @@
 		$Assignment['maximum_number_group_members'] = $_POST['maximum_number_of_group_members'];
 	}
 	
-	if ($assignment_blank == TRUE) {
+	if ($assignment_blank) {
 		$Assignment["owner"] = '';
 		$Assignment["id"] = '';
 		$Assignment["name"] = '';
