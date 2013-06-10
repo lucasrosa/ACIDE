@@ -250,6 +250,7 @@ class Project extends Common {
                         }
                     }
                 }
+				$assignment_successfully_created = FALSE;
 				if ($has_assignment) {
 					if ($this->CreateProjectOnDatabase($user)) {
 						return "success";
@@ -258,12 +259,11 @@ class Project extends Common {
 					}
 				} else {
 					if ($this->CreateProjectOnDatabase()) {
-						return "success";
+						$assignment_successfully_created = TRUE;
 					} else {
-						return "Could not create the project in the database.";
+						echo formatJSEND("error","Could not create the project in the database.");
 					}
 				}
-				
 				
                 // Pull from Git Repo?
                 if($this->gitrepo){
@@ -274,16 +274,16 @@ class Project extends Common {
                     }
                     $this->ExecuteCMD();
                 }
-                if ($has_assignment) {
-					return "success";	
-				} else {
-                	echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path));
+				
+				if ($assignment_successfully_created) {
+					echo formatJSEND("success",array("name"=>$this->name,"path"=>$this->path));
 				}
+				
             }else{
             	if ($has_assignment) {
-					return "A Project With the Same Name or Path Exists";
+					return "A Project With the Same Name or Path Exists.";
 				} else {
-                	echo formatJSEND("error","A Project With the Same Name or Path Exists");
+                	echo formatJSEND("error","A Project With the Same Name or Path Exists.");
 				}
             }
         } else {
