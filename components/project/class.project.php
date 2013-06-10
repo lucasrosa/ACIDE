@@ -703,7 +703,7 @@ class Project extends Common {
     //////////////////////////////////////////////////////////////////
     
     public function DeleteAssignment($id) {
-    	// Just unset the assignment
+    	// Just overwrites the assignment to ''
     	$collection = $this->database->users;
 		
 		$users = $collection->find();
@@ -716,7 +716,7 @@ class Project extends Common {
 						//  Get the url of the description url 
 						$url = $user["projects"][$i]["assignment"]['description_url'];
 						// LF: Remove the assignment from the project array
-						unset($user["projects"][$i]["assignment"]);
+						$user["projects"][$i]["assignment"] = '';
 						$user["projects"][$i]["name"] = "[Deleted] " . $user["projects"][$i]['name'];
 						$user["projects"] = array_values($user["projects"]);
 					}

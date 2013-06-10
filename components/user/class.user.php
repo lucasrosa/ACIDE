@@ -20,6 +20,13 @@ class User {
     public $actives     = '';
     public $lang        = '';
 
+	//////////////////////////////////////////////////////////////////
+    // LF: PROPERTIES
+    //////////////////////////////////////////////////////////////////
+    
+    public $type		= '';
+    public $email		= '';
+	
     //////////////////////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////////////////////
@@ -65,7 +72,16 @@ class User {
         $this->EncryptPassword();
         $pass = $this->checkDuplicate();
         if($pass){
-            $this->users[] = array("username"=>$this->username,"password"=>$this->password,"project"=>"");
+            
+			$new_user = array( 	
+								"type" => $this->type,
+								"username" => $this->username,
+								"password" => $this->password, 
+								"email" => $this->email, 
+								"projects" => ''
+							 );
+							 
+			$this->users[] = array("username"=>$this->username,"password"=>$this->password,"project"=>"");				 
             saveJSON('users.php',$this->users);
             echo formatJSEND("success",array("username"=>$this->username));
         }else{
@@ -206,5 +222,17 @@ class User {
     public static function CleanUsername( $username ){
         return preg_replace('#[^A-Za-z0-9'.preg_quote('-_@. ').']#','', $username);
     }
-
+	
+	private function GetCollection() {
+		// connect
+		$mongo_client = new MongoClient();
+		
+		// select a database
+		$database = $mongo_client->codiad_database;
+		
+		// select a collection (analogous to a relational database's table)
+		$collection = $database->users;
+		
+		return $collection;
+	}
 }

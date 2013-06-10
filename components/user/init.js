@@ -82,6 +82,10 @@
                 e.preventDefault();
                 var username = $('#modal-content form input[name="username"]')
                     .val();
+                var type = $('#modal-content form input[name="type"]')
+                    .val();
+                var email = $('#modal-content form input[name="email"]')
+                    .val();
                 var password1 = $('#modal-content form input[name="password1"]')
                     .val();
                 var password2 = $('#modal-content form input[name="password2"]')
@@ -89,7 +93,7 @@
                 if (password1 != password2) {
                     codiad.message.error('Passwords Do Not Match');
                 } else {
-                    $.post(_this.controller + '?action=create', {'username' : username , 'password' : password1 }, function(data) {
+                    $.post(_this.controller + '?action=create', {'username' : username , 'password' : password1 , 'type' : type , 'email' : email   }, function(data) {
                         var createResponse = codiad.jsend.parse(data);
                         if (createResponse != 'error') {
                             codiad.message.success('User Account Created');

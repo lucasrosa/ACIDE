@@ -63,6 +63,8 @@
         	
             $User->username = User::CleanUsername( $_POST['username'] );
             $User->password = $_POST['password'];
+			$User->email = $_POST['email'];
+			$User->type = $_POST['type'];
             $User->Create();
         }
     }

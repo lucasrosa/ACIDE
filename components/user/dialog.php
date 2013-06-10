@@ -81,6 +81,9 @@
             <form>
             <label>Username</label>
             <input type="text" name="username" autofocus="autofocus" autocomplete="off">
+            <label>E-mail</label>
+            <input type="text" name="email" autocomplete="off">
+            <input type="hidden" name="type" value="student" />
             <label>Password</label>
             <input type="password" name="password1">
             <label>Confirm Password</label>
@@ -98,7 +101,7 @@
         
             // Get project list
             //$projects = getJSON('projects.php');
-            $projects = getProjectsForUser("lucasfurlani");
+            $projects = getProjectsForUser($_SESSION['user']);
             // Get control list (if exists)
             $projects_assigned = false;
             if(file_exists(BASE_PATH . "/data/" . $_GET['username'] . '_acl.php')){
