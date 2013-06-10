@@ -222,6 +222,9 @@
 #file-manager .directory {
     background-image: url(images/directory.png);
 }
+#file-manager .description_file {
+    background-image: url(images/pdf.png);
+}
 #file-manager .directory.open {
     background-image: url(images/directory_open.png);
 }

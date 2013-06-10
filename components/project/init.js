@@ -46,7 +46,10 @@
                 if (projectInfo != 'error') {
                     $('#file-manager')
                         .html('')
-                        .append('<ul><li><a id="project-root" data-type="root" class="directory" data-path="' + projectInfo.path + '">' + projectInfo.name + '</a></li></ul>');
+                        .append('<ul id="project-root-ul"><li><a id="project-root" data-type="root" class="directory" data-path="' + projectInfo.path + '">' + projectInfo.name + '</a></li></ul>');
+                        if (projectInfo.description_url != 'null') {
+                        	$('#project-root-ul').append('<ul><li><a href="'+ projectInfo.description_url +'" target="_blank" class="description_file" >Assignment Description</a></li></ul>');	
+                        }
                     codiad.filemanager.index(projectInfo.path);
                     codiad.user.project(projectInfo.path);
                     codiad.message.success(i18n('Project ' + projectInfo.name + ' Loaded'));

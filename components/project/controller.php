@@ -34,8 +34,14 @@
             $Project->path = $_SESSION['project'];
 			$Project->user = $_SESSION['user'];
 			$Project->load();
+			if (isset($Project->assignment['description_url'])) {
+				$description_url = $Project->assignment['description_url'];
+			} else {
+				$description_url = "null";
+			}
+			
             $project_name = $Project->GetName();
-            if(!$no_return){ echo formatJSEND("success",array("name"=>$project_name,"path"=>$_SESSION['project'])); }
+            if(!$no_return){ echo formatJSEND("success",array("name"=>$project_name,"path"=>$_SESSION['project'], "description_url"=>$description_url)); }
         }
     }
 
