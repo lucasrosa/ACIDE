@@ -109,6 +109,7 @@
 				if ($error == '') {
 					$Project->assignment = $Assignment;
 					$creation_result = $Project->CreateProjectsOnDatabaseWithAssignments();
+					
 					if ($creation_result == "success") {
 						$success = "Assignment created with success!";
 					} else {
