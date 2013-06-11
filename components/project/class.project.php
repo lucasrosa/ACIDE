@@ -152,6 +152,7 @@ class Project extends Common {
 						"name" => $this->name,
 						"path" => $this->path,
 						"privacy" => $this->privacy,
+						"visibility" => "true",
 						"group_members" => array(
 													array(
 															"username" => $this->user,
@@ -165,6 +166,10 @@ class Project extends Common {
 			// LF: Find the current user
 			$user = $collection->findOne(array("username" => $this->user));
 			// LF: Push the new project in the end of the project's array
+			if (!isset($user["projects"][0])) {
+				$user["projects"] = array();
+			}
+			
 			array_push($user["projects"], $project);
 			// LF: Saves the new array in the database by overwriting the previous user
 			return $collection->update(array("username" => $this->user), $user);
@@ -195,27 +200,40 @@ class Project extends Common {
 		
 		// Must check if there is no assignment with the same ID
 		foreach ($users as $user) {
-			for ($i = 0; $i < count($user["projects"]); $i++) {
-				if (isset($user["projects"][$i]["assignment"]['id'])) {
-					if ($user["projects"][$i]["assignment"]['id'] == $this->assignment['id']) {
-						return "An assignment with the same id already exists.";
+			if (isset($user["projects"][0])) {
+				for ($i = 0; $i < count($user["projects"]); $i++) {
+					if (isset($user["projects"][$i]["assignment"]['id'])) {
+						if ($user["projects"][$i]["assignment"]['id'] == $this->assignment['id']) {
+							return "An assignment with the same id already exists.";
+						}
 					}
 				}
 			}
 		}	
 		
+		// Should rollback if some error occur
 		$return = "success";
 		$users = $collection->find();
 		$user = '';
 		foreach ($users as $user) {
-			
-			$this->path = "AS_" . $user['username'] ."_" . $this->assignment["id"] ;
+			$this->path = "AS_" . $user['username'] ."_" . $this->assignment["id"];
 			$result = $this->Create($user['username']);
 			if ($result != 'success') {
 				$return = $result;
 			}
 		}
-		return $result;
+		
+		if ($return != 'success') {
+			$users = $collection->find();
+			$user = '';
+			foreach ($users as $user) {
+				$this->path = "AS_" . $user['username'] ."_" . $this->assignment["id"];
+				$delete_as_an_assignment = TRUE;
+				$result = $this->Delete($delete_as_an_assignment);
+			}	
+		}
+			
+		return $return;
 	}
 	
 	
@@ -361,19 +379,27 @@ class Project extends Common {
     // LF:  Delete Project
     //////////////////////////////////////////////////////////////////
 	
-	public function Delete(){
+	public function Delete($delete_as_an_assignment = FALSE){
         $collection = $this->database->users;
 		
 		$users = $collection->find();
 		$update_successful = TRUE;
 		
 		foreach ($users as $user) {
-			for ($i = 0; $i < count($user["projects"]); $i++) {
-				// LF: The project is selected based on the path :-> As it is the project's id
-				if ($user["projects"][$i]["path"] == $this->path) {
-					// LF: Remove the project from the projects array
-					unset($user["projects"][$i]);
-					$user["projects"] = array_values($user["projects"]);
+			if (isset($user["projects"][0])) {
+				for ($i = 0; $i < count($user["projects"]); $i++) {
+					// LF: The project is selected based on the path :-> As it is the project's id
+					if ($user["projects"][$i]["path"] == $this->path) {
+						// LF: Remove the project from the projects array
+							if ($delete_as_an_assignment) {
+								if (isset($user["projects"][$i]["assignment"]["id"])) {
+									unset($user["projects"][$i]);
+								}
+							} else {
+								unset($user["projects"][$i]);	
+							}
+						$user["projects"] = array_values($user["projects"]);
+					}
 				}
 			}
 			// LF: Updating in the database : Overwriting the user document  
@@ -383,11 +409,13 @@ class Project extends Common {
 		}
 		
 		// LF: If everything is okay returns success 	
-		if($update_successful) {
+		if(!$delete_as_an_assignment) {
 			// Response
-        	echo formatJSEND("success",null);	
+			if ($return) {
+				echo formatJSEND("success",null);	
+			}
 		}
-    }
+	}
 
     //////////////////////////////////////////////////////////////////
     // Check Duplicate
@@ -401,11 +429,13 @@ class Project extends Common {
 		if ($check_name) {
 			// LF: Find the current user and verifies the name of all of its projects
 			$user = $collection->findOne(array("username" => $this->user));
-			for ($i = 0; $i < count($user["projects"]); $i++) {
-				if ($user["projects"][$i]["name"] == $this->name) {
-					$pass = false;
-				}	
-			}	
+			if (isset($user["projects"][0])) {	
+				for ($i = 0; $i < count($user["projects"]); $i++) {
+					if ($user["projects"][$i]["name"] == $this->name) {
+						$pass = false;
+					}	
+				}
+			}
 		}
 		
 		// LF: Looking if the current path is equal of at least one of the saved paths
@@ -585,19 +615,21 @@ class Project extends Common {
 		
 		$users = $collection->find();
 		foreach ($users as $user) {
-			for ($i = 0; $i < count($user["projects"]); $i++) {
-				if (isset($user["projects"][$i]) && isset($user["projects"][$i]["assignment"]["owner"])) {	
-					if ($user["projects"][$i]["assignment"]["owner"] == $owner) {
-						$assignment_added = FALSE;
-						
-						for ($k = 0; $k < count($assignments); $k++) {
-							if ($user["projects"][$i]["assignment"]["id"] == $assignments[$k]["id"]) {
-								$assignment_added = TRUE;
+			if (isset($user["projects"][0])) {
+				for ($i = 0; $i < count($user["projects"]); $i++) {
+					if (isset($user["projects"][$i]) && isset($user["projects"][$i]["assignment"]["owner"])) {	
+						if ($user["projects"][$i]["assignment"]["owner"] == $owner) {
+							$assignment_added = FALSE;
+							
+							for ($k = 0; $k < count($assignments); $k++) {
+								if ($user["projects"][$i]["assignment"]["id"] == $assignments[$k]["id"]) {
+									$assignment_added = TRUE;
+								}
 							}
-						}
-						// If the assignment isn't added yet, add it
-						if (!$assignment_added) {
-							array_push($assignments, $user["projects"][$i]["assignment"]);												
+							// If the assignment isn't added yet, add it
+							if (!$assignment_added) {
+								array_push($assignments, $user["projects"][$i]["assignment"]);												
+							}
 						}
 					}
 				}
@@ -618,18 +650,20 @@ class Project extends Common {
 		
 		$users = $collection->find();
 		foreach ($users as $user) {
-			for ($i = 0; $i < count($user["projects"]); $i++) {
-				if (isset($user["projects"][$i]) && isset($user["projects"][$i]["assignment"]["id"])) {
-					if ($user["projects"][$i]["assignment"]["id"] == $id) {
-						if (isset($user["projects"][$i]["assignment"]["submitted_date"])) {
-							if ($user["projects"][$i]["assignment"]["submitted_date"] != "") {
-								if ($user["projects"][$i]['privacy'] == 'shared' && count($user['projects'][$i]["group_members"]) > 1) {
-									$user['projects'][$i]['name'] .= " (". $user['username'] . ")";
+			if (isset($user["projects"][0])) {		
+				for ($i = 0; $i < count($user["projects"]); $i++) {
+					if (isset($user["projects"][$i]) && isset($user["projects"][$i]["assignment"]["id"])) {
+						if ($user["projects"][$i]["assignment"]["id"] == $id) {
+							if (isset($user["projects"][$i]["assignment"]["submitted_date"])) {
+								if ($user["projects"][$i]["assignment"]["submitted_date"] != "") {
+									if ($user["projects"][$i]['privacy'] == 'shared' && count($user['projects'][$i]["group_members"]) > 1) {
+										$user['projects'][$i]['name'] .= " (". $user['username'] . ")";
+									}
+									array_push($projects, $user["projects"][$i]);
 								}
-								array_push($projects, $user["projects"][$i]);
 							}
+							
 						}
-						
 					}
 				}
 			}
@@ -649,10 +683,12 @@ class Project extends Common {
 		
 		$users = $collection->find();
 		foreach ($users as $user) {
-			for ($i = 0; $i < count($user["projects"]); $i++) {
-				if (isset($user["projects"][$i]) && isset($user["projects"][$i]["assignment"]["id"])) {	
-					if ($user["projects"][$i]["assignment"]["id"] == $id) {
-						return $user["projects"][$i]["assignment"];
+			if (isset($user["projects"][0])) {		
+				for ($i = 0; $i < count($user["projects"]); $i++) {
+					if (isset($user["projects"][$i]) && isset($user["projects"][$i]["assignment"]["id"])) {	
+						if ($user["projects"][$i]["assignment"]["id"] == $id) {
+							return $user["projects"][$i]["assignment"];
+						}
 					}
 				}
 			}
@@ -700,10 +736,12 @@ class Project extends Common {
 		
 		// Must check if there is no assignment with the same ID
 		foreach ($users as $user) {
-			for ($i = 0; $i < count($user["projects"]); $i++) {
-				if (isset($user["projects"][$i]["assignment"]['id'])) {
-					if ($user["projects"][$i]["assignment"]['id'] == $assignment_id) {
-						return $user["projects"][$i]["assignment"]['name'];
+			if (isset($user["projects"][0])) {
+				for ($i = 0; $i < count($user["projects"]); $i++) {
+					if (isset($user["projects"][$i]["assignment"]['id'])) {
+						if ($user["projects"][$i]["assignment"]['id'] == $assignment_id) {
+							return $user["projects"][$i]["assignment"]['name'];
+						}
 					}
 				}
 			}

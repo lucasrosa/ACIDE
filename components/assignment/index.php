@@ -59,6 +59,7 @@
 			
 			
 			$Assignment["id"] = $_POST['id'];
+			$Assignment["visibility"] = "true";
 			if ($Assignment["id"] == "") 
 				$error .= "The field ID/Folder cannot be blank. <br />";
 			
