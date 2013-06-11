@@ -411,9 +411,7 @@ class Project extends Common {
 		// LF: If everything is okay returns success 	
 		if(!$delete_as_an_assignment) {
 			// Response
-			if ($return) {
-				echo formatJSEND("success",null);	
-			}
+			echo formatJSEND("success",null);	
 		}
 	}
 

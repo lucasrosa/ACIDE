@@ -43,7 +43,7 @@
 	            foreach($projects as $project=>$data){
 	                $show = true;
 	                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
-	                if($show && $data['privacy'] == 'public'){
+	                if($show && $data['privacy'] == 'public' && $data['visibility'] == 'true'){
 	                ?>
 	                <li>
 						<div>
@@ -84,7 +84,7 @@
 	            foreach($projects as $project=>$data){
 	                $show = true;
 	                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
-	                if($show && $data['privacy'] == 'private'){ //: needed when not using getUserProjects && $data['user'] == $_SESSION['user']){
+	                if($show && $data['privacy'] == 'private' && $data['visibility'] == 'true'){ //: needed when not using getUserProjects && $data['user'] == $_SESSION['user']){
 	                ?>
 	                <li>
 						<div>
@@ -130,7 +130,7 @@
 	            foreach($projects as $project=>$data){
 	                $show = true;
 	                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
-	                if($show && $data['privacy'] == 'shared'){ //: needed when not using getUserProjects && $data['user'] == $_SESSION['user']){
+	                if($show && $data['privacy'] == 'shared'  && $data['visibility'] == 'true'){ //: needed when not using getUserProjects && $data['user'] == $_SESSION['user']){
 	                ?>
 	                <li>
 						<div>
@@ -202,7 +202,7 @@
             foreach($projects as $project=>$data){
                 $show = true;
                 if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
-                if($show){
+                if($show && $data['visibility'] == 'true'){
                 ?>
                 <tr>
                     <td><a onclick="codiad.project.open('<?php echo($data['path']); ?>');" class="icon-folder bigger-icon"></a></td>
