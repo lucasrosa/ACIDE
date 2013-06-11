@@ -169,6 +169,10 @@ class Project extends Common {
 		} else { // public project
 			$users = $collection->find();
 			foreach ($users as $user) {
+				// LF: Identify if the array of projects exists, if not, it creates it
+				if (!isset($user["projects"][0])) {
+					$user["projects"] = array();
+				}
 				// LF: Push the new project in the end of the project's array
 				array_push($user["projects"], $project);
 				// LF: Saves the new array in the database by overwriting the previous user
@@ -406,9 +410,11 @@ class Project extends Common {
 		$user = '';
 		$users = $collection->find();
 		foreach ($users as $user) {
-			for ($i = 0; $i < count($user["projects"]); $i++) {
-				if ($user["projects"][$i]["path"] == $this->path) {
-					$pass = false;
+			if (isset($user["projects"][0])) {
+				for ($i = 0; $i < count($user["projects"]); $i++) {
+					if ($user["projects"][$i]["path"] == $this->path) {
+						$pass = false;
+					}
 				}
 			}
 		}	
@@ -479,13 +485,15 @@ class Project extends Common {
 		$users = $collection->find();
 		$user = '';
 		foreach ($users as $user) {
-			for ($i = 0; $i < count($user["projects"]); $i++) {
-				for ($j = 0; $j < count($user["projects"][$i]["group_members"]); $j++) {
-					if (($user["projects"][$i]["group_members"][$j]['username'] == $username) || $user["projects"][$i]['privacy'] == 'public') {
-						array_push($projects, $user["projects"][$i]);
+			if (isset($user["projects"][0])) {
+				for ($i = 0; $i < count($user["projects"]); $i++) {
+					for ($j = 0; $j < count($user["projects"][$i]["group_members"]); $j++) {
+						if (($user["projects"][$i]["group_members"][$j]['username'] == $username) || $user["projects"][$i]['privacy'] == 'public') {
+							array_push($projects, $user["projects"][$i]);
+						}
 					}
 				}
-			}			
+			}
 		}
 		
 		return $projects;

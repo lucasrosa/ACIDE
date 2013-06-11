@@ -50,7 +50,9 @@ class User {
 
         $pass = false;
         $this->EncryptPassword();
-        $users = getJSON('users.php');
+       
+	   	/*
+	    $users = getJSON('users.php');
         foreach($users as $user){
             if($user['username']==$this->username && $user['password']==$this->password){
                 $pass = true;
@@ -59,6 +61,21 @@ class User {
                 if($user['project']!=''){ $_SESSION['project'] = $user['project']; }
             }
         }
+		*/
+		
+		// Load the users from the database and verifies if one of them is this one
+		$collection = $this->GetCollection();
+		// Get all the users in the database
+		$users = $collection->find();
+		foreach ($users as $user) {
+			if($user['username']==$this->username && $user['password']==$this->password){
+                $pass = true;
+                $_SESSION['user'] = $this->username;
+                $_SESSION['lang'] = $this->lang;
+                if($user['project']!=''){ $_SESSION['project'] = $user['project']; }
+            }			
+		}
+		
 
         if($pass){ echo formatJSEND("success",array("username"=>$this->username)); }
         else{ echo formatJSEND("error","Incorrect Username or Password"); }
@@ -72,7 +89,9 @@ class User {
         $this->EncryptPassword();
         $pass = $this->checkDuplicate();
         if($pass){
-            
+        	
+            $collection = $this->GetCollection();
+			
 			$new_user = array( 	
 								"type" => $this->type,
 								"username" => $this->username,
@@ -80,10 +99,17 @@ class User {
 								"email" => $this->email, 
 								"projects" => ''
 							 );
-							 
-			$this->users[] = array("username"=>$this->username,"password"=>$this->password,"project"=>"");				 
+
+			$this->users[] = array("username"=>$this->username,"password"=>$this->password,"project"=>"");
             saveJSON('users.php',$this->users);
-            echo formatJSEND("success",array("username"=>$this->username));
+			
+			// Insert the user in the database:
+			if ($collection->insert($new_user)) {
+				echo formatJSEND("success",array("username"=>$this->username));
+			} else {
+				echo formatJSEND("error","The user could not be inserted on the database");				
+			}
+            
         }else{
             echo formatJSEND("error","The Username is Already Taken");
         }
@@ -135,6 +161,7 @@ class User {
                 $revised_array[] = array("username"=>$data['username'],"password"=>$data['password'],"project"=>$data['project']);
             }
         }
+		
         // Save array back to JSON
         saveJSON('users.php',$revised_array);
         // Response

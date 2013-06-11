@@ -28,7 +28,7 @@
         if(!isset($_SESSION['project'])){
             // Load default/first project
             if($no_return){ $this->no_return = true; }
-            $Project->GetFirst();
+            //$Project->GetFirst();
         }else{
             // Load current
             $Project->path = $_SESSION['project'];
