@@ -28,6 +28,7 @@
         if(!isset($_SESSION['project'])){
             // Load default/first project
             if($no_return){ $this->no_return = true; }
+			// LF : Removing the GetFirst because the user doesn't have a project when it is just created
             //$Project->GetFirst();
         }else{
             // Load current

@@ -38,7 +38,11 @@ class User {
     //////////////////////////////////////////////////////////////////
 
     public function __construct(){
-        $this->users = getJSON('users.php');
+        // Load the users from the database and verifies if one of them is this one
+		$collection = $this->GetCollection();
+		// Get all the users in the database and set it as the users of this instance
+		$this->users = $collection->find(); //$this->users = getJSON('users.php');
+		
         $this->actives = getJSON('active.php');
     }
 
@@ -51,18 +55,6 @@ class User {
         $pass = false;
         $this->EncryptPassword();
        
-	   	/*
-	    $users = getJSON('users.php');
-        foreach($users as $user){
-            if($user['username']==$this->username && $user['password']==$this->password){
-                $pass = true;
-                $_SESSION['user'] = $this->username;
-                $_SESSION['lang'] = $this->lang;
-                if($user['project']!=''){ $_SESSION['project'] = $user['project']; }
-            }
-        }
-		*/
-		
 		// Load the users from the database and verifies if one of them is this one
 		$collection = $this->GetCollection();
 		// Get all the users in the database
@@ -97,11 +89,9 @@ class User {
 								"username" => $this->username,
 								"password" => $this->password, 
 								"email" => $this->email, 
-								"projects" => ''
+								"projects" => '',
+								"project" => ''
 							 );
-
-			$this->users[] = array("username"=>$this->username,"password"=>$this->password,"project"=>"");
-            saveJSON('users.php',$this->users);
 			
 			// Insert the user in the database:
 			if ($collection->insert($new_user)) {
@@ -120,16 +110,10 @@ class User {
     //////////////////////////////////////////////////////////////////
 
     public function Delete(){
-        // Remove User
-        $revised_array = array();
-        foreach($this->users as $user=>$data){
-            if($data['username']!=$this->username){
-                $revised_array[] = array("username"=>$data['username'],"password"=>$data['password'],"project"=>$data['project']);
-            }
-        }
-        // Save array back to JSON
-        saveJSON('users.php',$revised_array);
-
+		// Remove User from database
+		$collection = $this->GetCollection();
+		$collection->remove(array('username' => $this->username));
+		
         // Remove any active files
         foreach($this->actives as $active=>$data){
             if($this->username==$data['username']){
@@ -153,17 +137,15 @@ class User {
 
     public function Password(){
         $this->EncryptPassword();
-        $revised_array = array();
-        foreach($this->users as $user=>$data){
-            if($data['username']==$this->username){
-                $revised_array[] = array("username"=>$data['username'],"password"=>$this->password);
-            }else{
-                $revised_array[] = array("username"=>$data['username'],"password"=>$data['password'],"project"=>$data['project']);
-            }
-        }
+		$collection = $this->GetCollection();
+		$users = $collection->find();
+		foreach ($users as $user) {
+			if($user['username']==$this->username) {
+				$user["password"] = $this->password;
+				$collection->update(array("username" => $user["username"]), $user);	
+			} 
+		}
 		
-        // Save array back to JSON
-        saveJSON('users.php',$revised_array);
         // Response
         echo formatJSEND("success",null);
     }
@@ -192,16 +174,14 @@ class User {
     //////////////////////////////////////////////////////////////////
 
     public function Project(){
-        $revised_array = array();
-        foreach($this->users as $user=>$data){
-            if($this->username==$data['username']){
-                $revised_array[] = array("username"=>$data['username'],"password"=>$data['password'],"project"=>$this->project);
-            }else{
-                $revised_array[] = array("username"=>$data['username'],"password"=>$data['password'],"project"=>$data['project']);
-            }
-        }
-        // Save array back to JSON
-        saveJSON('users.php',$revised_array);
+		$collection = $this->GetCollection();
+		$users = $collection->find();
+		foreach ($users as $user) {
+			if($user['username']==$this->username) {
+				$user["project"] = $this->project;
+				$collection->update(array("username" => $user["username"]), $user);	
+			} 
+		}
         // Response
         echo formatJSEND("success",null);
     }
@@ -212,11 +192,17 @@ class User {
 
     public function CheckDuplicate(){
         $pass = true;
-        foreach($this->users as $user=>$data){
-            if($data['username']==$this->username){
+        
+		$collection = $this->GetCollection();
+		// Get all the users in the database
+		$users = $collection->find();
+		foreach ($users as $user) {
+			if($user['username']==$this->username){
                 $pass = false;
-            }
-        }
+            }			
+		}
+		
+		
         return $pass;
     }
 
@@ -226,11 +212,16 @@ class User {
 
     public function Verify(){
         $pass = 'false';
-        foreach($this->users as $user=>$data){
-            if($this->username==$data['username']){
+		
+		$collection = $this->GetCollection();
+		// Get all the users in the database
+		$users = $collection->find();
+		foreach ($users as $user) {
+			if($user['username']==$this->username){
                 $pass = 'true';
-            }
-        }
+            }			
+		}
+		
         echo($pass);
     }
 
@@ -251,15 +242,13 @@ class User {
     }
 	
 	private function GetCollection() {
-		// connect
+		// Connect
 		$mongo_client = new MongoClient();
-		
-		// select a database
+		// select the database
 		$database = $mongo_client->codiad_database;
-		
-		// select a collection (analogous to a relational database's table)
+		// Select the collection 
 		$collection = $database->users;
-		
+		// Return the collection
 		return $collection;
 	}
 }

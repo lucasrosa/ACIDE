@@ -41,7 +41,16 @@
             <?php
         
             // Get projects JSON data
-            $users = getJSON('users.php');
+            //$users = getJSON('users.php');
+            // Load the users from the database and verifies if one of them is this one
+			// Connect
+			$mongo_client = new MongoClient();
+			// select the database
+			$database = $mongo_client->codiad_database;
+			// Select the collection 
+			$collection = $database->users;
+			// Get all the users in the database
+			$users = $collection->find();
             foreach($users as $user=>$data){        
             ?>
             <tr>

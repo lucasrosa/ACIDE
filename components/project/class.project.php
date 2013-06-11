@@ -106,15 +106,17 @@ class Project extends Common {
 		
 		foreach ($users as $user) {
 		//$user = $collection->findOne(array("username" => $this->user));
-			for ($i = 0; $i < count($user["projects"]); $i++) {
-				if ($user["projects"][$i]["path"] == $this->path) {
-					$pass = true;
-		            $this->name = $user["projects"][$i]["name"];
-					$this->privacy = $user["projects"][$i]["privacy"];
-					$this->group_members = $user["projects"][$i]["group_members"];
-					$this->assignment = $user["projects"][$i]["assignment"];
-		            $_SESSION['project'] = $user["projects"][$i]["path"];
-					return $pass;
+			if (isset($user["projects"][0])) {	
+				for ($i = 0; $i < count($user["projects"]); $i++) {
+					if ($user["projects"][$i]["path"] == $this->path) {
+						$pass = true;
+			            $this->name = $user["projects"][$i]["name"];
+						$this->privacy = $user["projects"][$i]["privacy"];
+						$this->group_members = $user["projects"][$i]["group_members"];
+						$this->assignment = $user["projects"][$i]["assignment"];
+			            $_SESSION['project'] = $user["projects"][$i]["path"];
+						return $pass;
+					}
 				}
 			}
 		}
@@ -509,13 +511,15 @@ class Project extends Common {
 		$users = $collection->find();
 		$update_successful = TRUE;
 		foreach ($users as $user) {
-			for ($i = 0; $i < count($user["projects"]); $i++) {
-				// LF: The project is selected based on the path :-> As it is the project's id
-				if ($user["projects"][$i]["path"] == $this->path) {
-					$user["projects"][$i]["name"] = $this->name;
-					$user["projects"][$i]["privacy"] = $this->privacy;
-					$user["projects"][$i]["group_members"] = $this->group_members;
-					$user["projects"][$i]["assignment"] = $this->assignment;
+			if (isset($user["projects"][0])) {	
+				for ($i = 0; $i < count($user["projects"]); $i++) {
+					// LF: The project is selected based on the path :-> As it is the project's id
+					if ($user["projects"][$i]["path"] == $this->path) {
+						$user["projects"][$i]["name"] = $this->name;
+						$user["projects"][$i]["privacy"] = $this->privacy;
+						$user["projects"][$i]["group_members"] = $this->group_members;
+						$user["projects"][$i]["assignment"] = $this->assignment;
+					}
 				}
 			}
 			// LF: Updating in the database : Overwriting the user document  
@@ -537,9 +541,11 @@ class Project extends Common {
 		
 		$users = $collection->find();
 		foreach ($users as $user) {
-			for ($i = 0; $i < count($user["projects"]); $i++) {
-				if ($user["projects"][$i]["path"] == $this->path) {
-					$users_in_project =  $user["projects"][$i]["group_members"];
+			if (isset($user["projects"][0])) {		
+				for ($i = 0; $i < count($user["projects"]); $i++) {
+					if ($user["projects"][$i]["path"] == $this->path) {
+						$users_in_project =  $user["projects"][$i]["group_members"];
+					}
 				}
 			}
 		}

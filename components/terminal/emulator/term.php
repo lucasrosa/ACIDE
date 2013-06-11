@@ -29,8 +29,14 @@
     //////////////////////////////////////////////////////////////////
     // Globals
     //////////////////////////////////////////////////////////////////
+    // if the user doesn't have any porject the ROOT will be the workspace
+    $project_path = "";
+    if (isset($_SESSION['project'])) {
+    	$project_path = '/' . $_SESSION['project'];
+    }
+	
+    define('ROOT',WORKSPACE . $project_path);
     
-    define('ROOT',WORKSPACE . '/' . $_SESSION['project']);
     define('BLOCKED','ssh,telnet');
     
     //////////////////////////////////////////////////////////////////

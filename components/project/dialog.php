@@ -381,7 +381,15 @@
 			      <?php 
 			        	
 			        	$User = new User();
-						$User->users = getJSON('users.php');
+						//$User->users = getJSON('users.php');
+						// Connect
+						$mongo_client = new MongoClient();
+						// select the database
+						$database = $mongo_client->codiad_database;
+						// Select the collection 
+						$collection = $database->users;
+						// Get all the users in the database
+						$User->users = $collection->find();
 						$users = $User->users;
 						foreach($users as $user) {
 							if($user['username'] != $_SESSION['user']) {
