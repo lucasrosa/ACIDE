@@ -251,4 +251,16 @@ class User {
 		// Return the collection
 		return $collection;
 	}
+	
+	public function GetUserType() {
+		$collection = $this->GetCollection();
+		$users = $collection->find();
+		foreach ($users as $user) {
+			if($user['username']==$this->username) {
+				return $user['type'];	
+			} 
+		}
+		
+		return "";
+	}
 }

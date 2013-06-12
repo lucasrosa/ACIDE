@@ -392,7 +392,11 @@ if(!file_exists(DATA . '/plugins.php')) {
                 echo('<script src="plugins/'.$plugin.'/init.js"></script>"');
             }
         }
-
+		
+		// LF: PHP
+		require_once('components/assignment/interface_insertion.php');
+		
+		
     }
 
     ?>
