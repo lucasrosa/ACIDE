@@ -100,10 +100,11 @@
 			////////////////////////////////////////////////////
 			
 			// LF: The blank command is necessary because apparently the terminal executes a blank command when it opens
-			$allowed_commands[0] = "";
-			$allowed_commands[1] = "ls";
-			$allowed_commands[2] = "javac";
-			$allowed_commands[3] = "java";
+			$allowed_commands[] = "";
+			$allowed_commands[] = "ls";
+			$allowed_commands[] = "javac";
+			$allowed_commands[] = "java";
+			
 			/* LF: 
 			 * Compare the array of allowed commands with the commands received from the terminal,
 			 * if there is at least one intersection, the rest of the code is executed, if not
@@ -238,8 +239,7 @@
         }
     
     }
-
-    
+	
     echo(htmlentities($output));
 
 

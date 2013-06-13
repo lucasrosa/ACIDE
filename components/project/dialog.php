@@ -222,15 +222,17 @@
                     
                     <?php
                         if(checkAccess()){
+                        	/*
                             if($_SESSION['project'] == $data['path']){
                             ?>
                             <td><a onclick="codiad.message.error('Active Project Cannot Be Removed');" class="icon-block bigger-icon"></a></td>
                             <?php
                             }else{
+                            */
                             ?>
                             <td><a onclick="codiad.project.delete('<?php echo($data['name']); ?>','<?php echo($data['path']); ?>');" class="icon-cancel-circled bigger-icon"></a></td>
                             <?php
-                            }
+                            //}
                         }
                     ?>
                 </tr>
