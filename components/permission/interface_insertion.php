@@ -1,11 +1,28 @@
-<a onclick="codiad.update.check();"><span class="icon-share bigger-icon"></span>Update Check</a>
-<a onclick="codiad.user.list();"><span class="icon-users bigger-icon"></span>Users</a>
-<a onclick="codiad.plugin_manager.list();"><span class="icon-tag bigger-icon"></span>Plugins</a>
-
-
 <?
-	/*
-	 * 
+	if (isset($_SESSION['user'])) {
+		// Connect
+		$mongo_client = new MongoClient();
+		// select the database
+		$database = $mongo_client->codiad_database;
+		// Select the collection 
+		$collection = $database->users;
+		
+		$type = "";
+		$users = $collection->find();
+		foreach ($users as $user) {
+			if($user['username'] == $_SESSION['user']) {
+				$type = $user['type'];	
+			} 
+		}
+		
+
+		if ($type == 'admin') {
+			echo('<script src="components/permission/interface_insertion.js"></script>"');
+		}
+	} 
+	
+	 /*
+	  
 	 	{
         "title": "plugins",
         "icon": null,
