@@ -267,7 +267,7 @@
 			</select>
 			
             <?php if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') { ?>
-            <label>Folder Name or Absolute Path</label>
+            <label>Folder Name (<span class="sb-dialog-warning">This is the main directory of your project</span>)</label>
 			<label id="path_prefix">Folder prefix: "<?=$_SESSION['user']?>-"</label>
 			<input name="project_path" autofocus="off" autocomplete="off">
 			
