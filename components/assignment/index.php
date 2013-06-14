@@ -314,7 +314,7 @@
 							if (!$editing_assignment) {
 							?>
 							<tr>
-								<th>ID / Folder</th>
+								<th>ID (Project's folder name)</th>
 								<td><input type="text" name="id" value="<?=$Assignment['id']?>" /></td>
 							</tr>
 							<?
@@ -325,7 +325,7 @@
 							}
 							?>
 							<tr>
-								<th>Assignment / Project Name</th>
+								<th>Assignment name (Project's name)</th>
 								<td><input type="text" name="project_name" value="<?=$Assignment['name']?>" /></td>
 							</tr>
 							<tr>

@@ -18,7 +18,7 @@
         init: function() {
 
             var _this = this;
-
+                
             $('#lock-left-sidebar')
                 .on('click', function() {
                 if (_this.leftLock) {
