@@ -260,15 +260,23 @@
 			<label>Project Privacy</label>
 			
 			
-			<select name="project_privacy">
-			  <option value="public" selected >Public</option>
-			  <option value="private">Private</option>
+			<select id="privacy_select" name="project_privacy">
+			  <option id="option_public" value="public" selected >Public</option>
+			  <option id="option_private" value="private">Private</option>
 			  <!-- There is not need to shared projects here because a project turns to shared when new users are added -->
 			</select>
 			
             <?php if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') { ?>
             <label>Folder Name or Absolute Path</label>
-            <input name="project_path" autofocus="off" autocomplete="off">
+			<label id="path_prefix">Folder prefix: "<?=$_SESSION['user']?>-"</label>
+			<input name="project_path" autofocus="off" autocomplete="off">
+			
+			<!--
+				<div style="display:inline;">
+					<label id="path_prefix" style="display:inline; display:none;" ><?=$_SESSION['user']?>-</label>
+					<input style="display:inline;" name="project_path" autofocus="off" autocomplete="off">
+				</div> 
+			-->
             <?php } else { ?>
             <input type="hidden" name="project_path">
             <?php }  ?>
@@ -434,11 +442,18 @@
 			      }
 			    } );
 			}
-		    </script>
-        	
+		  </script>
         	
         <?php
         break;       
     }
     
 ?>
+<script>
+	$("#path_prefix").toggle();
+	$(document).ready(function() {
+		$("#privacy_select").change(function () {			
+			$("#path_prefix").toggle();
+		});
+	});	
+</script>
