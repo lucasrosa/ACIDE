@@ -29,7 +29,7 @@
             if(file_exists(BASE_PATH . "/data/" . $_SESSION['user'] . '_acl.php')){
                 $projects_assigned = getJSON($_SESSION['user'] . '_acl.php');
             }
-            
+			
             ?>  
             <!-- LF: Public Projects List -->
             <div id='public-projects-containter'>        

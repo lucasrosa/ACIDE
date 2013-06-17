@@ -84,7 +84,7 @@
 									$root_directory = "/" . $directories[1];
 								}
 								
-								$url = $root_directory . "/components/project/" . $projects[$k]["assignment"]["project_file_name"];
+								$url = $root_directory . "/data/assignments/submitted/" . $projects[$k]["assignment"]["project_file_name"];
 							?>
 							<td>
 								<a href="<?=$url?>"><button>Download</button></a>

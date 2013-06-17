@@ -172,7 +172,9 @@
 			// Zipping the file
 			$path = "../../workspace/" . $folderName . "/";
 
-			$zipFile = './' . $projectName. ".zip";
+			//$zipFile = './' . $projectName. ".zip";
+			$zipFile = '../../data/assignments/submitted/' . $projectName. ".zip";
+			
 			$zipArchive = new ZipArchive();
 			$include_dir = true;
 			
