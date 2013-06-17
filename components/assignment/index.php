@@ -189,6 +189,20 @@
 		$Assignment['maximum_number_group_members'] = $_POST['maximum_number_of_group_members'];
 	}
 	
+	$pageURL = 'http';
+	if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+		$pageURL .= "://";
+	if ($_SERVER["SERVER_PORT"] != "80") {
+		 $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"];
+	} else {
+		$pageURL .= $_SERVER["SERVER_NAME"];
+	}
+	
+	$dir =  dirname($_SERVER['PHP_SELF']);
+	$dirs = explode('/', $dir);
+	$pageURL .= "/" . $dirs[1];
+	
+	
 ?>
 <!doctype html>
 
@@ -216,10 +230,10 @@
   	</script>
 </head>
 <body>
-	<h1  align="center">Assignments</h1>
-	
-	
-	
+	<form method="post" action="<?=$pageURL?>">
+		<button>Open IDE</button>
+	</form>
+	<h1 align="center">Assignments</h1>	
 	
 	<div id="modal" style="display: block; width: 800px; margin:0 auto;" >
 		<div id="modal-content">
