@@ -25,6 +25,7 @@
 	
 	$assignment_blank = FALSE;
 	$editing_assignment = FALSE;
+	$error_editing_assignment = FALSE;
 	
 	$Project = new Project();
 	$Assignment = array();
@@ -53,11 +54,11 @@
 			if ($hour > 12) {
 				$hour -= 12;
 			}
-			$Assignment['due_date_time'] = $hour . substr($Assignment['due_date_time'], 2 , 6); 
+			$Assignment['due_date_time'] = $hour . substr($Assignment['due_date_time'], 2 , 6);
 				
 		} else if (($_POST['action'] == 'create_new_assignment') || ($_POST['action'] == 'save_edited_assignment')) {
 			
-			
+		
 			$Assignment["id"] = $_POST['id'];
 			$Assignment["visibility"] = "true";
 			if ($Assignment["id"] == "") 
@@ -79,37 +80,48 @@
 			$Assignment['allow_late_submission'] = $_POST['late_submission_days'];
 			$Assignment['maximum_number_group_members'] = $_POST['maximum_number_of_group_members'];
 				
-			// Uploading the pdf file
-			$allowedExts = array("pdf");
-			$extension = end(explode(".", $_FILES["file"]["name"]));
+			$keep_old_description_file = FALSE;	
 			
-			if (in_array($extension, $allowedExts) && $error == '') {
-				if ($_FILES["file"]["error"] > 0) {
-					$error .=  "Return Code: " . $_FILES["file"]["error"] . "<br>";
-				} else {
-					
-					if (file_exists("../../data/assignments/" . $_FILES["file"]["name"])) {
-						$error = "The description file \"" . $_FILES["file"]["name"] . "\" already exists. ";
+			if (isset($_POST['keep_old_description_file'])) {
+				if ($_POST['keep_old_description_file'] == "TRUE") {
+					$keep_old_description_file = TRUE;
+				}
+			} 
+			
+			
+			if (!$keep_old_description_file) {
+				// Uploading the pdf file
+				$allowedExts = array("pdf");
+				$extension = end(explode(".", $_FILES["file"]["name"]));
+				
+				if (in_array($extension, $allowedExts) && $error == '') {
+					if ($_FILES["file"]["error"] > 0) {
+						$error .=  "Return Code: " . $_FILES["file"]["error"] . "<br>";
 					} else {
-						move_uploaded_file($_FILES["file"]["tmp_name"], "../../data/assignments/" . $_FILES["file"]["name"]);
-						$Assignment["description_url"] = 'http';
 						
-						if (isset($_SERVER["HTTPS"])) {
-							if ($_SERVER["HTTPS"] == "on") {
-								$Assignment["description_url"] .= "s";
+						if (file_exists("../../data/assignments/" . $_FILES["file"]["name"])) {
+							$error = "The description file \"" . $_FILES["file"]["name"] . "\" already exists. ";
+						} else {
+							move_uploaded_file($_FILES["file"]["tmp_name"], "../../data/assignments/" . $_FILES["file"]["name"]);
+							$Assignment["description_url"] = 'http';
+							
+							if (isset($_SERVER["HTTPS"])) {
+								if ($_SERVER["HTTPS"] == "on") {
+									$Assignment["description_url"] .= "s";
+								}
+							}
+							$Assignment["description_url"] .= "://";
+							if ($_SERVER["SERVER_PORT"] != "80") {
+								$Assignment["description_url"] .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+							} else {
+								$Assignment["description_url"] .= $_SERVER["SERVER_NAME"]. "/Codiad/data/assignments/" . $_FILES["file"]["name"];
 							}
 						}
-						$Assignment["description_url"] .= "://";
-						if ($_SERVER["SERVER_PORT"] != "80") {
-							$Assignment["description_url"] .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
-						} else {
-							$Assignment["description_url"] .= $_SERVER["SERVER_NAME"]. "/Codiad/data/assignments/" . $_FILES["file"]["name"];
-						}
 					}
-				}
-			} else {
-				if ($error == '') {
-					$error = "Invalid description file. <br />";	
+				} else {
+					if ($error == '') {
+						$error = "Invalid description file. <br />";	
+					}
 				}
 			}
 			
@@ -141,23 +153,22 @@
 					}
 				}
 			} 
+			
 			if ($error != '') {
 				$assignment_blank = FALSE;
+				if ($_POST['action'] == 'save_edited_assignment') {
+					$error_editing_assignment = TRUE;
+					$editing_assignment = TRUE;
+					$form_action = "save_edited_assignment";
+					$form_title = "Edit Assignment";
+					$form_button_title = "Update";	
+				}
 			} else if ($success != '') {
 				$assignment_blank = TRUE;
 			}
 		}
 	} else {
 		$assignment_blank = TRUE;
-	}
-	
-	if ($error != "" && !$assignment_blank) {
-		$Assignment['id'] = $_POST['id'];
-		$Assignment['name'] = $_POST['project_name'];
-		$Assignment['due_date_date'] = $_POST['due_date'];
-		$Assignment['due_date_time'] = $_POST['due_time'];
-		$Assignment['allow_late_submission'] = $_POST['late_submission_days'];
-		$Assignment['maximum_number_group_members'] = $_POST['maximum_number_of_group_members'];
 	}
 	
 	if ($assignment_blank) {
@@ -169,7 +180,15 @@
 		$Assignment['maximum_number_group_members'] = '';
 		$Assignment['due_date_date'] = '';
 		$Assignment['due_date_time'] = '';
+	} else  if (!$editing_assignment || $error_editing_assignment){
+		$Assignment['id'] = $_POST['id'];
+		$Assignment['name'] = $_POST['project_name'];
+		$Assignment['due_date_date'] = $_POST['due_date'];
+		$Assignment['due_date_time'] = $_POST['due_time'];
+		$Assignment['allow_late_submission'] = $_POST['late_submission_days'];
+		$Assignment['maximum_number_group_members'] = $_POST['maximum_number_of_group_members'];
 	}
+	
 ?>
 <!doctype html>
 
@@ -363,6 +382,13 @@
 									</select>
 								</td>
 							</tr>
+							<? if ($editing_assignment) {?>
+							<tr>
+								<th>Keep the old description file?</th>
+								<td><input name="keep_old_description_file" type="checkbox" value="TRUE" /></td>
+							</tr>
+							<? } ?>
+							<tr>
 								<th>Description File</th>
 								<td><input name="file" type="file" accept=".pdf"  /></td>
 							</tr>
@@ -387,6 +413,18 @@
 				<button>
 					<?=$form_button_title?>
 				</button>
+				<?	if ($editing_assignment) {
+						$pageURL = 'http';
+						if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+							$pageURL .= "://";
+						if ($_SERVER["SERVER_PORT"] != "80") {
+							 $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+						} else {
+							$pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+						}
+					?>
+					<a href="<?=$pageURL?>">Cancel</a>
+				<? } ?>
 			</form>
 		</div>
 	</div>
