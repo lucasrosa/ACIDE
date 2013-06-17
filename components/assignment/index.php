@@ -141,7 +141,11 @@
 					}
 				}
 			} 
-			$assignment_blank = TRUE;
+			if ($error != '') {
+				$assignment_blank = FALSE;
+			} else if ($success != '') {
+				$assignment_blank = TRUE;
+			}
 		}
 	} else {
 		$assignment_blank = TRUE;
