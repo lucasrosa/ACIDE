@@ -30,6 +30,26 @@
 	$Project = new Project();
 	$Assignment = array();
 	
+	// Verify if the uploaded description file is bigger than the allowed by php (defined in php.ini)
+	if ( $_SERVER['REQUEST_METHOD'] == 'POST' && empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0 ) {
+	  $displayMaxSize = ini_get('post_max_size');
+	 
+	  switch ( substr($displayMaxSize,-1) )
+	  {
+	    case 'G':
+	      $displayMaxSize = $displayMaxSize * 1024;
+	    case 'M':
+	      $displayMaxSize = $displayMaxSize * 1024;
+	    case 'K':
+	       $displayMaxSize = $displayMaxSize * 1024;
+	  }
+	 
+		@$error = 'Description file is too large. '.
+	           $_SERVER[CONTENT_LENGTH]. ' bytes (' . number_format($_SERVER[CONTENT_LENGTH]/1024/1024, 1). ' MB)' .
+	           ' exceeds the maximum size of '.
+	           $displayMaxSize.' bytes '.  '(' . number_format($displayMaxSize/1024/1024, 1). ' MB)';
+	}
+	
 	if (isset($_POST['action'])) {
 		
 		if ($_POST['action'] == 'delete_assignment') {
@@ -94,9 +114,21 @@
 				$allowedExts = array("pdf");
 				$extension = end(explode(".", $_FILES["file"]["name"]));
 				
+				
 				if (in_array($extension, $allowedExts) && $error == '') {
 					if ($_FILES["file"]["error"] > 0) {
-						$error .=  "Return Code: " . $_FILES["file"]["error"] . "<br>";
+						$error .= " ";
+						if ($_FILES["file"]["error"] == 1) {
+							$error .=  "Description file is too large. <br />";
+						} else if ($_FILES["file"]["error"] == 3) {
+							$error .= "An error occurred when uploading the file. <br />";
+						} else if ($_FILES["file"]["error"] == 4) {
+							$error .= "No file was uploaded. <br />";
+						} else if ($_FILES["file"]["error"] == 7) {
+							$error .= "Failed to write file into disk. <br />";
+						} else {
+							$error .=  "Return Code: " . $_FILES["file"]["error"] . "<br>";
+						}
 					} else {
 						
 						if (file_exists("../../data/assignments/" . $_FILES["file"]["name"])) {
@@ -190,7 +222,10 @@
 	}
 	
 	$pageURL = 'http';
-	if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+	
+	if (@$_SERVER["HTTPS"] == "on") {
+		$pageURL .= "s";
+	}
 		$pageURL .= "://";
 	if ($_SERVER["SERVER_PORT"] != "80") {
 		 $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"];
@@ -403,7 +438,7 @@
 							</tr>
 							<? } ?>
 							<tr>
-								<th>Description File</th>
+								<th>Description File (Maximum of 2 MB)</th>
 								<td><input name="file" type="file" accept=".pdf"  /></td>
 							</tr>
 							<tr>

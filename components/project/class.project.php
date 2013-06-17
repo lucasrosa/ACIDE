@@ -390,7 +390,11 @@ class Project extends Common {
 				for ($i = 0; $i < count($user["projects"]); $i++) {
 					// LF: The project is selected based on the path :-> As it is the project's id
 					if ($user["projects"][$i]["path"] == $this->path) {
-						// LF: Remove the project from the projects array
+							// LF: clear the "project" attribute if it's the actual project
+							if ($user["projects"][$i]["path"] == $user["project"]) {
+								$user["project"] = '';
+							}
+							// LF: Remove the project from the projects array
 							if ($delete_as_an_assignment) {
 								if (isset($user["projects"][$i]["assignment"]["id"])) {
 									unset($user["projects"][$i]);
