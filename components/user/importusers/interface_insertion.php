@@ -32,12 +32,12 @@
 		
 		$dir =  dirname($_SERVER['PHP_SELF']);
 		$dirs = explode('/', $dir);
-		$pageURL .= "/" . $dirs[1] . "/components/assignment";
+		$pageURL .= "/" . $dirs[1] . "/components/user/importusers";
 		
 		if ($type == 'student') {
 			echo("<script>
 				$(document).ready(function() {
-					$('.sb-right-content').prepend('<a href=\'" .$pageURL . "\' target=\'_blank\' style=\'text-decoration: none\'><span class=\'icon-docs l bigger-icon\'></span>Assignments</a>');
+					$('.sb-right-content').prepend('<a href=\'" .$pageURL . "\' target=\'_blank\' style=\'text-decoration: none\'><span class=\'icon-user-add l bigger-icon\'></span>Import Users</a>');
 				});	
 			</script>");
 		}		

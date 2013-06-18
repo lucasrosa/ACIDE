@@ -77,7 +77,7 @@ class User {
     // Create Account
     //////////////////////////////////////////////////////////////////
 
-    public function Create(){
+    public function Create($return_a_string = FALSE){
         $this->EncryptPassword();
         $pass = $this->checkDuplicate();
         if($pass){
@@ -95,13 +95,25 @@ class User {
 			
 			// Insert the user in the database:
 			if ($collection->insert($new_user)) {
-				echo formatJSEND("success",array("username"=>$this->username));
+				if ($return_a_string) {
+					return "success";
+				} else {
+					echo formatJSEND("success",array("username"=>$this->username));	
+				}
 			} else {
-				echo formatJSEND("error","The user could not be inserted on the database");				
+				if ($return_a_string) {
+					return "The user could not be inserted on the database";
+				} else {
+					echo formatJSEND("error","The user could not be inserted on the database");
+				}				
 			}
             
         }else{
-            echo formatJSEND("error","The Username is Already Taken");
+        	if ($return_a_string) {
+				return "The Username is Already Taken";
+			} else {
+            	echo formatJSEND("error","The Username is Already Taken");
+			}
         }
     }
 
