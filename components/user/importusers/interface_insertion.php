@@ -34,7 +34,7 @@
 		$dirs = explode('/', $dir);
 		$pageURL .= "/" . $dirs[1] . "/components/user/importusers";
 		
-		if ($type == 'student') {
+		if ($type == 'professor' || $type == 'admin') {
 			echo("<script>
 				$(document).ready(function() {
 					$('.sb-right-content').prepend('<a href=\'" .$pageURL . "\' target=\'_blank\' style=\'text-decoration: none\'><span class=\'icon-user-add l bigger-icon\'></span>Import Users</a>');

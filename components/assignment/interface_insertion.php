@@ -34,7 +34,7 @@
 		$dirs = explode('/', $dir);
 		$pageURL .= "/" . $dirs[1] . "/components/assignment";
 		
-		if ($type == 'student') {
+		if ($type == 'professor' || $type == 'admin' || $type == 'grader') {
 			echo("<script>
 				$(document).ready(function() {
 					$('.sb-right-content').prepend('<a href=\'" .$pageURL . "\' target=\'_blank\' style=\'text-decoration: none\'><span class=\'icon-docs l bigger-icon\'></span>Assignments</a>');
