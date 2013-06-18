@@ -384,6 +384,7 @@ class Project extends Common {
 		
 		$users = $collection->find();
 		$update_successful = TRUE;
+		$deleted_project_path = $this->path;
 		
 		foreach ($users as $user) {
 			if (isset($user["projects"][0])) {
@@ -410,6 +411,23 @@ class Project extends Common {
 			if (!$collection->update(array("username" => $user["username"]), $user)){
 				$update_successful = FALSE;	
 			}
+		}
+		
+		if ($update_successful) {
+			// Remove this project from all users active project attribute -> $user['project]
+			$users = $collection->find();
+			foreach ($users as $user) {
+				if (isset($user["project"])) {
+					// LF: The project is selected based on the path :-> As it is the project's id
+					if ($user["project"] == $deleted_project_path) {
+						$user["project"] = '';
+					}
+				}
+				// LF: Updating in the database : Overwriting the user document  
+				if (!$collection->update(array("username" => $user["username"]), $user)){
+					$update_successful = FALSE;	
+				}
+			}				
 		}
 		
 		// LF: If everything is okay returns success 	
