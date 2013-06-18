@@ -74,6 +74,22 @@
 			}
 		} 
 	}
+
+	$pageURL = 'http';
+	
+	if (@$_SERVER["HTTPS"] == "on") {
+		$pageURL .= "s";
+	}
+		$pageURL .= "://";
+	if ($_SERVER["SERVER_PORT"] != "80") {
+		 $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"];
+	} else {
+		$pageURL .= $_SERVER["SERVER_NAME"];
+	}
+	
+	$dir =  dirname($_SERVER['PHP_SELF']);
+	$dirs = explode('/', $dir);
+	$pageURL .= "/" . $dirs[1];
 ?>
 <!doctype html>
 
@@ -87,6 +103,9 @@
   	
 </head>
 <body>
+	<form method="post" action="<?=$pageURL?>">
+		<button>Open IDE</button>
+	</form>
 	<h1  align="center">Import Users</h1>
 	
 	
