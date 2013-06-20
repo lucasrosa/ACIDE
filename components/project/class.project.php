@@ -660,6 +660,39 @@ class Project extends Common {
 	}
 	
 	//////////////////////////////////////////////////////////////////
+    // LF: Returns all the assignments for a certain user
+    //////////////////////////////////////////////////////////////////
+	
+	public function GetAssignments () {
+		$assignments = array();
+		
+		$collection = $this->database->users;
+		
+		$users = $collection->find();
+		foreach ($users as $user) {
+			if (isset($user["projects"][0])) {
+				for ($i = 0; $i < count($user["projects"]); $i++) {
+					if (isset($user["projects"][$i]) && isset($user["projects"][$i]["assignment"]["owner"])) {	
+						$assignment_added = FALSE;
+						
+						for ($k = 0; $k < count($assignments); $k++) {
+							if ($user["projects"][$i]["assignment"]["id"] == $assignments[$k]["id"]) {
+								$assignment_added = TRUE;
+							}
+						}
+						// If the assignment isn't added yet, add it
+						if (!$assignment_added) {
+							array_push($assignments, $user["projects"][$i]["assignment"]);												
+						}
+					}
+				}
+			}
+		}
+		
+		return $assignments;	
+	}
+	
+	//////////////////////////////////////////////////////////////////
     // LF: Returns all the projects for a certain assignment
     //////////////////////////////////////////////////////////////////
 	

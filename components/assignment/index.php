@@ -17,6 +17,29 @@
     //////////////////////////////////////////////////////////////////
 	
     checkSession();
+	
+	//////////////////////////////////////////////////////////////////
+    // Defining the user type
+    //////////////////////////////////////////////////////////////////
+    $user_type = "";
+	if (isset($_SESSION['user'])) {
+		// Connect
+		$mongo_client = new MongoClient();
+		// select the database
+		$database = $mongo_client->codiad_database;
+		// Select the collection 
+		$collection = $database->users;
+		
+		$type = "";
+		$users = $collection->find();
+		foreach ($users as $user) {
+			if($user['username'] == $_SESSION['user']) {
+				$user_type = $user['type'];
+				break;	
+			}
+		}
+	}
+
 	$form_action = "create_new_assignment";
 	$form_title = "New Assignment";
 	$form_button_title = "Create";
@@ -278,6 +301,7 @@
 					<tbody>
 						<tr>
 							<th>Name</th>
+							<th>Created by</th>
 							<th>Due Date</th>
 							<th>Late submission days</th>
 							<th>Description</th>
@@ -291,13 +315,18 @@
 					    // LF: List all assignments which this user is the owner
 					    //////////////////////////////////////////////////////////////////
 					    $Project = new Project();
-					    $assignments = $Project->GetAssignmentsForOwner($_SESSION['user']);
+					    $assignments = $Project->GetAssignments();
 						
 						for ($k = 0; $k < count($assignments); $k++) {
 						?>
 						<tr>
 							<td><?=$assignments[$k]['name']?></td>
-							<td><?=$assignments[$k]['due_date']?></td>
+							<td><?=$assignments[$k]['owner']?></td>
+							<td>
+								<?=date("m/d/Y", strtotime($assignments[$k]['due_date'])); ?>
+								<br />
+								&nbsp;<?=date("H:i A", strtotime($assignments[$k]['due_date'])); ?>
+								</td>
 							<td>
 								<?
 									if ($assignments[$k]['allow_late_submission'] == 0) {

@@ -89,6 +89,22 @@ if(!file_exists(DATA . '/plugins.php')) {
     }
     ?>
     <link rel="icon"       href="favicon.ico" type="image/x-icon" />
+    <script>
+/*	if (document.hasFocus)
+           setInterval ("CheckFocus()", 200);
+        else
+           console.log("Your browser does not support the hasFocus method");
+
+	function CheckFocus () {
+            if (document.hasFocus ()) {
+                console.log("The document has the focus.");
+            }
+            else {
+                console.log("The document doesn't have the focus.");
+            }
+        }
+*/
+    </script>
 </head>
 
 <body>
@@ -402,5 +418,15 @@ if(!file_exists(DATA . '/plugins.php')) {
     }
 	
     ?>
+    
+    <script id="testscript">
+    /*
+    $(document).ready(function() {
+    	$('.ace_line').focus(function() {
+		  console.log('ace_content focused');
+		});
+    });
+    */
+    </script>
 </body>
 </html>
