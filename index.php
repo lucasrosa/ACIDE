@@ -1,6 +1,7 @@
 <?php
 
 require_once('common.php');
+require_once('components/permission/class.permission.php');
 
 // Context Menu
 $context_menu = file_get_contents(COMPONENTS . "/filemanager/context_menu.json");
@@ -90,7 +91,7 @@ if(!file_exists(DATA . '/plugins.php')) {
     ?>
     <link rel="icon"       href="favicon.ico" type="image/x-icon" />
     <script>
-/*	if (document.hasFocus)
+	if (document.hasFocus)
            setInterval ("CheckFocus()", 200);
         else
            console.log("Your browser does not support the hasFocus method");
@@ -103,7 +104,6 @@ if(!file_exists(DATA . '/plugins.php')) {
                 console.log("The document doesn't have the focus.");
             }
         }
-*/
     </script>
 </head>
 

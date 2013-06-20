@@ -24,6 +24,12 @@ class User {
     // LF: PROPERTIES
     //////////////////////////////////////////////////////////////////
     
+    /* Types of users (from bottom to top) :
+	 * 		student 
+	 * 		marker
+	 * 		professor
+	 * 		admin
+	 */
     public $type		= '';
     public $email		= '';
 	

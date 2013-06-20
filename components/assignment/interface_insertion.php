@@ -1,21 +1,7 @@
 <?php
-
 	if (isset($_SESSION['user'])) {
-		// Connect
-		$mongo_client = new MongoClient();
-		// select the database
-		$database = $mongo_client->codiad_database;
-		// Select the collection 
-		$collection = $database->users;
-		
-		$type = "";
-		$users = $collection->find();
-		foreach ($users as $user) {
-			if($user['username'] == $_SESSION['user']) {
-				$type = $user['type'];	
-			} 
-		}
-		
+		// Instantiate the permission object and set the username
+		$Permission = new Permission($_SESSION['user']);
 		
 		$pageURL = 'http';
 		
@@ -34,7 +20,7 @@
 		$dirs = explode('/', $dir);
 		$pageURL .= "/" . $dirs[1] . "/components/assignment";
 		
-		if ($type == 'professor' || $type == 'admin' || $type == 'grader') {
+		if ($Permission->GetPermissionToSeeAssignments()) {
 			echo("<script>
 				$(document).ready(function() {
 					$('.sb-right-content').prepend('<a href=\'" .$pageURL . "\' target=\'_blank\' style=\'text-decoration: none\'><span class=\'icon-docs l bigger-icon\'></span>Assignments</a>');

@@ -7,6 +7,7 @@
     require_once('../user/class.user.php');
 	require_once('../project/class.project.php');
 	require_once('class.assignment.php');
+	require_once('../permission/class.permission.php');
 	
 	//////////////////////////////////////////////////////////////////
     // This page offers an interface to manage assignments
@@ -21,24 +22,8 @@
 	//////////////////////////////////////////////////////////////////
     // Defining the user type
     //////////////////////////////////////////////////////////////////
-    $user_type = "";
-	if (isset($_SESSION['user'])) {
-		// Connect
-		$mongo_client = new MongoClient();
-		// select the database
-		$database = $mongo_client->codiad_database;
-		// Select the collection 
-		$collection = $database->users;
-		
-		$type = "";
-		$users = $collection->find();
-		foreach ($users as $user) {
-			if($user['username'] == $_SESSION['user']) {
-				$user_type = $user['type'];
-				break;	
-			}
-		}
-	}
+	$Permission = new Permission($_SESSION['user']);
+	
 
 	$form_action = "create_new_assignment";
 	$form_title = "New Assignment";
@@ -307,7 +292,9 @@
 							<th>Description</th>
 							<th>Maximum number of group members</th>
 							<th>Submitted Projects</th>
-							<th>Edit</th>
+							<? if ($Permission->GetPermissionToCreateAndEditAssignments()) { ?>
+								<th>Edit</th>
+							<? }?>
 							<th>Delete</th>
 						</tr>
 						<?
@@ -357,6 +344,7 @@
 									</form>
 								</div>
 							</td>
+							<? if ($Permission->GetPermissionToCreateAndEditAssignments()) { ?>
 							<td>
 								<div align="center">
 									<form method="post" name="edit_assignment_form">
@@ -366,6 +354,7 @@
 									</form>
 								</div>
 							</td>
+							<? } ?>
 							<td>
 								<div align="center">
 									<form method="post" name="delete_assignment_form">
@@ -385,125 +374,126 @@
 		</div>
 	</div>
 	
+	<? if ($Permission->GetPermissionToCreateAndEditAssignments()) { ?>
 	
+		<div style="padding-bottom: 25px; padding-top: 25px;">
+			<div align="center">
+				<?
+					$color = "green";
+					$message = $success;
 	
-	<div style="padding-bottom: 25px; padding-top: 25px;">
-		<div align="center">
-			<?
-				$color = "green";
-				$message = $success;
-
-				if ($error != "") {
-					$color = "red";
-					$message = $error;
-				}
-			?>
-			<span style="color: <?=$color?>;"><?=$message?></span>
-		</div>		
-	</div>
-	<div id="modal" style="display: block; width: 700px; margin:0 auto;" >
-		<div id="modal-content">
-			<form method="post" name="assignment_form" enctype="multipart/form-data">
-				<input type="hidden" name="action" value="<?=$form_action?>" />
-				<label>
-					<?=$form_title;?> 
-				</label>
-				<div id="project-list">
-					<table width="100%">
-						<tbody>
-							<?
-							if (!$editing_assignment) {
-							?>
-							<tr>
-								<th>ID (Project's folder name)</th>
-								<td><input type="text" name="id" value="<?=$Assignment['id']?>" /></td>
-							</tr>
-							<?
-							} else {
-							?>
-								<input type="hidden" name="id" value="<?=$Assignment['id']?>" />
-							<?
-							}
-							?>
-							<tr>
-								<th>Assignment name (Project's name)</th>
-								<td><input type="text" name="project_name" value="<?=$Assignment['name']?>" /></td>
-							</tr>
-							<tr>
-								<th>Due Date</th>
-								<td>
-									<table>
-										<tr>
-											<td style="border:0px;">Date</td>
-											<td style="border:0px;">
-												<input type="text" name="due_date" id="datepicker" value="<?=$Assignment['due_date_date']?>" readonly="readonly" />
-											</td>
-										</tr>
-											<td style="border:0px;">Time</td>
-											<td style="border:0px;">
-												<input type="text" name="due_time" id="due_time" value="<?=$Assignment['due_date_time']?>" readonly="readonly"  />
-											</td>
-									</table>
-								</td>
-							</tr>
-							<tr>
-								<th>Late submission days</th>
-								<td>
-									<select name="late_submission_days">
-										<?php
-										for($i = 0; $i <= 31; $i++){
-										?>
-									 		<option value="<?=$i?>" <? if ($i == $Assignment['allow_late_submission']) echo "selected='selected'"; ?>><?=$i?></option>
-									  	<?
-									  	}
-									  	?>
-									</select>
-								</td>
-							</tr>
-							<? if ($editing_assignment) {?>
-							<tr>
-								<th>Keep the old description file?</th>
-								<td><input name="keep_old_description_file" type="checkbox" value="TRUE" /></td>
-							</tr>
-							<? } ?>
-							<tr>
-								<th>Description File (Maximum of 2 MB)</th>
-								<td><input name="file" type="file" accept=".pdf"  /></td>
-							</tr>
-							<tr>
-								<th>Maximum number of group members</th>
-								<td>
-									<select name="maximum_number_of_group_members">
-										<?php
-										for($i = 1; $i <= 100; $i++){
-										?>
-									 		<option value="<?=$i?>" <? if ($i == $Assignment['maximum_number_group_members']) echo "selected='selected'"; ?>><?=$i?></option>
-									  	<?
-									  	}
-									  	?>
-									</select>
-								</td>
-							</tr>
-							<tr>
-						</tbody>
-					</table>
-				</div>
-				<button>
-					<?=$form_button_title?>
-				</button>
-				<?	if ($editing_assignment) {
-						$pageURL = 'http';
-						if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
-							$pageURL .= "://";
-						if ($_SERVER["SERVER_PORT"] != "80") {
-							 $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
-						} else {
-							$pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
-						}
-					?>
-					<a href="<?=$pageURL?>">Cancel</a>
-				<? } ?>
-			</form>
+					if ($error != "") {
+						$color = "red";
+						$message = $error;
+					}
+				?>
+				<span style="color: <?=$color?>;"><?=$message?></span>
+			</div>		
 		</div>
-	</div>
+		<div id="modal" style="display: block; width: 700px; margin:0 auto;" >
+			<div id="modal-content">
+				<form method="post" name="assignment_form" enctype="multipart/form-data">
+					<input type="hidden" name="action" value="<?=$form_action?>" />
+					<label>
+						<?=$form_title;?> 
+					</label>
+					<div id="project-list">
+						<table width="100%">
+							<tbody>
+								<?
+								if (!$editing_assignment) {
+								?>
+								<tr>
+									<th>ID (Project's folder name)</th>
+									<td><input type="text" name="id" value="<?=$Assignment['id']?>" /></td>
+								</tr>
+								<?
+								} else {
+								?>
+									<input type="hidden" name="id" value="<?=$Assignment['id']?>" />
+								<?
+								}
+								?>
+								<tr>
+									<th>Assignment name (Project's name)</th>
+									<td><input type="text" name="project_name" value="<?=$Assignment['name']?>" /></td>
+								</tr>
+								<tr>
+									<th>Due Date</th>
+									<td>
+										<table>
+											<tr>
+												<td style="border:0px;">Date</td>
+												<td style="border:0px;">
+													<input type="text" name="due_date" id="datepicker" value="<?=$Assignment['due_date_date']?>" readonly="readonly" />
+												</td>
+											</tr>
+												<td style="border:0px;">Time</td>
+												<td style="border:0px;">
+													<input type="text" name="due_time" id="due_time" value="<?=$Assignment['due_date_time']?>" readonly="readonly"  />
+												</td>
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<th>Late submission days</th>
+									<td>
+										<select name="late_submission_days">
+											<?php
+											for($i = 0; $i <= 31; $i++){
+											?>
+										 		<option value="<?=$i?>" <? if ($i == $Assignment['allow_late_submission']) echo "selected='selected'"; ?>><?=$i?></option>
+										  	<?
+										  	}
+										  	?>
+										</select>
+									</td>
+								</tr>
+								<? if ($editing_assignment) {?>
+								<tr>
+									<th>Keep the old description file?</th>
+									<td><input name="keep_old_description_file" type="checkbox" value="TRUE" /></td>
+								</tr>
+								<? } ?>
+								<tr>
+									<th>Description File (Maximum of 2 MB)</th>
+									<td><input name="file" type="file" accept=".pdf"  /></td>
+								</tr>
+								<tr>
+									<th>Maximum number of group members</th>
+									<td>
+										<select name="maximum_number_of_group_members">
+											<?php
+											for($i = 1; $i <= 100; $i++){
+											?>
+										 		<option value="<?=$i?>" <? if ($i == $Assignment['maximum_number_group_members']) echo "selected='selected'"; ?>><?=$i?></option>
+										  	<?
+										  	}
+										  	?>
+										</select>
+									</td>
+								</tr>
+								<tr>
+							</tbody>
+						</table>
+					</div>
+					<button>
+						<?=$form_button_title?>
+					</button>
+					<?	if ($editing_assignment) {
+							$pageURL = 'http';
+							if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+								$pageURL .= "://";
+							if ($_SERVER["SERVER_PORT"] != "80") {
+								 $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+							} else {
+								$pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+							}
+						?>
+						<a href="<?=$pageURL?>">Cancel</a>
+					<? } ?>
+				</form>
+			</div>
+		</div>
+	<? } ?>
 </body>
