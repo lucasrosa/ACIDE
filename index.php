@@ -92,7 +92,7 @@ if(!file_exists(DATA . '/plugins.php')) {
     <link rel="icon"       href="favicon.ico" type="image/x-icon" />
     <script>
 	if (document.hasFocus)
-           setInterval ("CheckFocus()", 200);
+           //setInterval ("CheckFocus()", 200);
         else
            console.log("Your browser does not support the hasFocus method");
 
@@ -427,6 +427,21 @@ if(!file_exists(DATA . '/plugins.php')) {
 		});
     });
     */
+    /*
+   e.stopPropagation();
+                var newMode = "ace/mode/" + $(e.currentTarget).text();
+                console.log("new mode = " + newMode);
+                var actSession = _this.activeInstance.getSession();
+
+                // handle async mode change
+                var fn = function(){
+                   _this.setModeDisplay(actSession);
+                   actSession.removeListener('changeMode', fn);
+                }
+                actSession.on("changeMode", fn);
+
+                actSession.setMode(newMode);
+                */
     </script>
 </body>
 </html>

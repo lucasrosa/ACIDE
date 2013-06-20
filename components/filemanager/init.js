@@ -70,6 +70,28 @@
                     } else {
                         _this.openFile($(this)
                             .attr('data-path'));
+
+                        /*
+                         * LF : Changing the mode of the editor for this file extension {
+                         */
+                        var extension = $(this).attr('data-path').split(".")[1];
+                        console.log("Opening a " + extension + " file!");
+                        
+		                var newMode = "ace/mode/" + extension;
+		                console.log("new mode = " + newMode);
+		                var actSession = codiad.editor.activeInstance.getSession();
+		
+		                // handle async mode change
+		                var fn = function(){
+		                   codiad.editor.setModeDisplay(actSession);
+		                   actSession.removeListener('changeMode', fn);
+		                }
+		                actSession.on("changeMode", fn);
+		
+		                actSession.setMode(newMode);
+                        /*
+                         * }
+                         */
                     }
                     if (!$(this).parent().children("span").hasClass('none')) {
                         if ($(this).parent().children("span").hasClass('plus')) {
