@@ -125,6 +125,25 @@
                     if(e.which == 1) {
                         e.stopPropagation();
                         _this.focus($(this).parent('li').attr('data-path'));
+                        //console.log("focused on = " + $(this).parent('li').attr('data-path'));
+                        /*
+                         * LF : Changing the mode of the editor for this file extension {
+                         */
+                        var extension = $(this).parent('li').attr('data-path').split(".")[1];
+		                var newMode = "ace/mode/" + extension;
+		                var actSession = codiad.editor.activeInstance.getSession();
+		
+		                // handle async mode change
+		                var fn = function(){
+		                   codiad.editor.setModeDisplay(actSession);
+		                   actSession.removeListener('changeMode', fn);
+		                }
+		                actSession.on("changeMode", fn);
+		
+		                actSession.setMode(newMode);
+                        /*
+                         * }
+                         */
                     }
             });
 
