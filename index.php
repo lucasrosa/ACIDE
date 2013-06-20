@@ -91,8 +91,9 @@ if(!file_exists(DATA . '/plugins.php')) {
     ?>
     <link rel="icon"       href="favicon.ico" type="image/x-icon" />
     <script>
+    /*
 	if (document.hasFocus)
-           //setInterval ("CheckFocus()", 200);
+           setInterval ("CheckFocus()", 200);
         else
            console.log("Your browser does not support the hasFocus method");
 
@@ -104,6 +105,7 @@ if(!file_exists(DATA . '/plugins.php')) {
                 console.log("The document doesn't have the focus.");
             }
         }
+        */
     </script>
 </head>
 

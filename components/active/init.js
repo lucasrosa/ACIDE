@@ -54,7 +54,6 @@
             }
 			
             var _this = this;
-            
             if (this.isOpen(path)) {
                 if(focus) this.focus(path);
                 return;
@@ -129,7 +128,7 @@
                         /*
                          * LF : Changing the mode of the editor for this file extension {
                          */
-                        var extension = $(this).parent('li').attr('data-path').split(".")[1];
+                        var extension = $(this).parent('li').attr('data-path').split(".").pop();
 		                var newMode = "ace/mode/" + extension;
 		                var actSession = codiad.editor.activeInstance.getSession();
 		
@@ -395,6 +394,24 @@
                 moveToTabList = true;
             }
             
+            /*
+             * LF : Changing the mode of the editor for this file extension {
+             */
+            var extension = path.split(".").pop();
+            var newMode = "ace/mode/" + extension;
+            var actSession = codiad.editor.activeInstance.getSession();
+
+            // handle async mode change
+            var fn = function(){
+               codiad.editor.setModeDisplay(actSession);
+               actSession.removeListener('changeMode', fn);
+            }
+            actSession.on("changeMode", fn);
+
+            actSession.setMode(newMode);
+            /*
+             * }
+             */
             this.highlightEntry(path, moveToTabList);
             
             if(path != this.getPath()) {

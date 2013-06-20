@@ -74,7 +74,7 @@
                         /*
                          * LF : Changing the mode of the editor for this file extension {
                          */
-                        var extension = $(this).attr('data-path').split(".")[1];
+                        var extension = $(this).attr('data-path').split(".").pop();
 		                var newMode = "ace/mode/" + extension;
 		                var actSession = codiad.editor.activeInstance.getSession();
 		
