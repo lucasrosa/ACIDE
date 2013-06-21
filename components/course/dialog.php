@@ -214,7 +214,7 @@
             <?php
             
             break;
-         /*   
+         
         //////////////////////////////////////////////////////////////////////
         // Create New Project
         //////////////////////////////////////////////////////////////////////
@@ -223,62 +223,22 @@
         
             ?>
             <form>
-            <label>Project Name</label>
-            <input name="project_name" autofocus="autofocus" autocomplete="off">
-			<label>Project Privacy</label>
+            <label>Course Code</label>
+            <input name="course_code" autofocus="autofocus" autocomplete="off">
+			<label>Course Name</label>
+            <input name="course_name" autofocus="autofocus" autocomplete="off">
 			
-			
-			<select id="privacy_select" name="project_privacy">
-			  <option id="option_public" value="public" selected >Public</option>
-			  <option id="option_private" value="private">Private or Shared</option>
-			  <!-- There is not need to shared projects here because a project turns to shared when new users are added -->
-			</select>
-			
-            <?php if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') { ?>
-            <label>Folder Name (<span class="sb-dialog-warning">This is the main directory of your project</span>)</label>
-			<label id="path_prefix">Folder prefix: "<?=$_SESSION['user']?>-"</label>
-			<input name="project_path" autofocus="off" autocomplete="off">
-			
-			<!--
-				<div style="display:inline;">
-					<label id="path_prefix" style="display:inline; display:none;" ><?=$_SESSION['user']?>-</label>
-					<input style="display:inline;" name="project_path" autofocus="off" autocomplete="off">
-				</div> 
-			-->
-            <?php } else { ?>
-            <input type="hidden" name="project_path">
-            <?php }  ?>
-            
-            <!-- Clone From GitHub -->
-            <div style="width: 500px;">
-            <table class="hide" id="git-clone">
-                <tr>
-                    <td>
-                        <label>Git Repository</label>
-                        <input name="git_repo">
-                    </td>
-                    <td width="5%">&nbsp;</td>
-                    <td width="25%">
-                        <label>Branch</label>
-                        <input name="git_branch" value="master">
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3" class="note">Note: This will only work if your Git repo DOES NOT require interactive authentication and your server has git installed.</td>
-                </tr>
-            </table>
-            </div>
-            <!-- /Clone From GitHub --><?php
-                $action = 'codiad.project.list();';
+          <?php
+                $action = 'codiad.course.list();';
                 if($_GET['close'] == 'true') {
                     $action = 'codiad.modal.unload();';
                 } 
             ?>           
-            <button class="btn-left">Create Project</button><button onclick="$('#git-clone').slideDown(300); $(this).hide(); return false;" class="btn-mid">...From Git Repo</button><button class="btn-right" onclick="<?php echo $action;?>return false;">Cancel</button>
+            <button class="btn-left">Create Course</button><button class="btn-right" onclick="<?php echo $action;?>return false;">Cancel</button>
             <form>
             <?php
             break;
-            
+        /*   
         //////////////////////////////////////////////////////////////////
         // Rename
         //////////////////////////////////////////////////////////////////

@@ -83,10 +83,8 @@
             $('#modal-content form')
                 .die('submit'); // Prevent form bubbling
             codiad.modal.load(500, this.dialog + '?action=list');
-        }
+        },
         /*
-        ,
-        
         //////////////////////////////////////////////////////////////////
         // Load and list projects in the sidebar.
         //////////////////////////////////////////////////////////////////
@@ -124,7 +122,7 @@
                 .die('submit'); // Prevent form bubbling
             codiad.modal.load(500, this.dialog + '?action=list');
         },
-
+		*/
         //////////////////////////////////////////////////////////////////
         // Create Project
         //////////////////////////////////////////////////////////////////
@@ -136,21 +134,13 @@
             $('#modal-content form')
                 .live('submit', function(e) {
                 e.preventDefault();
-                var projectName = $('#modal-content form input[name="project_name"]')
+                var courseCode = $('#modal-content form input[name="course_code"]')
                     .val(),
-                    projectPath = $('#modal-content form input[name="project_path"]')
-                    .val(),
-                    projectPrivacy = $('#modal-content form select[name="project_privacy"]')
-                    .val(),
-                    gitRepo = $('#modal-content form input[name="git_repo"]')
-                    .val(),
-                    gitBranch = $('#modal-content form input[name="git_branch"]')
+                    course_name = $('#modal-content form input[name="course_name"]')
                     .val();
-                    if(projectPath.indexOf('/') == 0) {
-                        create = confirm('Do you really want to create project with absolute path "' + projectPath + '"?');
-                    }
+                    
                 if(create) {    
-                    $.get(_this.controller + '?action=create&project_name=' + projectName + '&project_path=' + projectPath + '&project_privacy=' + projectPrivacy + '&git_repo=' + gitRepo + '&git_branch=' + gitBranch, function(data) {
+                    $.get(_this.controller + '?action=create&course_code=' + courseCode + '&course_name=' + courseName, function(data) {
                         createResponse = codiad.jsend.parse(data);
                         if (createResponse != 'error') {
                             _this.open(createResponse.path);
@@ -160,7 +150,9 @@
                     });
                 }
             });
-        },
+        }
+        /*
+        ,
         
         //////////////////////////////////////////////////////////////////
         // Rename Project

@@ -8,14 +8,14 @@
 
 
     require_once('../../common.php');
-    require_once('../project/class.project.php');
+    require_once('../course/class.course.php');
     //////////////////////////////////////////////////////////////////
     // Verify Session or Key
     //////////////////////////////////////////////////////////////////
 
     checkSession();
 
-    $Project = new Project();
+    $Course= new Course();
 
     //////////////////////////////////////////////////////////////////
     // Get Current Project
