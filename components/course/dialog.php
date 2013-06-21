@@ -1,10 +1,8 @@
 <?php
 
     /*
-    *  Copyright (c) Codiad & Kent Safranski (codiad.com), distributed
-    *  as-is and without warranty under the MIT License. See 
-    *  [root]/license.txt for more. This information must remain intact.
-    */
+	 *  Copyright (c) UPEI lrosa@upei.ca sbateman@upei.ca
+	 */
 
 
     require_once('../../common.php');
@@ -226,7 +224,7 @@
             <label>Course Code</label>
             <input name="course_code" autofocus="autofocus" autocomplete="off">
 			<label>Course Name</label>
-            <input name="course_name" autofocus="autofocus" autocomplete="off">
+            <input name="course_name" autocomplete="off">
 			
           <?php
                 $action = 'codiad.course.list();';

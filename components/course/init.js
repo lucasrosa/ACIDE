@@ -1,8 +1,6 @@
-/*
- *  Copyright (c) Codiad & Kent Safranski (codiad.com), distributed
- *  as-is and without warranty under the MIT License. See
- *  [root]/license.txt for more. This information must remain intact.
- */
+	/*
+	 *  Copyright (c) UPEI lrosa@upei.ca sbateman@upei.ca
+	 */
 
 (function(global, $){
 
@@ -136,16 +134,15 @@
                 e.preventDefault();
                 var courseCode = $('#modal-content form input[name="course_code"]')
                     .val(),
-                    course_name = $('#modal-content form input[name="course_name"]')
+                    courseName = $('#modal-content form input[name="course_name"]')
                     .val();
                     
                 if(create) {    
                     $.get(_this.controller + '?action=create&course_code=' + courseCode + '&course_name=' + courseName, function(data) {
                         createResponse = codiad.jsend.parse(data);
                         if (createResponse != 'error') {
-                            _this.open(createResponse.path);
                             codiad.modal.unload();
-                            _this.loadSide();
+                            codiad.message.success(i18n('Course created with success!'));
                         }
                     });
                 }

@@ -1,10 +1,8 @@
 <?php
 
     /*
-    *  Copyright (c) Codiad & Kent Safranski (codiad.com), distributed
-    *  as-is and without warranty under the MIT License. See
-    *  [root]/license.txt for more. This information must remain intact.
-    */
+	 *  Copyright (c) UPEI lrosa@upei.ca sbateman@upei.ca
+	 */
 
 
     require_once('../../common.php');
@@ -16,47 +14,7 @@
     checkSession();
 
     $Course= new Course();
-
-    //////////////////////////////////////////////////////////////////
-    // Get Current Project
-    //////////////////////////////////////////////////////////////////
-
-    $no_return = false;
-    if(isset($_GET['no_return'])){ $no_return = true; }
-
-    if($_GET['action']=='get_current'){
-        if(!isset($_SESSION['project'])){
-            // Load default/first project
-            //if($no_return){ $this->no_return = true; }
-            if($no_return){ $no_return = true; }
-			// LF : Removing the GetFirst because the user doesn't have a project when it is just created
-            //$Project->GetFirst();
-        }else{
-            // Load current
-            $Project->path = $_SESSION['project'];
-			$Project->user = $_SESSION['user'];
-			$Project->load();
-			if (isset($Project->assignment['description_url'])) {
-				$description_url = $Project->assignment['description_url'];
-			} else {
-				$description_url = "null";
-			}
-			
-            $project_name = $Project->GetName();
-            if(!$no_return){ echo formatJSEND("success",array("name"=>$project_name,"path"=>$_SESSION['project'], "description_url"=>$description_url)); }
-        }
-    }
-
-    //////////////////////////////////////////////////////////////////
-    // Open Project
-    //////////////////////////////////////////////////////////////////
-
-    if($_GET['action']=='open'){
-        $Project->path = $_GET['path'];
-		// LF : Set the user of the project to be open
-		$Project->user = $_SESSION['user'];
-        $Project->Open();
-    }
+    
 
     //////////////////////////////////////////////////////////////////
     // Create Project
@@ -64,26 +22,12 @@
 
     if($_GET['action']=='create'){
         if(checkAccess()) {
-            $Project->name = $_GET['project_name'];
-			$Project->privacy = $_GET['project_privacy'];
-			
-            if($_GET['project_path'] != '') {
-                $Project->path = $_GET['project_path'];
-            } else {
-                $Project->path = $_GET['project_name'];
+        	$Course->code = $_GET['course_code'];
+            $Course->name = $_GET['course_name'];
+			// Saving the Course in the database
+            if ($Course->Save()) {
+            	echo formatJSEND("success");
             }
-            // Git Clone?
-            if(!empty($_GET['git_repo'])){
-                $Project->gitrepo = $_GET['git_repo'];
-                $Project->gitbranch = $_GET['git_branch'];
-            }
-			
-			// LF: Define the name of the path
-			if($_GET['project_privacy'] == 'private') {
-				$Project->path = $_SESSION['user'] . "-" . $Project->path;
-			}
-			
-            $Project->Create();
         }
     }
     
@@ -98,17 +42,6 @@
 		$Project->name = $_GET['project_name'];
         $Project->Rename();
     }
-	
-    //////////////////////////////////////////////////////////////////
-    // LF: Submit Project
-    //////////////////////////////////////////////////////////////////
-
-    if($_GET['action']=='submit'){
-        $Project->path = $_GET['project_path'];
-		$Project->user = $_SESSION['user'];
-		$Project->load();
-        $Project->Submit();
-    }
 
     //////////////////////////////////////////////////////////////////
     // Delete Project
@@ -122,17 +55,6 @@
         }
     }
 
-    //////////////////////////////////////////////////////////////////
-    // Return Current
-    //////////////////////////////////////////////////////////////////
-
-    if($_GET['action']=='current'){
-        if(isset($_SESSION['project'])){
-            echo formatJSEND("success",$_SESSION['project']);
-        }else{
-            echo formatJSEND("error","No Project Returned");
-        }
-    }
 	
 	//////////////////////////////////////////////////////////////////
     // Manage Users
