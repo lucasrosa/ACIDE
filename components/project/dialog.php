@@ -262,7 +262,7 @@
 			
 			<select id="privacy_select" name="project_privacy">
 			  <option id="option_public" value="public" selected >Public</option>
-			  <option id="option_private" value="private">Private</option>
+			  <option id="option_private" value="private">Private or Shared</option>
 			  <!-- There is not need to shared projects here because a project turns to shared when new users are added -->
 			</select>
 			
