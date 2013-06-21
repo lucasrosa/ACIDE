@@ -31,9 +31,9 @@ class Course {
     // Construct
     //////////////////////////////////////////////////////////////////
 
-    public function __construct($code, $username){
+    public function __construct($code, $name){
     	$this->code 	= $code;
-    	$this->username = $username;
+    	$this->name = $name;
     	/*
 		 * Defining the collection
 		 */
@@ -43,6 +43,13 @@ class Course {
 		$database = $mongo_client->codiad_database;
 		// Return the collection
 		$this->collection = $database->courses;
+		
+		/*
+		 * How to find
+		 * $item = $collection->findOne(array(
+    		'_id' => new MongoId('4e49fd8269fd873c0a000000')));
+		 */
+		 
     }
 	
 	//////////////////////////////////////////////////////////////////
@@ -55,6 +62,6 @@ class Course {
 								"name" => $this->name
 							 );
 		// Insert the user in the database:
-		return $collection->insert($new_course);
+		return $this->collection->insert($new_course);
     }	
 }
