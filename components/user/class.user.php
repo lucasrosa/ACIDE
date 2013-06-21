@@ -32,6 +32,8 @@ class User {
 	 */
     public $type		= '';
     public $email		= '';
+	// LF: The classes that the user is in
+	public $classes		= '';
 	
     //////////////////////////////////////////////////////////////////
     // METHODS
@@ -96,7 +98,8 @@ class User {
 								"password" => $this->password, 
 								"email" => $this->email, 
 								"projects" => '',
-								"project" => ''
+								"project" => '',
+								"classes" => $this->classes
 							 );
 			
 			// Insert the user in the database:

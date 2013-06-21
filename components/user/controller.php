@@ -65,6 +65,7 @@
             $User->password = $_POST['password'];
 			$User->email = $_POST['email'];
 			$User->type = $_POST['type'];
+			$User->classes[] = $_POST['class'];
             $User->Create();
         }
     }
