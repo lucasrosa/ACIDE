@@ -1,5 +1,10 @@
 [
     {
+        "title": "Courses",
+        "icon": "icon-book-open",
+        "onclick": "codiad.course.list();"
+    },
+    {
         "title": "break",
         "icon": null,
         "onclick": null

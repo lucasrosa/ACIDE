@@ -31,8 +31,8 @@ class Course {
     // Construct
     //////////////////////////////////////////////////////////////////
 
-    public function __construct($code, $name){
-    	$this->code 	= $code;
+    public function __construct($code = "", $name = ""){
+    	$this->code = $code;
     	$this->name = $name;
     	/*
 		 * Defining the collection
@@ -63,5 +63,8 @@ class Course {
 							 );
 		// Insert the user in the database:
 		return $this->collection->insert($new_course);
-    }	
+	}
+	public function GetAllCourses () {
+		return $this->collection->find();
+	}
 }
