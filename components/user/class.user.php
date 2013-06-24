@@ -335,7 +335,7 @@ class User {
 		$users = $this->users;
 		foreach ($users as $user) {
 			if($user['username'] == $this->username) {
-				if (isset($user['courses'])) {
+				if (isset($user['courses'][0])) {
 					return $user['courses'];
 				} else {
 					return array();

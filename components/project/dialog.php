@@ -37,14 +37,26 @@
 	            <ul>
 					<lh>Public Projects</lh>
 	            <?php
-            
+            	$User = new User();
+				$User->username = $_SESSION['user'];
+				$courses = $User->GetUserCourses();
+				
 	            // Get projects JSON data
 				$projects = getProjectsForUser($_SESSION['user']);
 	            sort($projects);
 	            foreach($projects as $project=>$data){
 	                $show = true;
-	                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
-	                if($show && $data['privacy'] == 'public' && $data['visibility'] == 'true'){
+	                if($projects_assigned && !in_array($data['path'],$projects_assigned)) {
+	                	$show=false; 
+					}
+					$user_in_course = TRUE;
+					if (isset($data['course'])) {
+						if (!in_array($data['course'], $courses)) {
+							$user_in_course = FALSE;		
+						}
+					}
+					
+	                if($show && $data['privacy'] == 'public' && $data['visibility'] == 'true' && $user_in_course){
 	                ?>
 	                <li>
 						<div>
@@ -294,12 +306,6 @@
 			<label id="path_prefix">Folder prefix: "<?=$_SESSION['user']?>-"</label>
 			<input name="project_path" autofocus="off" autocomplete="off">
 			
-			<!--
-				<div style="display:inline;">
-					<label id="path_prefix" style="display:inline; display:none;" ><?=$_SESSION['user']?>-</label>
-					<input style="display:inline;" name="project_path" autofocus="off" autocomplete="off">
-				</div> 
-			-->
             <?php } else { ?>
             <input type="hidden" name="project_path">
             <?php }  ?>
