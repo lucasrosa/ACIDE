@@ -7,6 +7,7 @@
 
     require_once('../../common.php');
     require_once('../course/class.course.php');
+	require_once('../user/class.user.php');
     //////////////////////////////////////////////////////////////////
     // Verify Session or Key
     //////////////////////////////////////////////////////////////////
@@ -60,10 +61,8 @@
     // Manage Users
     //////////////////////////////////////////////////////////////////
 
-    if($_GET['action']=='manage_users'){
-    	$Project->user = $_SESSION["user"];
-		$Project->path = $_POST["project_path"];
-		$Project->Load();
+    if($_GET['action'] == 'manage_users'){
+    	$Course->id = $_POST["course_id"];
 		
 		if (isset($_POST['group_user'])) {
 			$group_users = $_POST['group_user'];	
@@ -71,43 +70,23 @@
 			$group_users = array();
 		}
 		
-		$formated_group_users = array();
-		$number_of_users = count($group_users);
+		$success = TRUE;
 		
-		$formated_group_users[0] = array("username" => $Project->user);
+		$User = new User();
 		
-		for($i = 0; $i < $number_of_users; $i++) {
-			$formated_group_users[$i+1] = array("username" => $group_users[$i]);
-		}
-		
-		if ($number_of_users > 0) {
-			$Project->privacy = "shared";
-		} else {
-			$Project->privacy = "private";
-		}
-		
-		$Project->group_members = $formated_group_users;
-		
-		$maximum_number_group_members = $Project->GetMaximumNumberGroupMembers();
+		for ($i = 0; $i < count ($group_users); $i++) {
+			$User->username = $group_users[$i];
+			if (!($User->AddCourse($Course->id))) {
+				$success = FALSE;
+			}
+		}		
 		
 		header('Content-type: application/json');
 		
-		if ($maximum_number_group_members > 0) {
-			if (($number_of_users + 1) <= $maximum_number_group_members) {
-				if ($Project->Save()) {
-					$response_array['status'] = 'success'; 	
-				} else {
-					$response_array['status'] = 'error_database';
-				}
-			} else {
-				$response_array['status'] = 'error_user_maximum_reached'; 
-			}
+		if ($success) {
+			$response_array['status'] = 'success'; 	
 		} else {
-			if ($Project->Save()) {
-				$response_array['status'] = 'success'; 	
-			} else {
-				$response_array['status'] = 'error_database';
-			}
+			$response_array['status'] = 'error_database';
 		}
 		echo json_encode($response_array);
     }

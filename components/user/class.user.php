@@ -33,7 +33,8 @@ class User {
     public $type		= '';
     public $email		= '';
 	// LF: The classes that the user is in
-	public $classes		= '';
+	public $courses		= '';
+	// LF: The actual collection
 	
     //////////////////////////////////////////////////////////////////
     // METHODS
@@ -46,10 +47,10 @@ class User {
     //////////////////////////////////////////////////////////////////
 
     public function __construct(){
-        // Load the users from the database and verifies if one of them is this one
-		$collection = $this->GetCollection();
+        // Load the users from the database
+		$this->collection = $this->GetCollection();
 		// Get all the users in the database and set it as the users of this instance
-		$this->users = $collection->find(); //$this->users = getJSON('users.php');
+		$this->users = $this->collection->find(); //$this->users = getJSON('users.php');
 		
         $this->actives = getJSON('active.php');
     }
@@ -283,5 +284,32 @@ class User {
 		}
 		
 		return "";
+	}
+	
+	public function AddCourse ($course_id) {
+		$users = $this->users;
+		foreach ($users as $user) {
+			if($user['username'] == $this->username) {
+				$course_already_inserted = FALSE;
+				if (isset($user['courses'])) {
+					for ($k = 0; $k < count($user['courses']); $k++) {
+						if ($user['courses'][$k] == $course_id) {
+							$course_already_inserted = TRUE;
+							break;
+						}
+					}
+					
+					if (!$course_already_inserted) {
+						$user['courses'][] = $course_id;
+					}
+				} else {
+					$user['courses'] = array();
+					$user['courses'][] = $course_id;
+				}
+				
+				return ($this->collection->update(array("username" => $user["username"]), $user));
+			} 
+		}
+		
 	}
 }

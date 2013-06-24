@@ -74,7 +74,7 @@
         },
 		*/
         //////////////////////////////////////////////////////////////////
-        // Open the project manager dialog
+        // Open the course manager dialog
         //////////////////////////////////////////////////////////////////
 
         list: function() {
@@ -122,7 +122,7 @@
         },
 		*/
         //////////////////////////////////////////////////////////////////
-        // Create Project
+        // Create Course
         //////////////////////////////////////////////////////////////////
 
         create: function(close) {
@@ -147,9 +147,8 @@
                     });
                 }
             });
-        }
+        },
         /*
-        ,
         
         //////////////////////////////////////////////////////////////////
         // Rename Project
@@ -270,14 +269,14 @@
 	                });
 	            });
         },
-        
+        */
         //////////////////////////////////////////////////////////////////
-        // LF: Manage users of the Project
+        // LF: Manage users of the Course
         //////////////////////////////////////////////////////////////////
 		
-        manage_users: function(path) {
+        manage_users: function(id) {
 	            var _this = this;
-	            codiad.modal.load(500, this.dialog + '?action=manage_users&path=' + escape(path));
+	            codiad.modal.load(500, this.dialog + '?action=manage_users&id=' + escape(id));
 	            /*
 	            $('#modal-content form')
 	                .live('submit', function(e) {
@@ -298,8 +297,9 @@
 	                });
 	                
 	            }); 
+	            */
         }
-		*/
+		
 		
 		
     };

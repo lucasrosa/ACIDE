@@ -7,6 +7,7 @@
 
     require_once('../../common.php');
 	require_once('class.course.php');
+	require_once('../user/class.user.php');
 	
     //////////////////////////////////////////////////////////////////
     // Verify Session or Key
@@ -191,15 +192,15 @@
             $Course = new Course();
 			$courses = $Course->GetAllCourses();
             
-            sort($courses);
+            //sort($courses);
             foreach($courses as $course){
                 ?>
                 <tr>
                     <td><?php echo($course['code']); ?></td>
                     <td><?php echo($course['name']); ?></td>
-                    <td><a onclick="codiad.project.manage_users('<?php echo 'path'; ?>');" class="icon-users bigger-icon"></a></td>
+                    <td><a onclick="codiad.course.manage_users('<?=$course['_id']?>');" class="icon-users bigger-icon"></a></td>
                     <?php ?>
-                            <td><a onclick="codiad.project.delete('<?php echo 'name'; ?>','<?php echo($data['path']); ?>');" class="icon-cancel-circled bigger-icon"></a></td>
+                            <td><a onclick="codiad.course.delete('<?=($course['_id']); ?>');" class="icon-cancel-circled bigger-icon"></a></td>
                     <?php
                     ?>
                 </tr>
@@ -284,31 +285,24 @@
             <button class="btn-left">Confirm</button><button class="btn-right" onclick="codiad.project.list();return false;">Cancel</button>
             <?php
             break;
-     	
+     	*/
 		//////////////////////////////////////////////////////////////////
         // LF: Manage Users
         //////////////////////////////////////////////////////////////////
         case 'manage_users':
 		
+		/*
 		$Project = new Project();
 		$Project->path = $_GET['path'];
 		$Project->user = $_SESSION['user'];
 		$Project->Load();
 		$users_in_project = $Project->GetUsersInProject();
-						
+		*/				
 						
         ?>
         <form id="group_users_form">
-        <input type="hidden" name="project_path" value="<?php echo($_GET['path']); ?>">
-        <label><span class="icon-users"></span>Manage Users:</label>
-        <?
-        $maximum_number_group_members = $Project->GetMaximumNumberGroupMembers();
-        if ($maximum_number_group_members > 0) {
-        ?>
-        	<label class="sb-dialog-warning">This assignment has a maximum of <?=$maximum_number_group_members?> users. </label>
-	    <?
-		}
-	    ?>
+        <input type="hidden" name="course_id" value="<?=($_GET['id']); ?>">
+        <label><span class="icon-users"></span>Manage Students:</label>
 	        <table width="100%">
 	                <tr>
 	                    <th>Username</th>
@@ -317,28 +311,20 @@
 			      <?php 
 			        	
 			        	$User = new User();
-						//$User->users = getJSON('users.php');
-						// Connect
-						$mongo_client = new MongoClient();
-						// select the database
-						$database = $mongo_client->codiad_database;
-						// Select the collection 
-						$collection = $database->users;
-						// Get all the users in the database
-						$User->users = $collection->find();
 						$users = $User->users;
+						
 						foreach($users as $user) {
-							if($user['username'] != $_SESSION['user']) {
-								$username = $user['username'];
+							$username = $user['username'];
+							if ($user['type'] == 'student') {
 								?>
 								<tr>
 									<td><?=$username; ?></td>
 									<td><input type="checkbox" name="group_user[]" value="<?=$username; ?>"
-										<? if(in_array($username, $users_in_project)) { echo "checked=\"checked\""; } ?>/>
+										<? // if(in_array($username, $users_in_project)) { echo "checked=\"checked\""; } ?>/>
 									</td>
 								</tr>
 								<?php
-							} 
+							}
 						}
 			        ?>
          	</table> 
@@ -349,15 +335,13 @@
 		    	var form = $('#group_users_form');
 		    	$.ajax( {
 			      type: "POST",
-			      url: 'components/project/controller.php?action=manage_users',
+			      url: 'components/course/controller.php?action=manage_users',
 			      data: form.serialize(),
 			      dataType: 'json', 
 			      success: function( response ) {
 			        if(response.status == 'success') {
 			        	codiad.modal.unload();
-			        	codiad.message.success(i18n('Project updated'));
-			        } else if(response.status == 'error_user_maximum_reached') {
-			        	codiad.message.error(i18n('Maximum limit of users reached.'));
+			        	codiad.message.success(i18n('Course updated'));
 			        } else if(response.status == 'error_database') {
 			        	codiad.message.error(i18n('Changes couldn\'t be saved on database.'));
 			        }
@@ -372,8 +356,6 @@
         	
         <?php
         break;     
-		  * 
-		  */  
     }
     
 ?>

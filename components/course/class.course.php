@@ -9,6 +9,8 @@ class Course {
     //////////////////////////////////////////////////////////////////
     // PUBLIC  PROPERTIES
     //////////////////////////////////////////////////////////////////
+    // The id of the course (MongoId: '51c497a850ebc1b804fba437')
+	public $id	= '';
 	// The code of the course (CS 101, MATH 101)
 	public $code	= '';
 	// The name of the course
