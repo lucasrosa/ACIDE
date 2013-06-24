@@ -9,6 +9,7 @@
 
     require_once('../../common.php');
     require_once('../user/class.user.php');
+	require_once('../course/class.course.php');
 	require_once('class.project.php');
 	
     //////////////////////////////////////////////////////////////////
@@ -253,6 +254,10 @@
         
         case 'create':
         
+			$Course = new Course();
+			$User = new User();
+			$User->username = $_SESSION['user'];
+			
             ?>
             <form>
             <label>Project Name</label>
@@ -261,8 +266,26 @@
 			
 			
 			<select id="privacy_select" name="project_privacy">
-			  <option id="option_public" value="public" selected >Public</option>
-			  <option id="option_private" value="private">Private or Shared</option>
+				<option id="option_public" value="public" selected >Public</option>
+				<option id="option_private" value="private">Private or Shared</option>
+			  <!-- There is not need to shared projects here because a project turns to shared when new users are added -->
+			</select>
+			
+			<label>Course</label>
+			
+			
+			<select name="project_course">
+				<?
+					$courses = $User->GetUserCourses();
+					error_log("count : " . count($courses));
+					for ($i = 0; $i < count($courses); $i++) {
+						$Course->id = $courses[$i];
+						$Course->Load();
+				?>
+			 		<option value="<?=$Course->id?>"><?=$Course->code . " - " .$Course->name?></option>
+			  	<?
+					}
+			  	?>
 			  <!-- There is not need to shared projects here because a project turns to shared when new users are added -->
 			</select>
 			

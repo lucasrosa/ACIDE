@@ -66,8 +66,16 @@ class Course {
 		// Insert the user in the database:
 		return $this->collection->insert($new_course);
 	}
+	
 	public function GetAllCourses () {
 		return $this->collection->find();
+	}
+	
+	public function Load () {
+		$course = $this->collection->findOne(array('_id' => new MongoId($this->id)));
+		
+		$this->code = $course['code'];
+		$this->name = $course['name']; 
 	}
 	
 	public function GetUsersInCourse() {

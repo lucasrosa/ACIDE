@@ -34,8 +34,8 @@ class Project extends Common {
 	public $group_members		= '';
 	// LF: The assignment related to this project
 	public $assignment 			= '';
-	// LF: The class that the project is related to (discipline/course)
-	public $class 				= '';
+	// LF: The course that the project is related to (discipline/course)
+	public $course 				= '';
 	
     //////////////////////////////////////////////////////////////////
     // METHODS
@@ -155,7 +155,7 @@ class Project extends Common {
 						"path" => $this->path,
 						"privacy" => $this->privacy,
 						"visibility" => "true",
-						"class" => $this->class,
+						"course" => $this->course,
 						"group_members" => array(
 													array(
 															"username" => $this->user,

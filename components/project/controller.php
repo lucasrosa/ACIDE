@@ -66,6 +66,7 @@
         if(checkAccess()) {
             $Project->name = $_GET['project_name'];
 			$Project->privacy = $_GET['project_privacy'];
+			$Project->course = $_GET['project_course'];
 			
             if($_GET['project_path'] != '') {
                 $Project->path = $_GET['project_path'];

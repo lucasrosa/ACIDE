@@ -330,4 +330,17 @@ class User {
 			} 
 		}
 	}
+	
+	public function GetUserCourses () {
+		$users = $this->users;
+		foreach ($users as $user) {
+			if($user['username'] == $this->username) {
+				if (isset($user['courses'])) {
+					return $user['courses'];
+				} else {
+					return array();
+				}
+			} 
+		}
+	}
 }
