@@ -291,13 +291,10 @@
         //////////////////////////////////////////////////////////////////
         case 'manage_users':
 		
-		/*
-		$Project = new Project();
-		$Project->path = $_GET['path'];
-		$Project->user = $_SESSION['user'];
-		$Project->Load();
-		$users_in_project = $Project->GetUsersInProject();
-		*/				
+		
+		$Course = new Course();
+		$Course->id = $_GET['id'];
+		$users_in_course = $Course->GetUsersInCourse();
 						
         ?>
         <form id="group_users_form">
@@ -320,7 +317,7 @@
 								<tr>
 									<td><?=$username; ?></td>
 									<td><input type="checkbox" name="group_user[]" value="<?=$username; ?>"
-										<? // if(in_array($username, $users_in_project)) { echo "checked=\"checked\""; } ?>/>
+										<?  if(in_array($username, $users_in_course)) { echo "checked=\"checked\""; } ?>/>
 									</td>
 								</tr>
 								<?php

@@ -74,13 +74,20 @@
 		
 		$User = new User();
 		
-		for ($i = 0; $i < count ($group_users); $i++) {
-			$User->username = $group_users[$i];
-			if (!($User->AddCourse($Course->id))) {
-				$success = FALSE;
+		$users = $User->users;
+		foreach ($users as $user) {
+			$User->username = $user['username'];
+			if(in_array($user['username'], $group_users)) {
+				if (!$User->AddCourse($Course->id)) {
+					$success = FALSE;
+				}
+			} else {
+				if (!$User->RemoveCourse($Course->id)) {
+					$success = FALSE;
+				}
 			}
-		}		
-		
+			
+		}
 		header('Content-type: application/json');
 		
 		if ($success) {

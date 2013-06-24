@@ -310,6 +310,24 @@ class User {
 				return ($this->collection->update(array("username" => $user["username"]), $user));
 			} 
 		}
-		
+	}
+	
+	public function RemoveCourse ($course_id) {
+		$users = $this->users;
+		foreach ($users as $user) {
+			if($user['username'] == $this->username) {
+				if (isset($user['courses'])) {
+					for ($k = 0; $k < count($user['courses']); $k++) {
+						if ($user['courses'][$k] == $course_id) {
+							unset($user['courses'][$k]);
+							$user['courses'] = array_values($user['courses']);
+							break;
+						}
+					}
+				}
+				
+				return ($this->collection->update(array("username" => $user["username"]), $user));
+			} 
+		}
 	}
 }

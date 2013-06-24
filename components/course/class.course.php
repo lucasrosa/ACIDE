@@ -69,4 +69,27 @@ class Course {
 	public function GetAllCourses () {
 		return $this->collection->find();
 	}
+	
+	public function GetUsersInCourse() {
+		// Connect
+		$mongo_client = new MongoClient();
+		// select the database
+		$database = $mongo_client->codiad_database;
+		
+		$collection = $database->users;
+		$users_in_course = array();
+		
+		$users = $collection->find();
+		foreach ($users as $user) {
+			if (isset($user["courses"][0])) {		
+				for ($i = 0; $i < count($user["courses"]); $i++) {
+					if ($user["courses"][$i] == $this->id) {
+						$users_in_course[] =  $user["username"];
+					}
+				}
+			}
+		}
+		
+		return $users_in_course;
+	}
 }
