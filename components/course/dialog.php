@@ -199,17 +199,14 @@
                     <td><?php echo($course['code']); ?></td>
                     <td><?php echo($course['name']); ?></td>
                     <td><a onclick="codiad.course.manage_users('<?=$course['_id']?>');" class="icon-users bigger-icon"></a></td>
-                    <?php ?>
-                            <td><a onclick="codiad.course.delete('<?=($course['_id']); ?>');" class="icon-cancel-circled bigger-icon"></a></td>
-                    <?php
-                    ?>
+                    <td><a onclick="codiad.course.delete('<?=($course['_id']); ?>');" class="icon-cancel-circled bigger-icon"></a></td>
                 </tr>
                 <?php
             }
             ?>
             </table>
             </div>
-            <?php if(TRUE){ ?><button class="btn-left" onclick="codiad.course.create();">New Course</button><?php } ?><button class="<?php if(checkAccess()){ echo('btn-right'); } ?>" onclick="codiad.modal.unload();return false;">Close</button>
+            <button class="btn-left" onclick="codiad.course.create();">New Course</button><button class="btn-right" onclick="codiad.modal.unload();return false;">Close</button>
             <?php
             
             break;
@@ -270,22 +267,21 @@
         //////////////////////////////////////////////////////////////////////
         // Delete Project
         //////////////////////////////////////////////////////////////////////
-        
+        */
         case 'delete':
-        
+		$Course = new Course();
+		$Course->id = $_GET['id'];
+		$Course->Load();
+		
         ?>
             <form>
-            <input type="hidden" name="project_path" value="<?php echo($_GET['path']); ?>">
-            <label>Confirm Project Deletion</label>
-            <pre>Name: <?php echo($_GET['name']); ?>, Path: <?php echo($_GET['path']); ?></pre>
-            <table>
-            <tr><td width="5"><input type="checkbox" name="delete" id="delete" value="true"></td><td>Delete Project Files</td></tr>
-            <tr><td width="5"><input type="checkbox" name="follow" id="follow" value="true"></td><td>Follow Symbolic Links </td></tr>
-            </table>
-            <button class="btn-left">Confirm</button><button class="btn-right" onclick="codiad.project.list();return false;">Cancel</button>
+            <input type="hidden" name="id" value="<?=($_GET['id']); ?>">
+            <label>Confirm Course Deletion</label>
+            <pre>Course: <?=$Course->code ?> - <?=$Course->name ?></pre>
+            <button class="btn-left">Confirm</button><button class="btn-right" onclick="codiad.course.list();return false;">Cancel</button>
             <?php
             break;
-     	*/
+     	
 		//////////////////////////////////////////////////////////////////
         // LF: Manage Users
         //////////////////////////////////////////////////////////////////

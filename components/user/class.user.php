@@ -169,7 +169,7 @@ class User {
 		}
 		
         // Response
-        echo formatJSEND("success",null);
+        echo formatJSEND("success", null);
     }
 
     //////////////////////////////////////////////////////////////////

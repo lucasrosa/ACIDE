@@ -48,11 +48,12 @@
     // Delete Project
     //////////////////////////////////////////////////////////////////
 
-    if($_GET['action']=='delete'){
-        if(checkAccess()) {
-            $Project->path = $_GET['project_path'];
-			$Project->user = $_SESSION['user'];
-            $Project->Delete();
+    if($_GET['action'] == 'delete'){
+        $Course->id = $_GET['id'];
+        if ($Course->Delete()) {
+        	echo formatJSEND("success");
+        } else {
+        	echo formatJSEND("error");
         }
     }
 

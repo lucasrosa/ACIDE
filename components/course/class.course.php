@@ -4,6 +4,8 @@
  *  Copyright (c) UPEI lrosa@upei.ca sbateman@upei.ca
  */
 
+//require_once("../user/user.class.php");
+ 
 class Course {
 
     //////////////////////////////////////////////////////////////////
@@ -99,5 +101,17 @@ class Course {
 		}
 		
 		return $users_in_course;
+	}
+	
+	public function Delete () {
+		/* Don't remove, the users must have a course in the project
+		// Remove from the users
+		$User = new User();
+		foreach($User->users as $user) {
+			$user->RemoveCourse($this->id);	
+		}
+		*/
+		// Remove User from database
+		return $this->collection->remove(array('_id' => new MongoId($this->id)));
 	}
 }

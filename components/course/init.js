@@ -175,48 +175,29 @@
                 });
             });
         },
-        
+        */
         //////////////////////////////////////////////////////////////////
         // Delete Project
         //////////////////////////////////////////////////////////////////
 
-        delete: function(name, path) {
+        delete: function(id) {
             var _this = this;
-            codiad.modal.load(500, this.dialog + '?action=delete&name=' + escape(name) + '&path=' + escape(path));
+            codiad.modal.load(500, this.dialog + '?action=delete&id=' + escape(id));
             $('#modal-content form')
                 .live('submit', function(e) {
                 e.preventDefault();
-                var projectPath = $('#modal-content form input[name="project_path"]')
+                var id = $('#modal-content form input[name="id"]')
                     .val();
-                $.get(_this.controller + '?action=delete&project_path=' + projectPath, function(data) {
+                $.get(_this.controller + '?action=delete&id=' + id, function(data) {
                     deleteResponse = codiad.jsend.parse(data);
                     if (deleteResponse != 'error') {
-                        codiad.message.success('Project Deleted');
-                        var deletefiles = $('input:checkbox[name="delete"]:checked').val();
-                        var followlinks = $('input:checkbox[name="follow"]:checked').val();
-                        if( typeof deletefiles !== 'undefined' ) {
-                            if( typeof followlinks !== 'undefined' ) {
-                                $.get(codiad.filemanager.controller + '?action=delete&follow=true&path=' + projectPath);
-                            } else {
-                                $.get(codiad.filemanager.controller + '?action=delete&path=' + projectPath);
-                            }
-                        }
-                        _this.list();
-                        _this.loadSide();
-                        // Remove any active files that may be open
-                        $('#active-files a')
-                            .each(function() {
-                            var curPath = $(this)
-                                .attr('data-path');
-                            if (curPath.indexOf(projectPath) == 0) {
-                                codiad.active.remove(curPath);
-                            }
-                        });
+                    	codiad.modal.unload();
+                        codiad.message.success('Course Deleted');
                     }
                 });
             });
         },
-        
+        /*
         //////////////////////////////////////////////////////////////////
         // Check Absolute Path
         //////////////////////////////////////////////////////////////////
