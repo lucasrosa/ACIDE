@@ -289,7 +289,6 @@
 			<select name="project_course">
 				<?
 					$courses = $User->GetUserCourses();
-					error_log("count : " . count($courses));
 					for ($i = 0; $i < count($courses); $i++) {
 						$Course->id = $courses[$i];
 						$Course->Load();

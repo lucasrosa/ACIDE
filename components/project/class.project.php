@@ -685,6 +685,7 @@ class Project extends Common {
 						}
 						// If the assignment isn't added yet, add it
 						if (!$assignment_added) {
+							$user["projects"][$i]["assignment"]["course"] = $user["projects"][$i]["course"];
 							array_push($assignments, $user["projects"][$i]["assignment"]);												
 						}
 					}
@@ -743,6 +744,8 @@ class Project extends Common {
 				for ($i = 0; $i < count($user["projects"]); $i++) {
 					if (isset($user["projects"][$i]) && isset($user["projects"][$i]["assignment"]["id"])) {	
 						if ($user["projects"][$i]["assignment"]["id"] == $id) {
+							// Return the course inside the assignment
+							$user["projects"][$i]["assignment"]["course"] = $user["projects"][$i]["course"];
 							return $user["projects"][$i]["assignment"];
 						}
 					}
@@ -766,6 +769,8 @@ class Project extends Common {
 			for ($i = 0; $i < count($user["projects"]); $i++) {
 				if (isset($user["projects"][$i]) && isset($user["projects"][$i]["assignment"]["id"])) {	
 					if ($user["projects"][$i]["assignment"]["id"] == $assignment['id']) {
+						// Save the course in the project, not in the assignment
+						$user["projects"][$i]["course"] = $assignment['course'];
 						$user["projects"][$i]["assignment"]["name"] = $assignment['name'];
 						$user["projects"][$i]["assignment"]["due_date"] = $assignment['due_date'];
 						$user["projects"][$i]["assignment"]["description_url"] = $assignment['description_url'];

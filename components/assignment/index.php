@@ -8,6 +8,7 @@
 	require_once('../project/class.project.php');
 	require_once('class.assignment.php');
 	require_once('../permission/class.permission.php');
+	require_once('../course/class.course.php');
 	
 	//////////////////////////////////////////////////////////////////
     // This page offers an interface to manage assignments
@@ -99,7 +100,7 @@
 				
 				$Assignment["name"] = $_POST['project_name'];
 				if ($Assignment["name"] == "") 
-					$error .= "The field Assignment / Project Name cannot be blank. <br />";
+					$error .= "The field Assignment / Project Name cannot be blank. <br />";	
 				
 				if ($_POST['due_date'] == "") 
 					$error .= "The field Date cannot be blank. <br />";
@@ -173,7 +174,9 @@
 				if ($_POST['action'] == 'create_new_assignment') {
 					$Project->path = $_POST['id'];
 					$Project->name = $_POST['project_name'];
-					$Project->privacy = "private"; 
+					$Project->privacy = "private";
+					$Project->course = $_POST['course'];
+					
 					$Assignment["id"] = $Project->path;
 					$Assignment["owner"] = $_SESSION["user"];
 					
@@ -191,6 +194,7 @@
 					
 				} else if ($_POST['action'] == 'save_edited_assignment') {
 					if ($error == '') {
+						$Assignment['course'] = $_POST['course'];
 						if ($Project->SaveAssignment($Assignment)) {
 							$success = "Assignment updated with success!";
 						} else {
@@ -220,6 +224,7 @@
 			$Assignment["owner"] = '';
 			$Assignment["id"] = '';
 			$Assignment["name"] = '';
+			$Assignment['course'] = '';
 			$Assignment['due_date'] = '';
 			$Assignment['allow_late_submission'] = '';
 			$Assignment['maximum_number_group_members'] = '';
@@ -228,6 +233,7 @@
 		} else  if (!$editing_assignment || $error_editing_assignment){
 			$Assignment['id'] = $_POST['id'];
 			$Assignment['name'] = $_POST['project_name'];
+			$Assignment['course'] = $_POST['course'];
 			$Assignment['due_date_date'] = $_POST['due_date'];
 			$Assignment['due_date_time'] = $_POST['due_time'];
 			$Assignment['allow_late_submission'] = $_POST['late_submission_days'];
@@ -283,7 +289,7 @@
 		</form>
 		<h1 align="center">Assignments</h1>	
 		
-		<div id="modal" style="display: block; width: 800px; margin:0 auto;" >
+		<div id="modal" style="display: block; width: 1000px; margin:0 auto;" >
 			<div id="modal-content">
 				<label>Assignment List</label>
 				<div id="project-list">
@@ -292,10 +298,11 @@
 							<tr>
 								<th>Name</th>
 								<th>Created by</th>
+								<th>Course</th>
 								<th>Due Date</th>
 								<th>Late submission days</th>
 								<th>Description</th>
-								<th>Maximum number of group members</th>
+								<th style="width: 50px;">Maximum number of group members</th>
 								<th>Submitted Projects</th>
 								<? if ($Permission->GetPermissionToCreateAndEditAssignments()) { ?>
 									<th>Edit</th>
@@ -308,12 +315,17 @@
 						    //////////////////////////////////////////////////////////////////
 						    $Project = new Project();
 						    $assignments = $Project->GetAssignments();
+							$Course = new Course();
 							
 							for ($k = 0; $k < count($assignments); $k++) {
+								$Course->id = $assignments[$k]['course'];
+								$Course->Load();
+								
 							?>
 							<tr>
 								<td><?=$assignments[$k]['name']?></td>
 								<td><?=$assignments[$k]['owner']?></td>
+								<td><?=$Course->code ." - ". $Course->name?></td>
 								<td>
 									<?=date("m/d/Y", strtotime($assignments[$k]['due_date'])); ?>
 									<br />
@@ -422,6 +434,24 @@
 									<tr>
 										<th>Assignment name (Project's name)</th>
 										<td><input type="text" name="project_name" value="<?=$Assignment['name']?>" /></td>
+									</tr>
+									<tr>
+										<th>Course</th>
+										<td>
+											<select name="course">
+												<?php
+												
+												$Course = new Course();
+												$courses = $Course->GetAllCourses();
+												
+												foreach($courses as $course){
+												?>
+											 		<option value="<?=$course['_id']?>" <? if ($course['_id'] == $Assignment['course']) echo "selected='selected'"; ?>><?=$course['code'] . " - " . $course['name']?></option>
+											  	<?
+											  	}
+											  	?>
+											</select>
+										</td>
 									</tr>
 									<tr>
 										<th>Due Date</th>
