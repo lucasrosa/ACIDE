@@ -21,7 +21,23 @@
         //////////////////////////////////////////////////////////////
         
         case 'list':
-            
+            $import_user_url = 'http';
+		
+			if (@$_SERVER["HTTPS"] == "on") {
+				$import_user_url .= "s";
+			}
+			
+			$import_user_url .= "://";
+			if ($_SERVER["SERVER_PORT"] != "80") {
+				 $import_user_url .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"];
+			} else {
+				$import_user_url .= $_SERVER["SERVER_NAME"];
+			}
+			
+			$dir =  dirname($_SERVER['PHP_SELF']);
+			$dirs = explode('/', $dir);
+			$import_user_url .= "/" . $dirs[1] . "/components/user/importusers";
+			
             $projects_assigned = false;
             if(!checkAccess()){ 
             ?>
@@ -74,7 +90,7 @@
             ?>
             </table>
             </div>
-            <button class="btn-left" onclick="codiad.user.createNew();">New Account</button><button class="btn-right" onclick="codiad.modal.unload();return false;">Close</button>
+            <button class="btn-left" onclick="codiad.user.createNew();">New Account</button><button class="btn-mid" onclick="window.open('<?=$import_user_url?>');return false;">Import from CSV File</button><button class="btn-right" onclick="codiad.modal.unload();return false;">Close</button>
             <?php
             }
             
@@ -85,7 +101,8 @@
         //////////////////////////////////////////////////////////////////////
         
         case 'create':
-        
+        	
+			
             ?>
             <form>
             <label>Username</label>
