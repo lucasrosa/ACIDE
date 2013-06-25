@@ -426,9 +426,9 @@
 						$database = $mongo_client->codiad_database;
 						// Select the collection 
 						$collection = $database->users;
-						// Get all the users in the database
-						$User->users = $collection->find();
-						$users = $User->users;
+						// TODO get all the users in the same class of the project //$User->users = $collection->find(); // Get all the users in the database
+						$users = $User->GetUsersInCourse($Project->course);
+						
 						foreach($users as $user) {
 							if($user['username'] != $_SESSION['user']) {
 								$username = $user['username'];

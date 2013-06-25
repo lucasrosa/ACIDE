@@ -343,4 +343,18 @@ class User {
 			} 
 		}
 	}
+	
+	public function GetUsersInCourse ($course) {
+		$users = $this->users;
+		$returning_users = array();
+		foreach ($users as $user) {
+			if (isset($user['courses'])) {
+				if (in_array($course, $user['courses'])) {
+					$returning_users[] = $user;
+				}
+			}
+		}
+		
+		return $returning_users;
+	}
 }

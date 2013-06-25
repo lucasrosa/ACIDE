@@ -113,6 +113,7 @@ class Project extends Common {
 					if ($user["projects"][$i]["path"] == $this->path) {
 						$pass = true;
 			            $this->name = $user["projects"][$i]["name"];
+						$this->course = $user["projects"][$i]["course"];
 						$this->privacy = $user["projects"][$i]["privacy"];
 						$this->group_members = $user["projects"][$i]["group_members"];
 						$this->assignment = $user["projects"][$i]["assignment"];
