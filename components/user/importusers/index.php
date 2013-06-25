@@ -6,6 +6,7 @@
 	require_once('../../../common.php');
     require_once('../class.user.php');
 	require_once('../../permission/class.permission.php');
+	require_once('../../course/class.course.php');
 	
 	//////////////////////////////////////////////////////////////////
     // This page shows a list of projects submitted for an assignment
@@ -26,63 +27,71 @@
 	} else {
 		
 		if (@$_POST['action'] == 'import_users') {
-			if ($_FILES['file_csv']['size'] > 0) { 
-				//print_r($_FILES);
-			    //get the csv file 
-			    $file = $_FILES['file_csv']['tmp_name']; 
-			    $handle = fopen($file,"r"); 
-			     
-			    //loop through the csv file and insert into database
-			    $users = array(); 
-				
-				do { 
-			        if (@$data[0] != "") {
-			        	if (strtolower($data[0]) != "username") {
-			        		if (strlen($data[0]) > 0 && strlen($data[1]) > 0 && strlen($data[2]) > 0) {
-			        			$users[] = $data;
-			        		}
-			        	}
-			        }
-			    } while ($data = fgetcsv($handle,1000,",","'")); 
-			
-				$users_imported_count = 0;
-				$errors = array();
-				
-				for ($i = 0; $i < count($users); $i++) {
-					$User = new User();
-					$User->username = $users[$i][0];
-					$User->email 	= $users[$i][1];
-					$User->password = $users[$i][2];
+			if (isset($_POST['courses'])) {
+				if ($_FILES['file_csv']['size'] > 0) { 
+					//print_r($_FILES);
+				    //get the csv file 
+				    $file = $_FILES['file_csv']['tmp_name']; 
+				    $handle = fopen($file,"r"); 
+				     
+				    //loop through the csv file and insert into database
+				    $users = array(); 
 					
-					// If no type was defined, the type is defined as "student"
-					if (isset($users[$i][3])) {
-						if (strlen($users[$i][3]) > 0) {
-							$User->type = $users[$i][3];
+					do { 
+				        if (@$data[0] != "") {
+				        	if (strtolower($data[0]) != "username") {
+				        		if (strlen($data[0]) > 0 && strlen($data[1]) > 0 && strlen($data[2]) > 0) {
+				        			$users[] = $data;
+				        		}
+				        	}
+				        }
+				    } while ($data = fgetcsv($handle,1000,",","'")); 
+				
+					$users_imported_count = 0;
+					$errors = array();
+					
+					// Save user's courses
+					$courses = $_POST['courses'];
+					
+					for ($i = 0; $i < count($users); $i++) {
+						$User = new User();
+						$User->username = $users[$i][0];
+						$User->email 	= $users[$i][1];
+						$User->password = $users[$i][2];
+						$User->courses = $courses;
+						
+						// If no type was defined, the type is defined as "student"
+						if (isset($users[$i][3])) {
+							if (strlen($users[$i][3]) > 0) {
+								$User->type = $users[$i][3];
+							} else {
+								$User->type = "student";
+							}
 						} else {
 							$User->type = "student";
 						}
-					} else {
-						$User->type = "student";
+						
+						$return_a_string = TRUE;
+						$result = $User->Create($return_a_string);
+						
+						if ($result == "success") {
+							$users_imported_count++;
+						} else {
+							$errors[] = "The following error was encountered while inserting the user '" . $User->username . "': \"<i>" . $result. "</i>\"";
+						}
 					}
 					
-					$return_a_string = TRUE;
-					$result = $User->Create($return_a_string);
-					
-					if ($result == "success") {
-						$users_imported_count++;
-					} else {
-						$errors[] = "The following error was encountered while inserting the user '" . $User->username . "': \"<i>" . $result. "</i>\"";
+					$success = $users_imported_count . " users inserted with success! <br />";
+					$error = "";
+					if (count($errors) > 0) {
+						for ($i = 0; $i < count($errors); $i++) {
+							$error .= $errors[$i] . "<br />";
+						}						
 					}
 				}
-				
-				$success = $users_imported_count . " users inserted with success! <br />";
-				$error = "";
-				if (count($errors) > 0) {
-					for ($i = 0; $i < count($errors); $i++) {
-						$error .= $errors[$i] . "<br />";
-					}						
-				}
-			} 
+			} else {
+				$error .= "You must select at least one course. <br />";
+			}
 		}
 	
 		$pageURL = 'http';
@@ -100,6 +109,13 @@
 		$dir =  dirname($_SERVER['PHP_SELF']);
 		$dirs = explode('/', $dir);
 		$pageURL .= "/" . $dirs[1];
+		
+		
+		
+		// Defining the courses
+		$Course = new Course();
+		$courses = $Course->GetAllCourses();
+		
 	?>
 	<!doctype html>
 	
@@ -130,9 +146,31 @@
 								<tr>
 									<th>File (.csv)</th>
 									<td><input name="file_csv" type="file" accept=".csv"  /></td>
-									<td align="center"><button>Import</button></td>
 								</tr>
-								
+								<tr>
+									<th>Courses</th>
+									<td>
+										<table>
+											<?
+											foreach($courses as $course) {
+											?>
+												<tr>
+													<td style="width: 10px; border: 0px;">
+														<input type="checkbox" name="courses[]" value="<?=$course['_id']?>" />
+													</td>
+													<td style="border: 0px;">
+														<?=$course['code'] . " - " . $course['name']?></span>
+													</td>
+												</tr>
+											<?
+											}
+											?>
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<th align="center" colspan="2"><button>Import</button></th>
+								</tr>
 							</tbody>
 						</table>
 					</form>

@@ -68,6 +68,7 @@ class Project extends Common {
             foreach($this->projects as $project=>$data){
                 if(in_array($data['path'],$this->assigned)){
                     $this->name = $data['name'];
+					$this->course = $data['course'];
                     $this->path = $data['path'];
 					$this->privacy = $data['privacy'];
 					$this->user = $data['user'];
@@ -569,6 +570,7 @@ class Project extends Common {
 				for ($i = 0; $i < count($user["projects"]); $i++) {
 					// LF: The project is selected based on the path :-> As it is the project's id
 					if ($user["projects"][$i]["path"] == $this->path) {
+						$user["projects"][$i]["course"] = $this->course;
 						$user["projects"][$i]["name"] = $this->name;
 						$user["projects"][$i]["privacy"] = $this->privacy;
 						$user["projects"][$i]["group_members"] = $this->group_members;

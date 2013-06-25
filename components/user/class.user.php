@@ -100,7 +100,7 @@ class User {
 								"email" => $this->email, 
 								"projects" => '',
 								"project" => '',
-								"classes" => $this->classes
+								"courses" => $this->courses
 							 );
 			
 			// Insert the user in the database:
