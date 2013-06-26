@@ -185,6 +185,7 @@
                     <th>Course Code</th>
                     <th>Course Name</th>
                     <th>Students</th>
+                    <th>Markers</th>
                     <?php if(TRUE){ ?><th width="5">Delete</th><?php } ?>
                 </tr>
             <?php
@@ -198,7 +199,8 @@
                 <tr>
                     <td><?php echo($course['code']); ?></td>
                     <td><?php echo($course['name']); ?></td>
-                    <td><a onclick="codiad.course.manage_users('<?=$course['_id']?>');" class="icon-users bigger-icon"></a></td>
+                    <td><a onclick="codiad.course.manage_users('<?=$course['_id']?>', 'student');" class="icon-users bigger-icon"></a></td>
+                    <td><a onclick="codiad.course.manage_users('<?=$course['_id']?>', 'marker');" class="icon-users bigger-icon"></a></td>
                     <td><a onclick="codiad.course.delete('<?=($course['_id']); ?>');" class="icon-cancel-circled bigger-icon"></a></td>
                 </tr>
                 <?php
@@ -290,12 +292,14 @@
 		
 		$Course = new Course();
 		$Course->id = $_GET['id'];
+		$type = $_GET['type'];
 		$users_in_course = $Course->GetUsersInCourse();
 						
         ?>
         <form id="group_users_form">
         <input type="hidden" name="course_id" value="<?=($_GET['id']); ?>">
-        <label><span class="icon-users"></span>Manage Students:</label>
+        <input type="hidden" name="type" value="<?=$type; ?>">
+        <label><span class="icon-users"></span>Manage <? if ($type == 'student') echo 'Students'; else echo 'Markers'; ?>:</label>
 	        <table width="100%">
 	                <tr>
 	                    <th>Username</th>
@@ -308,7 +312,7 @@
 						
 						foreach($users as $user) {
 							$username = $user['username'];
-							if ($user['type'] == 'student') {
+							if ($user['type'] == $type) {
 								?>
 								<tr>
 									<td><?=$username; ?></td>

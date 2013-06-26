@@ -64,6 +64,7 @@
 
     if($_GET['action'] == 'manage_users'){
     	$Course->id = $_POST["course_id"];
+		$type = $_POST["type"];
 		
 		if (isset($_POST['group_user'])) {
 			$group_users = $_POST['group_user'];	
@@ -77,17 +78,18 @@
 		
 		$users = $User->users;
 		foreach ($users as $user) {
-			$User->username = $user['username'];
-			if(in_array($user['username'], $group_users)) {
-				if (!$User->AddCourse($Course->id)) {
-					$success = FALSE;
-				}
-			} else {
-				if (!$User->RemoveCourse($Course->id)) {
-					$success = FALSE;
+			if ($user['type'] == $type) {
+				$User->username = $user['username'];
+				if(in_array($user['username'], $group_users)) {
+					if (!$User->AddCourse($Course->id)) {
+						$success = FALSE;
+					}
+				} else {
+					if (!$User->RemoveCourse($Course->id)) {
+						$success = FALSE;
+					}
 				}
 			}
-			
 		}
 		header('Content-type: application/json');
 		

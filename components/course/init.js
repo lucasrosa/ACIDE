@@ -255,9 +255,9 @@
         // LF: Manage users of the Course
         //////////////////////////////////////////////////////////////////
 		
-        manage_users: function(id) {
+        manage_users: function(id, type) {
 	            var _this = this;
-	            codiad.modal.load(500, this.dialog + '?action=manage_users&id=' + escape(id));
+	            codiad.modal.load(500, this.dialog + '?action=manage_users&id=' + escape(id) + '&type=' + escape(type));
 	            /*
 	            $('#modal-content form')
 	                .live('submit', function(e) {

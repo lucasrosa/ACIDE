@@ -357,4 +357,15 @@ class User {
 		
 		return $returning_users;
 	}
+	
+	public function GetUsersTypes () {
+		$types = array();
+		
+		$types[] = 'student';  
+	 	$types[] = 'marker';
+	 	$types[] = 'professor';
+	 	$types[] = 'admin';
+		
+		return $types;
+	}
 }
