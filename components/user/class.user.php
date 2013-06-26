@@ -358,13 +358,15 @@ class User {
 		return $returning_users;
 	}
 	
-	public function GetUsersTypes () {
+	public function GetUsersTypes ($returnAdminType = TRUE) {
 		$types = array();
 		
 		$types[] = 'student';  
 	 	$types[] = 'marker';
 	 	$types[] = 'professor';
-	 	$types[] = 'admin';
+		if ($returnAdminType) {
+			$types[] = 'admin';
+		}
 		
 		return $types;
 	}

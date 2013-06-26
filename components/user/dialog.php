@@ -7,7 +7,8 @@
     */
 
     require_once('../../common.php');
-    
+	require_once('../course/class.course.php');
+	require_once('class.user.php');    
     //////////////////////////////////////////////////////////////////
     // Verify Session or Key
     //////////////////////////////////////////////////////////////////
@@ -102,6 +103,12 @@
         
         case 'create':
         	
+			$User = new User();
+			$returnAdminType = FALSE;
+			$types = $User->GetUsersTypes($returnAdminType);
+			
+			$Course = new Course();
+			$courses = $Course->GetAllCourses();
 			
             ?>
             <form>
@@ -109,7 +116,27 @@
             <input type="text" name="username" autofocus="autofocus" autocomplete="off">
             <label>E-mail</label>
             <input type="text" name="email" autocomplete="off">
-            <input type="hidden" name="type" value="student" />
+            <label>Type</label>
+            <select name="type">
+            	<?
+            	for ($i = 0; $i < count($types); $i++) {
+            	?>
+            		<option value="<?=$types[$i]?>"><?=ucfirst($types[$i])?></option>
+            	<?
+            	}
+            	?>
+            </select>
+            <label>Course</label>
+            <select name="course">
+            	<?
+            	foreach($courses as $course) {
+            	?>
+            		<option value="<?=$course['_id']?>"><?=$course['code'] ." - ". $course['name']?></option>
+            	<?
+            	}
+            	?>
+            </select>
+            
             <label>Password</label>
             <input type="password" name="password1">
             <label>Confirm Password</label>
