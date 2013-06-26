@@ -8,6 +8,7 @@
 
     require_once('../../common.php');
 	require_once('../course/class.course.php');
+	require_once('../permission/class.permission.php');
 	require_once('class.user.php');    
     //////////////////////////////////////////////////////////////////
     // Verify Session or Key
@@ -72,7 +73,7 @@
             foreach($users as $user=>$data){        
             ?>
             <tr>
-                <td><a onclick="codiad.user.edit('<?php echo($data['username']); ?>');">     <?php echo($data['username']); ?></a></td>
+                <td><a onclick="codiad.user.edit('<?php echo($data['username']); ?>');"><?php echo($data['username']); ?></a></td>
                 <td><a onclick="codiad.user.password('<?php echo($data['username']); ?>');" class="icon-flashlight bigger-icon"></a></td>
                 <td><a onclick="codiad.user.projects('<?php echo($data['username']); ?>');" class="icon-archive bigger-icon"></a></td>
                 <td><a onclick="codiad.user.edit('<?php echo($data['username']); ?>');" class="icon-pencil bigger-icon"></a></td>
@@ -107,7 +108,9 @@
         case 'create':
         	
 			$User = new User();
-			$returnAdminType = FALSE;
+			$Permission = new Permission($_SESSION['user']);
+			$returnAdminType = $Permission->GetAdminPermission();
+			
 			$types = $User->GetUsersTypes($returnAdminType);
 			
 			$Course = new Course();
@@ -156,7 +159,9 @@
         case 'edit':
         	
 			$User = new User();
-			$returnAdminType = FALSE;
+			$Permission = new Permission($_SESSION['user']);
+			$returnAdminType = $Permission->GetAdminPermission();
+			
 			$types = $User->GetUsersTypes($returnAdminType);
 			$User->username = $_GET['username'];
 			$User->Load();
