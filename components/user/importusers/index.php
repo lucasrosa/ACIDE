@@ -62,13 +62,13 @@
 						
 						// If no type was defined, the type is defined as "student"
 						if (isset($users[$i][3])) {
-							if (strlen($users[$i][3]) > 0) {
+							if (strlen($users[$i][3]) > 0 && (($users[$i][3] == $Permission->user_types[2]) || ($users[$i][3] == $Permission->user_types[3]))) {
 								$User->type = $users[$i][3];
 							} else {
-								$User->type = "student";
+								$User->type = $Permission->user_types[3];
 							}
 						} else {
-							$User->type = "student";
+							$User->type = $Permission->user_types[3];
 						}
 						
 						$return_a_string = TRUE;
