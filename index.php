@@ -336,6 +336,7 @@ if(!file_exists(DATA . '/plugins.php')) {
             <div class="sidebar-handle"><span><a class="icon-menu"></a></span></div>
             <div id="sb-right-title">
                 <span id="lock-right-sidebar" class="icon-switch icon"></span>
+                <span style="color: #FFFFFF; position:absolute; right:12px; top: 10px;">Welcome,&nbsp;<?=$_SESSION['user']; ?>.</span>
             </div>
 
             <div class="sb-right-content">
