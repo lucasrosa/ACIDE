@@ -370,4 +370,34 @@ class User {
 		
 		return $types;
 	}
+
+	public function Save () {
+		$collection = $this->collection;
+		
+		$users = $collection->find();
+		foreach ($users as $user) {
+			if ($user['username'] == $this->username) {
+				$user['type'] = $this->type;
+				$user['email'] = $this->email;
+				if (!in_array($this->courses[0], $user['courses'])) {
+					$user['courses'][] = $this->courses[0]; 
+				}
+			}
+			// LF: Updating in the database : Overwriting the user document  
+			return $collection->update(array("username" => $user["username"]), $user);
+		}
+		return FALSE;
+    }
+	
+	public function Load () {
+		$user = $this->collection->findOne(array("username" => $this->username));
+		
+		$this->type 	= $user['type'];
+		$this->email 	= $user['email'];
+		$this->courses 	= $user['courses'];
+		$this->project 	= $user['project'];
+		$this->projects = $user['projects'];
+		
+		return TRUE;
+	}
 }

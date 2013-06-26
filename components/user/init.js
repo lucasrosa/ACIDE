@@ -105,6 +105,35 @@
                 }
             });
         },
+        
+        //////////////////////////////////////////////////////////////////
+        // Create User
+        //////////////////////////////////////////////////////////////////
+
+        edit: function(username) {
+            var _this = this;
+            codiad.modal.load(400, this.dialog + '?action=edit&username=' + username);
+            $('#modal-content form')
+                .live('submit', function(e) {
+                e.preventDefault();
+                var username = $('#modal-content form input[name="username"]')
+                    .val();
+                var type = $('#modal-content form select[name="type"]')
+                    .val();
+                var course = $('#modal-content form select[name="course"]')
+                    .val();
+                var email = $('#modal-content form input[name="email"]')
+                    .val();
+                
+                $.post(_this.controller + '?action=edit', {'username' : username , 'type' : type , 'course' : course , 'email' : email   }, function(data) {
+                    var createResponse = codiad.jsend.parse(data);
+                    if (createResponse != 'error') {
+                        codiad.message.success('User Edited with success');
+                        _this.list();
+                    }
+                });
+            });
+        },
 
         //////////////////////////////////////////////////////////////////
         // Delete User

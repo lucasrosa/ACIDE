@@ -53,6 +53,7 @@
                     <th>Login</th>
                     <th width="5">Password</th>
                     <th width="5">Projects</th>
+                    <th width="5">Edit</th>
                     <th width="5">Delete</th>
                 </tr>
             <?php
@@ -71,9 +72,11 @@
             foreach($users as $user=>$data){        
             ?>
             <tr>
-                <td><?php echo($data['username']); ?></td>
+                <td><a onclick="codiad.user.edit('<?php echo($data['username']); ?>');">     <?php echo($data['username']); ?></a></td>
                 <td><a onclick="codiad.user.password('<?php echo($data['username']); ?>');" class="icon-flashlight bigger-icon"></a></td>
                 <td><a onclick="codiad.user.projects('<?php echo($data['username']); ?>');" class="icon-archive bigger-icon"></a></td>
+                <td><a onclick="codiad.user.edit('<?php echo($data['username']); ?>');" class="icon-pencil bigger-icon"></a></td>
+                
                 <?php
                     if($_SESSION['user'] == $data['username']){
                     ?>
@@ -146,6 +149,58 @@
             <?php
             break;
         
+		//////////////////////////////////////////////////////////////////////
+        // Edit User
+        //////////////////////////////////////////////////////////////////////
+        
+        case 'edit':
+        	
+			$User = new User();
+			$returnAdminType = FALSE;
+			$types = $User->GetUsersTypes($returnAdminType);
+			$User->username = $_GET['username'];
+			$User->Load();
+			$Course = new Course();
+			$courses = $Course->GetAllCourses();
+			
+            ?>
+            <form>
+            <input type="hidden" name="username" value="<?=$User->username; ?>" />
+            <label>Editing user "<?=$User->username; ?>"</label>
+            <br />
+            <label>E-mail</label>
+            <input type="text" name="email" autofocus="autofocus" autocomplete="off" value="<?=$User->email;?>" />
+            <label>Type</label>
+            <select name="type">
+            	<?
+            	for ($i = 0; $i < count($types); $i++) {
+            	?>
+            		<option value="<?=$types[$i]?>"
+            			<? if($types[$i] == $User->type) { echo "selected=\"selected\""; } ?> 
+            			>
+            			<?=ucfirst($types[$i])?>
+            		</option>
+            	<?
+            	}
+            	?>
+            </select>
+            <table>
+		        <?
+		        foreach($courses as $course) {
+		        ?>
+		        	<tr>
+		        		<td><input type="checkbox" disabled="disabled" <? if (in_array($course['_id'], $User->courses)) { echo "checked=\"checked\""; } ?> /></td>
+		        		<td><?=$course['code'] ." - ". $course['name'] ?></td>
+		        	</tr>
+		        <?
+				}
+		        ?>
+            </table>
+            <button class="btn-left">Save</button><button class="btn-right" onclick="codiad.user.list();return false;">Cancel</button>
+            <form>
+            <?php
+            break;
+		
         //////////////////////////////////////////////////////////////////////
         // Set Project Access
         //////////////////////////////////////////////////////////////////////

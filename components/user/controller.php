@@ -69,6 +69,29 @@
             $User->Create();
         }
     }
+	
+	//////////////////////////////////////////////////////////////////
+    // Create User
+    //////////////////////////////////////////////////////////////////
+
+    if($_GET['action'] == 'edit'){
+        if(checkAccess()) {
+        	if(!isset($_POST['username'])){
+        		die(formatJSEND("error","Missing username"));
+        	}
+        	
+            $User->username = $_POST['username'];
+			$User->Load();
+			$User->email = $_POST['email'];
+			$User->type = $_POST['type'];
+			
+            if ($User->Save()) {
+            	echo formatJSEND("success",array("username"=>$User->username));
+            } else {
+            	echo formatJSEND("error","The user could not be edited on the database");
+            }
+        }
+    }
 
     //////////////////////////////////////////////////////////////////
     // Delete User
