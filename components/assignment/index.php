@@ -243,9 +243,13 @@
 			$Assignment['due_date_date'] = '';
 			$Assignment['due_date_time'] = '';
 		} else  if (!$editing_assignment || $error_editing_assignment){
-			//$Assignment['id'] = $_POST['id'];
-			$Assignment["id"] = str_replace(" ","_",$_POST['project_name']);
-	       	$Assignment["id"] = preg_replace('/[^\w-]/', '', $Assignment["id"]);
+			if ($error_editing_assignment) {
+				$Assignment['id'] = $_POST['id'];	
+			} else {
+				$Assignment["id"] = str_replace(" ","_",$_POST['project_name']);
+	       		$Assignment["id"] = preg_replace('/[^\w-]/', '', $Assignment["id"]);	
+			}
+			
 			$Assignment['name'] = $_POST['project_name'];
 			$Assignment['course'] = $_POST['course'];
 			$Assignment['due_date_date'] = $_POST['due_date'];
