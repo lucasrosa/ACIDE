@@ -302,14 +302,17 @@
 			  <!-- There is not need to shared projects here because a project turns to shared when new users are added -->
 			</select>
 			
-            <?php if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') { ?>
+            <?php
+            /*
+            if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') { ?>
             <label>Folder Name (<span class="sb-dialog-warning">This is the main directory of your project</span>)</label>
 			<label id="path_prefix">Folder prefix: "<?=$_SESSION['user']?>-"</label>
 			<input name="project_path" autofocus="off" autocomplete="off">
 			
             <?php } else { ?>
             <input type="hidden" name="project_path">
-            <?php } 
+            <?php }
+			 */ 
 			/*
 			?>
             

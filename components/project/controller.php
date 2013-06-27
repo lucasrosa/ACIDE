@@ -67,12 +67,15 @@
             $Project->name = $_GET['project_name'];
 			$Project->privacy = $_GET['project_privacy'];
 			$Project->course = $_GET['project_course'];
+			$Project->path = $_GET['project_name'];
 			
+			/*
             if($_GET['project_path'] != '') {
                 $Project->path = $_GET['project_path'];
             } else {
                 $Project->path = $_GET['project_name'];
             }
+			*/
 			/*
             // Git Clone?
             if(!empty($_GET['git_repo'])){

@@ -418,6 +418,7 @@
 							<table width="100%">
 								<tbody>
 									<?
+									/*
 									if (!$editing_assignment) {
 									?>
 									<tr>
@@ -426,10 +427,13 @@
 									</tr>
 									<?
 									} else {
+									 * 
+									 */
 									?>
 										<input type="hidden" name="id" value="<?=$Assignment['id']?>" />
 									<?
-									}
+									//}
+									 
 									?>
 									<tr>
 										<th>Assignment name (Project's name)</th>

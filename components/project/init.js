@@ -135,22 +135,20 @@
                 e.preventDefault();
                 var projectName = $('#modal-content form input[name="project_name"]')
                     .val(),
-                    projectPath = $('#modal-content form input[name="project_path"]')
-                    .val(),
+                    //projectPath = $('#modal-content form input[name="project_path"]').val(),
                     projectPrivacy = $('#modal-content form select[name="project_privacy"]')
                     .val(),
-                    gitRepo = $('#modal-content form input[name="git_repo"]')
-                    .val(),
-                    gitBranch = $('#modal-content form input[name="git_branch"]')
-                    .val(),
+                    //gitRepo = $('#modal-content form input[name="git_repo"]').val(),
+                    //gitBranch = $('#modal-content form input[name="git_branch"]').val(),
                     projectCourse = $('#modal-content form select[name="project_course"]')
                     .val();
-                    
+                    /*
                     if(projectPath.indexOf('/') == 0) {
                         create = confirm('Do you really want to create project with absolute path "' + projectPath + '"?');
                     }
+                    */
                 if(create) {    
-                    $.get(_this.controller + '?action=create&project_name=' + projectName + '&project_path=' + projectPath + '&project_privacy=' + projectPrivacy + '&git_repo=' + gitRepo + '&git_branch=' + gitBranch + '&project_course=' + projectCourse, function(data) {
+                    $.get(_this.controller + '?action=create&project_name=' + projectName /*+ '&project_path=' + projectPath  */+ '&project_privacy=' + projectPrivacy /* + '&git_repo=' + gitRepo + '&git_branch=' + gitBranch */ + '&project_course=' + projectCourse, function(data) {
                         createResponse = codiad.jsend.parse(data);
                         if (createResponse != 'error') {
                             _this.open(createResponse.path);
