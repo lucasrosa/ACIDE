@@ -292,9 +292,11 @@
 					for ($i = 0; $i < count($courses); $i++) {
 						$Course->id = $courses[$i];
 						$Course->Load();
-				?>
-			 		<option value="<?=$Course->id?>"><?=$Course->code . " - " .$Course->name?></option>
-			  	<?
+						if ($Course->name != '') {
+						?>
+					 		<option value="<?=$Course->id?>"><?=$Course->code . " - " .$Course->name?></option>
+					  	<?
+						}
 					}
 			  	?>
 			  <!-- There is not need to shared projects here because a project turns to shared when new users are added -->
@@ -307,7 +309,9 @@
 			
             <?php } else { ?>
             <input type="hidden" name="project_path">
-            <?php }  ?>
+            <?php } 
+			/*
+			?>
             
             <!-- Clone From GitHub -->
             <div style="width: 500px;">
@@ -328,13 +332,21 @@
                 </tr>
             </table>
             </div>
-            <!-- /Clone From GitHub --><?php
+            <!-- /Clone From GitHub -->
+            <?php
+            */
                 $action = 'codiad.project.list();';
                 if($_GET['close'] == 'true') {
                     $action = 'codiad.modal.unload();';
                 } 
             ?>           
-            <button class="btn-left">Create Project</button><button onclick="$('#git-clone').slideDown(300); $(this).hide(); return false;" class="btn-mid">...From Git Repo</button><button class="btn-right" onclick="<?php echo $action;?>return false;">Cancel</button>
+            <button class="btn-left">Create Project</button><button class="btn-right" onclick="<?php echo $action;?>return false;">Cancel</button>
+            <?
+            /*
+            <button onclick="$('#git-clone').slideDown(300); $(this).hide(); return false;" class="btn-mid">...From Git Repo</button>
+            */
+            ?>
+            
             <form>
             <?php
             break;

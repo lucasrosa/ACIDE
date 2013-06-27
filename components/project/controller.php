@@ -73,12 +73,13 @@
             } else {
                 $Project->path = $_GET['project_name'];
             }
+			/*
             // Git Clone?
             if(!empty($_GET['git_repo'])){
                 $Project->gitrepo = $_GET['git_repo'];
                 $Project->gitbranch = $_GET['git_branch'];
             }
-			
+			*/
 			// LF: Define the name of the path
 			if($_GET['project_privacy'] == 'private') {
 				$Project->path = $_SESSION['user'] . "-" . $Project->path;
