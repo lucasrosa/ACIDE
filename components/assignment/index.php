@@ -203,6 +203,11 @@
 							$success = "Assignment created with success!";
 						} else {
 							$error = $creation_result;
+							$url = $Project->assignment['description_url'];
+							// Deleting the description file
+							$tokens = explode('/', $url);
+							$description_file_name = $tokens[sizeof($tokens)-1];
+							unlink("../../data/assignments/" . $description_file_name);
 						}
 					}
 					
