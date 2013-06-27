@@ -93,14 +93,22 @@
 			} else if (($_POST['action'] == 'create_new_assignment') || ($_POST['action'] == 'save_edited_assignment')) {
 				
 			
-				$Assignment["id"] = $_POST['id'];
-				$Assignment["visibility"] = "true";
-				if ($Assignment["id"] == "") 
-					$error .= "The field ID/Folder cannot be blank. <br />";
+				//$Assignment["id"] = $_POST['id'];
+				//if ($Assignment["id"] == "") 
+				//	$error .= "The field ID/Folder cannot be blank. <br />";
 				
 				$Assignment["name"] = $_POST['project_name'];
 				if ($Assignment["name"] == "") 
-					$error .= "The field Assignment / Project Name cannot be blank. <br />";	
+					$error .= "The field Assignment / Project Name cannot be blank. <br />";
+					
+				if ($_POST['action'] == 'create_new_assignment') {
+					$Assignment["id"] = str_replace(" ","_",$_POST['project_name']);
+        			$Assignment["id"] = preg_replace('/[^\w-]/', '', $Assignment["id"]);	
+				} else {
+					$Assignment["id"] = $_POST['project_name'];
+				}
+				
+				$Assignment["visibility"] = "true";	
 				
 				if ($_POST['due_date'] == "") 
 					$error .= "The field Date cannot be blank. <br />";
@@ -172,12 +180,16 @@
 				}
 				
 				if ($_POST['action'] == 'create_new_assignment') {
-					$Project->path = $_POST['id'];
+					$Assignment["id"] = str_replace(" ","_",$_POST['project_name']);
+	        		$Assignment["id"] = preg_replace('/[^\w-]/', '', $Assignment["id"]);					
+					//$Project->path = $_POST['id'];
+					$Project->path = $Assignment["id"]; 
 					$Project->name = $_POST['project_name'];
 					$Project->privacy = "private";
 					$Project->course = $_POST['course'];
 					
-					$Assignment["id"] = $Project->path;
+					//$Assignment["id"] = $Project->path;
+					
 					$Assignment["owner"] = $_SESSION["user"];
 					
 					// If there is no errors until now, the operation continues
@@ -231,7 +243,9 @@
 			$Assignment['due_date_date'] = '';
 			$Assignment['due_date_time'] = '';
 		} else  if (!$editing_assignment || $error_editing_assignment){
-			$Assignment['id'] = $_POST['id'];
+			//$Assignment['id'] = $_POST['id'];
+			$Assignment["id"] = str_replace(" ","_",$_POST['project_name']);
+	       	$Assignment["id"] = preg_replace('/[^\w-]/', '', $Assignment["id"]);
 			$Assignment['name'] = $_POST['project_name'];
 			$Assignment['course'] = $_POST['course'];
 			$Assignment['due_date_date'] = $_POST['due_date'];
