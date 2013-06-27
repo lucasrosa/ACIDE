@@ -106,6 +106,8 @@
         			$Assignment["id"] = preg_replace('/[^\w-]/', '', $Assignment["id"]);	
 				} else {
 					$Assignment["id"] = $_POST['id'];
+					$Assignment = $Project->GetAssignmentWithId($_POST['id']);
+					$Assignment["name"] = $_POST['project_name'];
 				}
 				
 				$Assignment["visibility"] = "true";	
@@ -206,7 +208,7 @@
 					
 				} else if ($_POST['action'] == 'save_edited_assignment') {
 					if ($error == '') {
-						$Assignment['course'] = $_POST['course'];
+						//$Assignment['course'] = $_POST['course'];
 						if ($Project->SaveAssignment($Assignment)) {
 							$success = "Assignment updated with success!";
 						} else {
@@ -457,6 +459,11 @@
 										<th>Assignment name (Project's name)</th>
 										<td><input type="text" name="project_name" value="<?=$Assignment['name']?>" /></td>
 									</tr>
+									<?
+									
+									if (!$editing_assignment) {
+									?>
+									<tr
 									<tr>
 										<th>Course</th>
 										<td>
@@ -475,6 +482,9 @@
 											</select>
 										</td>
 									</tr>
+									<?
+									}
+									?>
 									<tr>
 										<th>Due Date</th>
 										<td>
@@ -539,8 +549,12 @@
 						</button>
 						<?	if ($editing_assignment) {
 								$pageURL = 'http';
-								if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
-									$pageURL .= "://";
+								if (@$_SERVER["HTTPS"] == "on") {
+									$pageURL .= "s";
+								}
+								
+								$pageURL .= "://";
+								
 								if ($_SERVER["SERVER_PORT"] != "80") {
 									 $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
 								} else {
