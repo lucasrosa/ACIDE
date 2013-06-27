@@ -1,4 +1,19 @@
 [
+	{
+        "title": "Update Check",
+        "icon": "icon-share",
+        "onclick": "codiad.update.check();"
+    },
+	{
+        "title": "Users",
+        "icon": "icon-users",
+        "onclick": "codiad.user.list();"
+    },
+	{
+        "title": "Plugins",
+        "icon": "icon-tag",
+        "onclick": "codiad.plugin_manager.list();"
+    },
     {
         "title": "Courses",
         "icon": "icon-book-open",

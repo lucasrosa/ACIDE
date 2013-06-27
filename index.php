@@ -342,13 +342,17 @@ if(!file_exists(DATA . '/plugins.php')) {
             <div class="sb-right-content">
 
                 <?php
-
+                
+				$Permission = new Permission($_SESSION['user']);
+				
                 ////////////////////////////////////////////////////////////
                 // Load Right Bar
                 ////////////////////////////////////////////////////////////
 
                 foreach($right_bar as $item_rb=>$data){
-
+					
+					$user_has_permission_to_access_menu = FALSE;
+					
                     if($data['title']=='break'){
                         echo("<hr>");
                     } else if ($data['title']=='plugins'){
@@ -367,9 +371,25 @@ if(!file_exists(DATA . '/plugins.php')) {
                                 }
                              }
                         }
+                    } else if (($data['title'] == 'Update Check') || ($data['title'] == 'Plugins')) {
+                    	if ($Permission->GetAdminPermission()) {
+                    		$user_has_permission_to_access_menu = TRUE;
+                    	}
+                    } else if ($data['title'] == 'Users') { 
+                    	if($Permission->GetPermissionToEditUsers()) {
+                    		$user_has_permission_to_access_menu = TRUE;	
+                    	}						
+                    } else if ($data['title'] == 'Courses') {
+                    	if ($Permission->GetPermissionToEditCourses()) {
+                    		$user_has_permission_to_access_menu = TRUE;
+                    	}
                     } else {
-                        echo('<a onclick="'.$data['onclick'].'"><span class="'.$data['icon'].' bigger-icon"></span>'.get_i18n($data['title']).'</a>');
+                    	$user_has_permission_to_access_menu = TRUE;
                     }
+					
+					if ($user_has_permission_to_access_menu) {
+						echo('<a onclick="'.$data['onclick'].'"><span class="'.$data['icon'].' bigger-icon"></span>'.get_i18n($data['title']).'</a>');
+					}
 
                 }
 
@@ -414,8 +434,10 @@ if(!file_exists(DATA . '/plugins.php')) {
 		
 		// LF: PHP
 		require_once('components/assignment/interface_insertion.php');
-		require_once('components/permission/interface_insertion.php');
-		require_once('components/user/importusers/interface_insertion.php');
+		
+		// Deprecated
+		//require_once('components/permission/interface_insertion.php');
+		//require_once('components/user/importusers/interface_insertion.php');
 		
 		
     }
