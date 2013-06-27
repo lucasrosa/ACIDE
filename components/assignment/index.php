@@ -105,7 +105,7 @@
 					$Assignment["id"] = str_replace(" ","_",$_POST['project_name']);
         			$Assignment["id"] = preg_replace('/[^\w-]/', '', $Assignment["id"]);	
 				} else {
-					$Assignment["id"] = $_POST['project_name'];
+					$Assignment["id"] = $_POST['id'];
 				}
 				
 				$Assignment["visibility"] = "true";	
