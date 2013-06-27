@@ -109,7 +109,7 @@ if(!file_exists(DATA . '/plugins.php')) {
     </script>
 </head>
 
-<body>
+<body  oncontextmenu="return false">
     <script>
     var i18n = (function(lang) {
         return function(word) {

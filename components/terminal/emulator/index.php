@@ -25,7 +25,7 @@ checkSession();
     <link rel="stylesheet" href="css/screen.css">
 </head>
 
-<body>
+<body  oncontextmenu="return false">
 
     
     <div id="terminal">
