@@ -6,7 +6,8 @@
 */
 
 /* RESET */
-
+	#terminal
+	
     html, body, div, span, applet, object, iframe,
     h1, h2, h3, h4, h5, h6, p, blockquote, pre,
     abbr, acronym, address, big, cite, code,
@@ -30,7 +31,9 @@
     ins{text-decoration:none;}
     del{text-decoration:line-through;}
     table{border-collapse:collapse;border-spacing:0;}
-    
+   
+  	
+  	
     * { box-sizing: border-box; }
     
 /* WEBKIT SCROLLBARS */
@@ -96,6 +99,9 @@
     }
         .command { font-weight: bold; color: #8a8af2; }
         .data { padding: 0 15px; }
+    #terminal div, pre { background-color: #303030; box-shadow: none; }
+    
+    #terminal div, pre {margin:0;padding:0;border:0;outline:0;font-size:100%;font:inherit;vertical-align:baseline;}
 	/*
     #command, #command input { display: block; position: relative; background: #1a1a1a; color: #fff; border: none; font-family: monospace; width: 100%; }
         #command input { padding-left: 15px; }
@@ -106,7 +112,7 @@
         #command input { padding-left: 15px; }
         #command #prompt { position: absolute; z-index: 9999; font-weight: bold; }
     
-    #command input:focus { outline: none; }
+    /*#command input:focus { outline: none; } */
 	
 	.prompt_text_class { 
 		color: #fff; 

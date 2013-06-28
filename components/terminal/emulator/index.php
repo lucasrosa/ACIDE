@@ -102,6 +102,7 @@
 	                    break;
 	                default:
 	                    terminal.display_output(command,data);
+	                    $('#prompt_text').focus();
 	            }
 	        });
 	    },
@@ -112,7 +113,9 @@
 	    
 	    display_output : function(command,data){
 	        terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">'+data+'</pre>');
-	        terminal.screen.scrollTop(terminal.output.height());    
+	        terminal.screen.scrollTop(terminal.output.height());
+	        // LF
+	        document.getElementById('prompt_text').scrollIntoView(true);
 	    },
 	    
 	    clear : function(){
