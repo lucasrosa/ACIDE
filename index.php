@@ -451,7 +451,7 @@ if(!file_exists(DATA . '/plugins.php')) {
                 actSession.setMode(newMode);
                 */
     </script>
-    <script>
+    <script src="components/userlog/log_script.js">
     /*
 	if (document.hasFocus)
            setInterval ("CheckFocus()", 200);
@@ -467,24 +467,37 @@ if(!file_exists(DATA . '/plugins.php')) {
         }
     }
     */
+	/*
+	var hasFocus = true;
 	
 	(function(global, $){
-
     	var codiad = global.codiad;
-    	if (document.hasFocus)
-			setInterval ("codiad.userlog.logUserHasFocusOnTheSystem()", 200);
-		else
-			console.log("Your browser does not support the hasFocus method");
+    	
+    	codiad.userlog.logUserHasFocusOnTheSystem();
+    	
+		setInterval ("CheckFocus()", 5000);
+		
+		window.onfocus = function() {
+	    	hasFocus = true;
+	    };
+	
+		window.onblur = function() {
+			hasFocus = false;
+		};
 		
     })(this, jQuery);
     
 	function CheckFocus () {
-		if (document.hasFocus ()) {
+		
+		if (hasFocus) {
 			console.log("The document has the focus.");
+			codiad.userlog.logUserHasFocusOnTheSystem();
 		} else {
 			console.log("The document doesn't have the focus.");
 	    }
+	    
 	}
+	*/
     </script>
 </body>
 </html>

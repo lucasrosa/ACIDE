@@ -23,6 +23,7 @@ checkSession();
     <meta charset="utf-8">
     <title>Terminal</title>
     <link rel="stylesheet" href="css/screen.css">
+    
 </head>
 
 <body  oncontextmenu="return false">
