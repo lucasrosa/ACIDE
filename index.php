@@ -291,7 +291,8 @@ if(!file_exists(DATA . '/plugins.php')) {
 						<span style='padding-left:10px;'>Terminal</span>
 					</div>
 					<div style='width:100%; height:87%;'>
-						<iframe id='terminal' width='100%' height='100%' src='components/terminal/emulator/index.php?id=kd9kdi8nundj' style='height: 100%;'></iframe>
+						<!-- <iframe id='terminal' width='100%' height='100%' src='components/terminal/emulator/index.php?id=kd9kdi8nundj' style='height: 100%;'></iframe> -->
+						<div id='terminal' width='100%' height='100%' style='height: 100%;'><? include "components/terminal/emulator/index.php"; ?></div>
 					</div>
 				</div>
 				
