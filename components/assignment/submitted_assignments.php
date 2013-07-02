@@ -22,6 +22,14 @@
 		$Project = new Project();
 		$assignmentName = $Project->GetAssignmentName($_POST['id']);
 		$projects = $Project->GetProjectsForAssignment($_POST['id']);
+		
+		$directory =  dirname($_SERVER['SCRIPT_NAME']);
+		$directories = explode('/', $directory);
+		if ($directories[1] != "") {
+			$root_directory = "/" . $directories[1];
+		}
+		
+		$download_all_assignments_url = $root_directory . "/components/assignment/download_all_assignments.php";
 ?>
 <!doctype html>
 
@@ -40,7 +48,18 @@
 	
 	<div id="modal" style="display: block; width: 800px; margin:0 auto;" >
 		<div id="modal-content">
-			<label style="padding-bottom: 25px;">Projects submitted to assignment <?=$assignmentName?>.</label>
+			<div style="padding-bottom: 25px;">
+				<div style="display: inline-block;" align="left">
+					<label style="padding-top: 10px;">Projects submitted to assignment <?=$assignmentName?>.</label>
+				</div>
+				<div style="display: inline-block; float: right;" align="right">
+					<form method="post" name="download_all_assignments_form" action="<?=$download_all_assignments_url ?>">
+						<input type="hidden" name="action" value="download_all_assignments" />
+						<input type="hidden" name="id" value="<?=$_POST['id']?>" />
+						<button>Download all assignments</button>
+					</form>
+				</div>
+			</div>
 			<div id="project-list">
 				<table width="100%">
 					<tbody>
