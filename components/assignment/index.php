@@ -399,7 +399,7 @@
 								<? } ?>
 								<td>
 									<div align="center">
-										<form method="post" name="delete_assignment_form">
+										<form method="post" name="delete_assignment_form" onsubmit="return confirm('Are you sure you want to delete this assignment?')">
 											<input type="hidden" name="action" value="delete_assignment" />
 											<input type="hidden" name="id" value="<?=$assignments[$k]['id']?>" />
 											<button class="icon-cancel icon"></button>
