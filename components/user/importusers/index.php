@@ -62,8 +62,8 @@
 						
 						// If no type was defined, the type is defined as "student"
 						if (isset($users[$i][3])) {
-							if (strlen($users[$i][3]) > 0 && (($users[$i][3] == $Permission->user_types[2]) || ($users[$i][3] == $Permission->user_types[3]))) {
-								$User->type = $users[$i][3];
+							if (strlen($users[$i][3]) > 0 && ((strtolower($users[$i][3]) == $Permission->user_types[2]) || (strtolower($users[$i][3]) == $Permission->user_types[3]))) {
+								$User->type = strtolower($users[$i][3]);
 							} else {
 								$User->type = $Permission->user_types[3];
 							}
@@ -116,6 +116,16 @@
 		$Course = new Course();
 		$courses = $Course->GetAllCourses();
 		
+		// Get the url to the user import example .csv
+		
+		$directory =  dirname($_SERVER['SCRIPT_NAME']);
+		$directories = explode('/', $directory);
+		if ($directories[1] != "") {
+			$root_directory = "/" . $directories[1];
+		}
+		
+		$url = $root_directory . "/components/user/importusers/UserImportWithHeader.csv";
+		
 	?>
 	<!doctype html>
 	
@@ -137,7 +147,45 @@
 		
 		<div id="modal" style="display: block; width: 800px; margin:0 auto;" >
 			<div id="modal-content">
-				<label style="padding-bottom: 25px;">Import users to the system</label>
+				<h2 style="padding-bottom: 15px;">Import users to the system</h2>
+				<div>
+					<div>
+						<label style="padding-bottom:15px;">Example:</label>
+						<table>
+							<tr>
+								<th>username</th>
+								<th>email</th>
+								<th>password</th>
+								<th>type</th>
+							</tr>
+							<tr>
+								<td>markus</td>
+								<td>markus@upei.ca</td>
+								<td>q895fgfdg</td>	
+								<td>student</td>
+							</tr>
+							<tr>
+								<td>lionel</td>
+								<td>lionel@upei.ca</td>
+								<td>5c2n043x34</td>
+								<td>student</td>
+							</tr>
+							<tr>
+								<td>jones</td>
+								<td>jones@upei.ca</td>
+								<td>4m2353iu45</td>
+								<td>student</td>
+							</tr>
+							<tr>
+								<td>gilbert</td>
+								<td>gilbert@upei.ca</td>
+								<td>ou18d55cdasd</td>
+								<td>marker</td>
+							</tr>
+						</table>
+						<label style="padding-top: 10px; padding-bottom: 25px;">Download an example file <a href="<?=$url?>">here</a>.</label>
+					</div>
+				</div>
 				<div id="project-list">
 					<form method="post" name="import_users_form" enctype="multipart/form-data">
 						<input type="hidden" name="action" value="import_users" />
