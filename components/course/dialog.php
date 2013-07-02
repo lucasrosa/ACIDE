@@ -186,6 +186,7 @@
                     <th>Course Name</th>
                     <th>Students</th>
                     <th>Markers</th>
+                    <th>Professors</th>
                     <?php if(TRUE){ ?><th width="5">Delete</th><?php } ?>
                 </tr>
             <?php
@@ -201,6 +202,7 @@
                     <td><?php echo($course['name']); ?></td>
                     <td><a onclick="codiad.course.manage_users('<?=$course['_id']?>', 'student');" class="icon-users bigger-icon"></a></td>
                     <td><a onclick="codiad.course.manage_users('<?=$course['_id']?>', 'marker');" class="icon-users bigger-icon"></a></td>
+                    <td><a onclick="codiad.course.manage_users('<?=$course['_id']?>', 'professor');" class="icon-users bigger-icon"></a></td>
                     <td><a onclick="codiad.course.delete('<?=($course['_id']); ?>');" class="icon-cancel-circled bigger-icon"></a></td>
                 </tr>
                 <?php
