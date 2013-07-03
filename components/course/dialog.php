@@ -301,7 +301,19 @@
         <form id="group_users_form">
         <input type="hidden" name="course_id" value="<?=($_GET['id']); ?>">
         <input type="hidden" name="type" value="<?=$type; ?>">
-        <label><span class="icon-users"></span>Manage <? if ($type == 'student') echo 'Students'; else echo 'Markers'; ?>:</label>
+        <label style="padding-bottom: 15px;">
+        	<span class="icon-users"></span>
+        	Manage 
+        	<? 	if ($type == 'student') 
+        			echo 'Students'; 
+        		else if ($type == 'marker')
+        			echo 'Markers';
+				else if ($type == 'professor')
+					echo 'Professors';
+        	?>
+        	:
+        	
+        </label>
 	        <table width="100%">
 	                <tr>
 	                    <th>Username</th>

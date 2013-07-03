@@ -398,6 +398,29 @@ class User {
 		$this->project 	= $user['project'];
 		$this->projects = $user['projects'];
 		
+		if (isset($user['courses'])) {
+			$this->courses = $user['courses'];	
+		}
 		return TRUE;
+	}
+	
+	public function GetUsersForProfessor($professor) {
+		
+		// Load this professor
+		$Professor = new User();
+		$Professor->username = $professor;
+		$Professor->Load();
+		
+		$users = $this->users;
+		$returning_users = array();
+		foreach ($users as $user) {
+			if (isset($user['courses'])) {
+				if (count(array_intersect($user['courses'], $Professor->courses)) > 0) {
+					$returning_users[] = $user;
+				}
+			}
+		}
+		
+		return $returning_users;		
 	}
 }
