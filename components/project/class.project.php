@@ -700,6 +700,47 @@ class Project extends Common {
 	}
 	
 	//////////////////////////////////////////////////////////////////
+    // LF: Returns all the assignments for a certain user
+    //////////////////////////////////////////////////////////////////
+	
+	public function GetAssignmentsInTheSameCoursesOfUser($current_user) {
+		
+		// Load this user
+		$CurrentUser = new User();
+		$CurrentUser->username = $current_user;
+		$CurrentUser->Load();
+		
+		$assignments = array();
+		
+		$collection = $this->database->users;
+		
+		$users = $collection->find();
+		foreach ($users as $user) {
+			if (isset($user["projects"][0])) {
+				for ($i = 0; $i < count($user["projects"]); $i++) {
+					if (isset($user["projects"][$i]) && isset($user["projects"][$i]["assignment"]["owner"])) {	
+						$assignment_added = FALSE;
+						if (in_array($user["projects"][$i]['course'], $CurrentUser->courses)) {
+							for ($k = 0; $k < count($assignments); $k++) {
+								if ($user["projects"][$i]["assignment"]["id"] == $assignments[$k]["id"]) {
+									$assignment_added = TRUE;
+								}
+							}
+							// If the assignment isn't added yet, add it
+							if (!$assignment_added) {
+								$user["projects"][$i]["assignment"]["course"] = $user["projects"][$i]["course"];
+								array_push($assignments, $user["projects"][$i]["assignment"]);												
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return $assignments;	
+	}	
+	
+	//////////////////////////////////////////////////////////////////
     // LF: Returns all the projects for a certain assignment
     //////////////////////////////////////////////////////////////////
 	

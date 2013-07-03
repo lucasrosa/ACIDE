@@ -339,7 +339,9 @@
 						    // LF: List all assignments which this user is the owner
 						    //////////////////////////////////////////////////////////////////
 						    $Project = new Project();
-						    $assignments = $Project->GetAssignments();
+						    //$assignments = $Project->GetAssignments();
+						    $current_user = $_SESSION['user'];
+						    $assignments = $Project->GetAssignmentsInTheSameCoursesOfUser($current_user); 
 							$Course = new Course();
 							
 							for ($k = 0; $k < count($assignments); $k++) {

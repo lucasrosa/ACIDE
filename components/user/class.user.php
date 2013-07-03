@@ -406,7 +406,7 @@ class User {
 	
 	public function GetUsersInTheSameCoursesOfUser($current_user) {
 		
-		// Load this professor
+		// Load this user
 		$CurrentUser = new User();
 		$CurrentUser->username = $current_user;
 		$CurrentUser->Load();
