@@ -404,18 +404,18 @@ class User {
 		return TRUE;
 	}
 	
-	public function GetUsersForProfessor($professor) {
+	public function GetUsersInTheSameCoursesOfUser($current_user) {
 		
 		// Load this professor
-		$Professor = new User();
-		$Professor->username = $professor;
-		$Professor->Load();
+		$CurrentUser = new User();
+		$CurrentUser->username = $current_user;
+		$CurrentUser->Load();
 		
 		$users = $this->users;
 		$returning_users = array();
 		foreach ($users as $user) {
 			if (isset($user['courses'])) {
-				if (count(array_intersect($user['courses'], $Professor->courses)) > 0) {
+				if (count(array_intersect($user['courses'], $CurrentUser->courses)) > 0) {
 					$returning_users[] = $user;
 				}
 			}

@@ -322,8 +322,10 @@
 			      <?php 
 			        	
 			        	$User = new User();
-						$users = $User->users;
-						
+						//$users = $User->users;
+						// Get the users based on the intersectiom between the professor's courses and the user's courses
+						$current_user = $_SESSION['user'];
+						$users = $User->GetUsersInTheSameCoursesOfUser($current_user);
 						foreach($users as $user) {
 							$username = $user['username'];
 							if ($user['type'] == $type) {

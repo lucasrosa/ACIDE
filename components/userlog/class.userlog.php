@@ -28,14 +28,17 @@ class Userlog {
 	// Identify if the session is open
 	public $is_session_open			= '';
 	// Session timeout
-	private $session_timeout		= 10;
+	private $session_timeout		= 0;
     //////////////////////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////////////////////
 
     // -----------------------------||----------------------------- //
 
-
+	public function __construct(){
+        $session_timeout = 10;
+    }
+	
     //////////////////////////////////////////////////////////////////
     // Save
     //////////////////////////////////////////////////////////////////
@@ -86,7 +89,7 @@ class Userlog {
 			$time_difference =  $this->DateMinuteDifference ($now, $last_update_timestamp);
 			//error_log("1 Difference is : ". $this->DateMinuteDifference ($now, $last_update_timestamp) . " minutes.");
 			
-			if ($time_difference >= $session_timeout) {
+			if ($time_difference >= $this->session_timeout) {
 				$log['last_update_timestamp'] 	= date("Y-m-d H:i:s");
 				$log['end_timestamp'] 			= date("Y-m-d H:i:s");
 				

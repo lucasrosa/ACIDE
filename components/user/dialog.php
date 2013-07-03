@@ -59,6 +59,7 @@
                 </tr>
             <?php
         
+        	/*
             // Get projects JSON data
             //$users = getJSON('users.php');
             // Load the users from the database and verifies if one of them is this one
@@ -70,6 +71,13 @@
 			$collection = $database->users;
 			// Get all the users in the database
 			$users = $collection->find();
+			*/
+			
+			// Load users in the same class
+			$User = new User();
+			$current_user = $_SESSION['user'];
+			$users = $User->GetUsersInTheSameCoursesOfUser($current_user);
+						
             foreach($users as $user=>$data){        
             ?>
             <tr>
