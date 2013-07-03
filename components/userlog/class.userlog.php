@@ -28,16 +28,13 @@ class Userlog {
 	// Identify if the session is open
 	public $is_session_open			= '';
 	// Session timeout
-	private $session_timeout		= 0;
+	private $session_timeout		= 10; // minutes
+	
     //////////////////////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////////////////////
 
     // -----------------------------||----------------------------- //
-
-	public function __construct(){
-        $session_timeout = 10;
-    }
 	
     //////////////////////////////////////////////////////////////////
     // Save
@@ -83,16 +80,16 @@ class Userlog {
 			
 		$log = $collection->findOne(array("username" => $this->username, "is_session_open" => 'TRUE'));
 		if (isset($log['username'])) {
-			// TODO close session if 10 minutes passed since last update
 			$now = strtotime(date("Y-m-d H:i:s"));
 			$last_update_timestamp = strtotime($log['last_update_timestamp']);
 			$time_difference =  $this->DateMinuteDifference ($now, $last_update_timestamp);
 			//error_log("1 Difference is : ". $this->DateMinuteDifference ($now, $last_update_timestamp) . " minutes.");
+			//error_log("this->session_timeout : " . $this->session_timeout);
 			
 			if ($time_difference >= $this->session_timeout) {
-				$log['last_update_timestamp'] 	= date("Y-m-d H:i:s");
-				$log['end_timestamp'] 			= date("Y-m-d H:i:s");
-				
+				//$log['last_update_timestamp'] 	= date("Y-m-d H:i:s");
+				//$log['end_timestamp'] 			= date("Y-m-d H:i:s");
+				//$log['end_timestamp'] = date("Y-m-d H:i:s", strtotime('+' . $this->session_timeout . ' minutes', strtotime($log['last_update_timestamp'])));
 				$log['is_session_open']			= 'FALSE';
 				
 				// Overwrite the log in the database:

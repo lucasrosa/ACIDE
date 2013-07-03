@@ -1,11 +1,12 @@
 var hasFocus = true;
-	
+var checkFocusInterval = 5; // seconds
+
 (function(global, $){
 	var codiad = global.codiad;
 	
 	codiad.userlog.logUserHasFocusOnTheSystem();
 	
-	setInterval ("CheckFocus()", 100);
+	setInterval ("CheckFocus()", (checkFocusInterval * 1000));
 	
 	window.onfocus = function() {
     	hasFocus = true;
