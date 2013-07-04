@@ -394,7 +394,16 @@
                 moveToTabList = true;
             }
             
-            /*
+            this.highlightEntry(path, moveToTabList);
+            
+            if(path != this.getPath()) {
+                codiad.editor.setSession(this.sessions[path]);
+                this.check(path);
+                this.history.push(path);
+                $.get(this.controller, {'action':'focused', 'path':path});
+            }
+			
+			/*
              * LF : Changing the mode of the editor for this file extension {
              */
             var extension = path.split(".").pop();
@@ -412,15 +421,7 @@
             /*
              * }
              */
-            this.highlightEntry(path, moveToTabList);
             
-            if(path != this.getPath()) {
-                codiad.editor.setSession(this.sessions[path]);
-                this.check(path);
-                this.history.push(path);
-                $.get(this.controller, {'action':'focused', 'path':path});
-            }
-
             /* Notify listeners. */
             amplify.publish('active.onFocus', path);
         },

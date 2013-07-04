@@ -284,6 +284,9 @@ if(!file_exists(DATA . '/plugins.php')) {
             </div>
             <div id="root-editor-wrapper"></div>
             <div id="editor-bottom-bar">
+            	<div class="ui-draggable" style="bottom: 356px;">
+            		<span>--</span>
+            	</div>
 				<!-- Terminal -->
 				<div id='terminal_container' style='height:90%'>
 					<div style='font-size: 15px;'>
