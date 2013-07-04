@@ -58,4 +58,6 @@
 		$("#terminal-open-button").toggle();
 		
 		$('.editor').attr('id', 'editor');
+		
+		 //$("#user-workstation").splitter({type: 'h'});	
 	});

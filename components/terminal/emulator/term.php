@@ -232,7 +232,20 @@
         // Split &&
         $Terminal = new Terminal();
         $output = '';
+		
+		if ($command == "change_directory") {
+			/*$Terminal->directory = ROOT . $_POST['target_path'];
+			error_log("TARGET PATHY :"  . ROOT);
+			error_log("TARGET PATHE = " . $_POST['target_path']);
+			error_log("TARGET PATH = " . $Terminal->directory);
+			 * 
+			 */
+			$Terminal->directory = ROOT;
+			$Terminal->ChangeDirectory();
+		}
+		
         $command = explode("&&", $command);
+		
         foreach($command as $c){
             $Terminal->command = $c;
             $output .= $Terminal->Process();

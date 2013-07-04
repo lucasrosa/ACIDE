@@ -32,6 +32,7 @@
 	    command : $('#command input'),
 	    screen : $('#terminal'),
 	    output : $('#terminal>#output'),
+	    target_path : '',
 	    
 	    // Command History
 	    command_history : [],
@@ -104,6 +105,40 @@
 	                    terminal.display_output(command,data);
 	                    $('#prompt_text').focus();
 	            }
+	        });
+	    },
+	    
+	    change_directory : function(path){
+	    	var this_path = path;
+	    	console.log("changing directory to '" + this_path + "'");
+	        $.post(terminal.controller,{command:'change_directory', target_path: this_path},function(data){
+	            /*
+	            terminal.command.val('').focus();
+	            switch(data){
+	                case '[CLEAR]':
+	                    terminal.clear();
+	                    break;
+	                case '[CLOSED]':
+	                    terminal.clear();
+	                    terminal.process_command();
+	                    window.parent.codiad.modal.unload();
+	                    break;
+	                case '[AUTHENTICATED]':
+	                    terminal.command_history = [];
+	                    terminal.command_counter = -1;
+	                    terminal.history_counter = -1;
+	                    terminal.clear();
+	                    break;
+	                case 'Enter Password:':
+	                    terminal.clear();
+	                    terminal.display_output('Authentication Required',data);
+	                    terminal.command.css({'color':'#333'});
+	                    break;
+	                default:
+	                    terminal.display_output(command,data);
+	                    $('#prompt_text').focus();
+	            }
+	            */
 	        });
 	    },
 	    
