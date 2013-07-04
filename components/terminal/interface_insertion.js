@@ -10,6 +10,7 @@
 		
 		// LF: Decreasing the size of the editor
 		$("#root-editor-wrapper").attr('style', 'height:71% !important');
+		$("#root-editor-wrapper").attr('style', 'top:45px');
 		// LF: Increasing the size of the bottom bar
 		$("#editor-bottom-bar").css("height", "24%");
 		
