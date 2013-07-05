@@ -104,6 +104,7 @@
 			$allowed_commands[] = "ls";
 			$allowed_commands[] = "javac";
 			$allowed_commands[] = "java";
+			$allowed_commands[] = "cd";
 			
 			/* LF: 
 			 * Compare the array of allowed commands with the commands received from the terminal,
@@ -119,10 +120,29 @@
 	            if(in_array('cd',$command_parts)){
 	                $cd_key = array_search('cd', $command_parts);
 	                $cd_key++;
+					$previous_directory = $this->directory;
 	                $this->directory = $command_parts[$cd_key];
-	                $this->ChangeDirectory();
-	                // Remove from command
-	                $this->command = str_replace('cd '.$this->directory,'',$this->command);
+					
+					$cd_allowed = TRUE;
+					
+					// LF: Handle access
+					if ($this->directory[0] == '/') {
+						$cd_allowed = FALSE;
+					} else if (substr($this->directory, 0, 2) == '..') {
+						$previous_directory = explode('/', $previous_directory);
+						if ($previous_directory[count($previous_directory) -2] == "workspace") {
+							$cd_allowed = FALSE;
+						}
+					} 
+					
+					if ($cd_allowed) {
+						$this->ChangeDirectory();
+		                // Remove from command
+		                $this->command = str_replace('cd '.$this->directory,'',$this->command);	
+					} else {
+						$this->command = 'echo ERROR: Command not allowed';
+						$this->command_exec = $this->command . ' 2>&1';
+					}
 	            }
             
 	            // Replace text editors with cat
