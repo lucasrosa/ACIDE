@@ -240,6 +240,7 @@
 			error_log("TARGET PATH = " . $Terminal->directory);
 			 * 
 			 */
+			//$output .= "Directory changed to '" . $_POST['target_name'] . "' project root directory.";
 			$Terminal->directory = ROOT;
 			$Terminal->ChangeDirectory();
 		}

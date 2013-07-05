@@ -53,9 +53,7 @@
                     codiad.filemanager.index(projectInfo.path);
                     codiad.user.project(projectInfo.path);
                     codiad.message.success(i18n('Project ' + projectInfo.name + ' Loaded'));
-                    //console.log("LOADING: '" + projectInfo.path + "' :D ");
-                    console.log("terminal controller : " + terminal.controller);
-                    terminal.change_directory(projectInfo.path);
+                    terminal.change_directory(projectInfo.name);
                 }
             });
         },

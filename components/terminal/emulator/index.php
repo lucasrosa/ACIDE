@@ -32,7 +32,7 @@
 	    command : $('#command input'),
 	    screen : $('#terminal'),
 	    output : $('#terminal>#output'),
-	    target_path : '',
+	    target_name : '',
 	    
 	    // Command History
 	    command_history : [],
@@ -108,37 +108,10 @@
 	        });
 	    },
 	    
-	    change_directory : function(path){
-	    	var this_path = path;
-	    	console.log("changing directory to '" + this_path + "'");
-	        $.post(terminal.controller,{command:'change_directory', target_path: this_path},function(data){
-	            /*
-	            terminal.command.val('').focus();
-	            switch(data){
-	                case '[CLEAR]':
-	                    terminal.clear();
-	                    break;
-	                case '[CLOSED]':
-	                    terminal.clear();
-	                    terminal.process_command();
-	                    window.parent.codiad.modal.unload();
-	                    break;
-	                case '[AUTHENTICATED]':
-	                    terminal.command_history = [];
-	                    terminal.command_counter = -1;
-	                    terminal.history_counter = -1;
-	                    terminal.clear();
-	                    break;
-	                case 'Enter Password:':
-	                    terminal.clear();
-	                    terminal.display_output('Authentication Required',data);
-	                    terminal.command.css({'color':'#333'});
-	                    break;
-	                default:
-	                    terminal.display_output(command,data);
-	                    $('#prompt_text').focus();
-	            }
-	            */
+	    change_directory : function(name){
+	    	var this_name = name;
+	        $.post(terminal.controller,{command:'change_directory', target_name: this_name},function(data) {
+	            terminal.display_output("Directory changed to '" + this_name + "' project root directory.", null);
 	        });
 	    },
 	    
@@ -147,7 +120,12 @@
 	    },
 	    
 	    display_output : function(command,data){
-	        terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">'+data+'</pre>');
+	    	if (data != null) {
+	    		terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">'+data+'</pre>');	
+	    	} else {
+	    		terminal.output.append('<pre class="command">'+command+'</pre>');
+	    	}
+	        
 	        terminal.screen.scrollTop(terminal.output.height());
 	        // LF
 	        document.getElementById('prompt_text').scrollIntoView(true);
