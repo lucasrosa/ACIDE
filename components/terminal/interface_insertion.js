@@ -8,8 +8,7 @@
 	// LF: Modifying the interface to fit the terminal between the editor and the bottom bar
 	$(document).ready(function() {
 		
-		// LF: Decreasing the size of the editor
-		$("#root-editor-wrapper").attr('style', 'height:71% !important');
+		// Add a distance from the top of the window
 		$("#root-editor-wrapper").attr('style', 'top:45px');
 		// LF: Increasing the size of the bottom bar
 		$("#editor-bottom-bar").css("height", "24%");
@@ -21,7 +20,9 @@
 			// LF: Decreasing the size of the bottom bar
 			$("#editor-bottom-bar").css("height", "4%");
 			// LF: Increasing the size of the editor
-			$("#root-editor-wrapper").attr('style', 'height:91% !important');
+			$("#root-editor-wrapper").attr('style', 'height:91% !important; top:45px');
+			// Add a distance from the top of the window
+			//$("#root-editor-wrapper").attr('style', '');
 			// LF: Showing the Terminal open button and its divider
 			$("#terminal-open-button-divider").slideToggle("slow");
 			$("#terminal-open-button").slideToggle("slow");
@@ -38,7 +39,9 @@
 			// LF: Increasing the size of the bottom bar
 			$("#editor-bottom-bar").css("height", "24%");
 			// LF: Decreasing the size of the editor
-			$("#root-editor-wrapper").attr('style', 'height:71% !important');
+			$("#root-editor-wrapper").attr('style', 'height:71% !important; top:45px');
+			// Add a distance from the top of the window
+			//$("#root-editor-wrapper").attr('style', 'top:45px');
 			// LF: Hiding the Terminal open button and its divider
 			$("#terminal-open-button-divider").slideToggle("slow");
 			$("#terminal-open-button").slideToggle("slow");
@@ -59,5 +62,7 @@
 		
 		$('.editor').attr('id', 'editor');
 		
-		 //$("#user-workstation").splitter({type: 'h'});	
+		 //$("#user-workstation").splitter({type: 'h'});
+		 // LF: Decreasing the size of the editor
+		$("#root-editor-wrapper").attr('style', 'height:71% !important; top:45px');	
 	});

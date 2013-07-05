@@ -284,9 +284,6 @@ if(!file_exists(DATA . '/plugins.php')) {
             </div>
             <div id="root-editor-wrapper"></div>
             <div id="editor-bottom-bar">
-            	<div class="ui-draggable" style="bottom: 356px;">
-            		<span>--</span>
-            	</div>
 				<!-- Terminal -->
 				<div id='terminal_container' style='height:90%'>
 					<div style='font-size: 15px;'>
@@ -303,8 +300,10 @@ if(!file_exists(DATA . '/plugins.php')) {
                 <div id="terminal-open-button-divider" class="divider"></div>
                 <a id="terminal-open-button" class="ico-wrapper"><span class="icon-layout"></span>Terminal</a>
                 <div class="divider"></div>
+                <!--
                 <a id="split" class="ico-wrapper"><span class="icon-layout"></span>Split</a>
                 <div class="divider"></div>
+                -->
                 <a id="current-mode"><span class="icon-layout"></span>Text</a>
                 <div class="divider"></div>
                 <div id="current-file"></div>
