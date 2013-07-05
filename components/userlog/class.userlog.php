@@ -83,8 +83,6 @@ class Userlog {
 			$now = strtotime(date("Y-m-d H:i:s"));
 			$last_update_timestamp = strtotime($log['last_update_timestamp']);
 			$time_difference =  $this->DateMinuteDifference ($now, $last_update_timestamp);
-			//error_log("1 Difference is : ". $this->DateMinuteDifference ($now, $last_update_timestamp) . " minutes.");
-			//error_log("this->session_timeout : " . $this->session_timeout);
 			
 			if ($time_difference >= $this->session_timeout) {
 				//$log['last_update_timestamp'] 	= date("Y-m-d H:i:s");

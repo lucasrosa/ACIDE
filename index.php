@@ -421,87 +421,10 @@ if(!file_exists(DATA . '/plugins.php')) {
 		
 		// LF: PHP
 		require_once('components/assignment/interface_insertion.php');
-		
-		// Deprecated
-		//require_once('components/permission/interface_insertion.php');
-		//require_once('components/user/importusers/interface_insertion.php');
-		
-		
     }
 	
     ?>
     
-    <script id="testscript">
-    /*
-    $(document).ready(function() {
-    	$('.ace_line').focus(function() {
-		  console.log('ace_content focused');
-		});
-    });
-    */
-    /*
-   e.stopPropagation();
-                var newMode = "ace/mode/" + $(e.currentTarget).text();
-                console.log("new mode = " + newMode);
-                var actSession = _this.activeInstance.getSession();
-
-                // handle async mode change
-                var fn = function(){
-                   _this.setModeDisplay(actSession);
-                   actSession.removeListener('changeMode', fn);
-                }
-                actSession.on("changeMode", fn);
-
-                actSession.setMode(newMode);
-                */
-    </script>
-    <script src="components/userlog/log_script.js">
-    /*
-	if (document.hasFocus)
-           setInterval ("CheckFocus()", 200);
-        else
-           console.log("Your browser does not support the hasFocus method");
-
-	function CheckFocus () {
-        if (document.hasFocus ()) {
-            console.log("The document has the focus.");
-        }
-        else {
-            console.log("The document doesn't have the focus.");
-        }
-    }
-    */
-	/*
-	var hasFocus = true;
-	
-	(function(global, $){
-    	var codiad = global.codiad;
-    	
-    	codiad.userlog.logUserHasFocusOnTheSystem();
-    	
-		setInterval ("CheckFocus()", 5000);
-		
-		window.onfocus = function() {
-	    	hasFocus = true;
-	    };
-	
-		window.onblur = function() {
-			hasFocus = false;
-		};
-		
-    })(this, jQuery);
-    
-	function CheckFocus () {
-		
-		if (hasFocus) {
-			console.log("The document has the focus.");
-			codiad.userlog.logUserHasFocusOnTheSystem();
-		} else {
-			console.log("The document doesn't have the focus.");
-	    }
-	    
-	}
-	*/
-    </script>
+    <script src="components/userlog/log_script.js"></script>
 </body>
 </html>

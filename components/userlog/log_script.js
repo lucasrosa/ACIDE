@@ -21,10 +21,12 @@ var checkFocusInterval = 5; // seconds
 function CheckFocus () {
 	
 	if (hasFocus) {
-		console.log("The document has the focus.");
+		//console.log("The document has the focus.");
 		codiad.userlog.logUserHasFocusOnTheSystem();
-	} else {
+	} 
+	/*
+	else {
 		console.log("The document doesn't have the focus.");
     }
-    
+    */
 }
