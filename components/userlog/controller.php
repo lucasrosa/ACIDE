@@ -40,4 +40,9 @@
         $Userlog->UpdateCurrentSession();
     }
 	
+	if ($_GET['action'] == 'log_user_has_focus_on_file'){
+		$Userlog->username 	= $_SESSION['user'];
+		$Userlog->path		= $_GET['path'];
+        $Userlog->UpdateCurrentFile();
+    }
 ?>

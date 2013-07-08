@@ -45,9 +45,14 @@ function CheckFocus () {
 
 function CheckFocusForFile () {
 	var file = document.getElementById('file_input');
-	var filename = codiad.active.getPath();
-	if ((file = document.activeElement) && file != document.body && document.activeElement.tagName == 'TEXTAREA')
-	        console.log("The focus is on the file '"+filename+"'.");
-	    else
-	        console.log("There is not focus on any file.");
+	var active_file_path = codiad.active.getPath();
+	
+	if ((file = document.activeElement) && file != document.body) {
+		 if (document.activeElement.tagName == 'TEXTAREA') {
+			codiad.userlog.logUserHasFocusOnFile(active_file_path); 	
+		 } else if (document.activeElement.tagName == 'INPUT') {
+		 	console.log("user has focus on the terminal") 
+		 }
+	}
+	        
 }
