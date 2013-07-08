@@ -130,10 +130,24 @@
 						$cd_allowed = FALSE;
 					} else if (substr($this->directory, 0, 2) == '..') {
 						$previous_directory = explode('/', $previous_directory);
+						
 						if ($previous_directory[count($previous_directory) -2] == "workspace") {
 							$cd_allowed = FALSE;
 						}
 					} 
+					
+					// LF: Get how many '..' are in the user's command
+					$two_dots_count = 0;
+					$current_directory = explode('/', $this->directory);
+					for ($in = 0; $in < count($current_directory); $in++) {
+						if ($current_directory[$in] == '..') {
+							$two_dots_count++;
+						}
+					}
+					
+					if ($two_dots_count > 1) {
+						$cd_allowed = FALSE;
+					}
 					
 					if ($cd_allowed) {
 						$this->ChangeDirectory();
