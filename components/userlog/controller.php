@@ -52,4 +52,9 @@
         $Userlog->UpdateCurrentProject();
     }
 	
+	else if ($_GET['action'] == 'log_user_has_focus_on_terminal'){
+		$Userlog->username 	= $_SESSION['user'];
+		$Userlog->path		= $_GET['path'];
+        $Userlog->UpdateCurrentTerminal();
+    }
 ?>

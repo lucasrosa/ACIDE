@@ -61,7 +61,8 @@ function CheckFocusForFile () {
 			 	//console.log("The id is: " + document.activeElement.id);
 				codiad.userlog.logUserHasFocusOnFile(active_file_path); 	
 			 } else if (document.activeElement.tagName == 'INPUT' && document.activeElement.id == 'prompt_text') {
-			 	console.log("user has focus on the terminal") 
+			 	//console.log("user has focus on the terminal")
+			 	codiad.userlog.logUserHasFocusOnTerminal(); 
 			 }
 		}	
 	}

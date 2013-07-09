@@ -35,8 +35,15 @@ class Userlog {
 	private $file_timeout			= 5; // seconds
 	// Project timeout
 	private $project_timeout		= 5; // seconds
+	// Terminal timeout
+	private $terminal_timeout		= 5; // seconds
 	// The session ID to be saved in the file
 	public $session_id				= '';
+	
+	/*
+	 * TODO Create an array  for timeout like project => 5, terminal -> 2.5, file => 1
+	 * so it can be called as $timeout['file'] for example and then change the methos to a single method
+	 */ 
 	
     //////////////////////////////////////////////////////////////////
     // METHODS
@@ -111,6 +118,27 @@ class Userlog {
 		$new_log = array( 	
 							"username" => $this->username,
 							"type" => "project",
+							"start_timestamp" => date("Y-m-d H:i:s"),
+							"last_update_timestamp" => date("Y-m-d H:i:s"),
+							"is_open" => 'TRUE',
+							"session_id" => $this->GetCurrentSessionId(),
+							"path" => $this->path
+						 );
+		
+		// Insert the log in the database:
+		return $collection->insert($new_log);
+    }
+    
+	//////////////////////////////////////////////////////////////////
+    // Save as Project
+    //////////////////////////////////////////////////////////////////
+
+    public function SaveAsTerminal(){
+		$collection = $this->GetCollection();
+			
+		$new_log = array( 	
+							"username" => $this->username,
+							"type" => "terminal",
 							"start_timestamp" => date("Y-m-d H:i:s"),
 							"last_update_timestamp" => date("Y-m-d H:i:s"),
 							"is_open" => 'TRUE',
@@ -206,12 +234,6 @@ class Userlog {
 			$time_difference =  $this->DateSecondDifference($now, $last_update_timestamp);
 			
 			if ($time_difference >= $this->project_timeout) {
-				
-				//$log['is_open']	= 'FALSE';
-				
-				// Overwrite the log in the database:
-				//$collection->update(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path), $log);
-				
 				// Update all the other logs for files to closed
 				$collection->update(
 				    array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type),
@@ -233,6 +255,51 @@ class Userlog {
 			);
 				
 			$this->SaveAsProject();
+		}
+    }
+	
+	//////////////////////////////////////////////////////////////////
+    // Update current terminal session
+    //////////////////////////////////////////////////////////////////
+	
+	public function UpdateCurrentTerminal(){
+		$collection = $this->GetCollection();
+		$current_type = "terminal";
+		
+		$log = $collection->findOne(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path));
+		if (isset($log['username'])) {
+			$now = strtotime(date("Y-m-d H:i:s"));
+			$last_update_timestamp = strtotime($log['last_update_timestamp']);
+			$time_difference =  $this->DateSecondDifference($now, $last_update_timestamp);
+			
+			if ($time_difference >= $this->terminal_timeout) {
+				
+				//$log['is_open']	= 'FALSE';
+				
+				// Overwrite the log in the database:
+				//$collection->update(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path), $log);
+				
+				// Update all the other logs for files to closed
+				$collection->update(
+				    array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type),
+				    array('$set' => array('is_open' => "FALSE")),
+				    array("multiple" => true)
+				);
+				
+				$this->SaveAsTerminal();
+			} else {
+				$log['last_update_timestamp'] = date("Y-m-d H:i:s");
+				// Overwrite the log in the database:
+				return $collection->update(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path), $log);	
+			}
+		} else {
+			$collection->update(
+			    array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type),
+			    array('$set' => array('is_open' => "FALSE")),
+			    array("multiple" => true)
+			);
+				
+			$this->SaveAsTerminal();
 		}
     }
 	
