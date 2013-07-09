@@ -33,6 +33,8 @@ class Userlog {
 	private $session_timeout		= 10; // minutes
 	// File timeout
 	private $file_timeout			= 5; // seconds
+	// Project timeout
+	private $project_timeout		= 5; // seconds
 	// The session ID to be saved in the file
 	public $session_id				= '';
 	
@@ -103,7 +105,7 @@ class Userlog {
     // Save as Project
     //////////////////////////////////////////////////////////////////
 
-    public function SaveAsFile(){
+    public function SaveAsProject(){
 		$collection = $this->GetCollection();
 			
 		$new_log = array( 	
@@ -164,7 +166,7 @@ class Userlog {
 			$last_update_timestamp = strtotime($log['last_update_timestamp']);
 			$time_difference =  $this->DateSecondDifference($now, $last_update_timestamp);
 			
-			if ($time_difference >= $this->file_timeout) {
+			if ($time_difference >= $this->project_timeout) {
 				// Update all the other logs for files to closed
 				$collection->update(
 				    array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type),
