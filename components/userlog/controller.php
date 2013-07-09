@@ -28,21 +28,28 @@
         $Userlog->Save();
     }
 	
-	if ($_GET['action'] == 'log_user_closed_system'){
+	else if ($_GET['action'] == 'log_user_closed_system'){
 		// LF : Log the user action "user_closed_system" in the database
 		$Userlog->username = $_SESSION['user'];
 		$Userlog->type = "user_closed_system";
         $Userlog->Save();
     }
 	
-	if ($_GET['action'] == 'log_user_has_focus_on_the_system'){
+	else if ($_GET['action'] == 'log_user_has_focus_on_the_system'){
 		$Userlog->username = $_SESSION['user'];
         $Userlog->UpdateCurrentSession();
     }
 	
-	if ($_GET['action'] == 'log_user_has_focus_on_file'){
+	else if ($_GET['action'] == 'log_user_has_focus_on_file'){
 		$Userlog->username 	= $_SESSION['user'];
 		$Userlog->path		= $_GET['path'];
         $Userlog->UpdateCurrentFile();
     }
+	
+	else if ($_GET['action'] == 'log_user_has_focus_on_project'){
+		$Userlog->username 	= $_SESSION['user'];
+		$Userlog->path		= $_GET['path'];
+        $Userlog->UpdateCurrentProject();
+    }
+	
 ?>

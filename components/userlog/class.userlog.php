@@ -100,6 +100,27 @@ class Userlog {
     }
 	
 	//////////////////////////////////////////////////////////////////
+    // Save as Project
+    //////////////////////////////////////////////////////////////////
+
+    public function SaveAsFile(){
+		$collection = $this->GetCollection();
+			
+		$new_log = array( 	
+							"username" => $this->username,
+							"type" => "project",
+							"start_timestamp" => date("Y-m-d H:i:s"),
+							"last_update_timestamp" => date("Y-m-d H:i:s"),
+							"is_open" => 'TRUE',
+							"session_id" => $this->GetCurrentSessionId(),
+							"path" => $this->path
+						 );
+		
+		// Insert the log in the database:
+		return $collection->insert($new_log);
+    }
+	
+	//////////////////////////////////////////////////////////////////
     // Update current session
     //////////////////////////////////////////////////////////////////
     
@@ -144,12 +165,6 @@ class Userlog {
 			$time_difference =  $this->DateSecondDifference($now, $last_update_timestamp);
 			
 			if ($time_difference >= $this->file_timeout) {
-				
-				//$log['is_open']	= 'FALSE';
-				
-				// Overwrite the log in the database:
-				//$collection->update(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path), $log);
-				
 				// Update all the other logs for files to closed
 				$collection->update(
 				    array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type),
@@ -171,6 +186,51 @@ class Userlog {
 			);
 				
 			$this->SaveAsFile();
+		}
+    }
+
+	//////////////////////////////////////////////////////////////////
+    // Update current project session
+    //////////////////////////////////////////////////////////////////
+	
+	public function UpdateCurrentProject(){
+		$collection = $this->GetCollection();
+		$current_type = "project";
+		
+		$log = $collection->findOne(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path));
+		if (isset($log['username'])) {
+			$now = strtotime(date("Y-m-d H:i:s"));
+			$last_update_timestamp = strtotime($log['last_update_timestamp']);
+			$time_difference =  $this->DateSecondDifference($now, $last_update_timestamp);
+			
+			if ($time_difference >= $this->project_timeout) {
+				
+				//$log['is_open']	= 'FALSE';
+				
+				// Overwrite the log in the database:
+				//$collection->update(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path), $log);
+				
+				// Update all the other logs for files to closed
+				$collection->update(
+				    array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type),
+				    array('$set' => array('is_open' => "FALSE")),
+				    array("multiple" => true)
+				);
+				
+				$this->SaveAsProject();
+			} else {
+				$log['last_update_timestamp'] = date("Y-m-d H:i:s");
+				// Overwrite the log in the database:
+				return $collection->update(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path), $log);	
+			}
+		} else {
+			$collection->update(
+			    array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type),
+			    array('$set' => array('is_open' => "FALSE")),
+			    array("multiple" => true)
+			);
+				
+			$this->SaveAsProject();
 		}
     }
 	

@@ -62,9 +62,12 @@
             $.get(this.controller + '?action=log_user_has_focus_on_the_system');
         },
         logUserHasFocusOnFile: function(active_file_path) {
-        	// console.log("User focus is in "+ active_file_path);
         	// Run controller to register the focus in a file
         	$.get(this.controller + '?action=log_user_has_focus_on_file&path=' + active_file_path);
+        },
+        logUserHasFocusOnProject: function(active_project_path) {
+        	// Run controller to register the focus in a project
+        	$.get(this.controller + '?action=log_user_has_focus_on_project&path=' + active_project_path);
         }
         
         
