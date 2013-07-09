@@ -143,8 +143,6 @@ class Userlog {
 			$last_update_timestamp = strtotime($log['last_update_timestamp']);
 			$time_difference =  $this->DateSecondDifference($now, $last_update_timestamp);
 			
-			error_log("Time difference for file : " . $time_difference);
-			
 			if ($time_difference >= $this->file_timeout) {
 				
 				//$log['is_open']	= 'FALSE';

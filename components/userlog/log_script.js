@@ -1,6 +1,6 @@
 var hasFocus 					= true;
 var projectHasFocus 			= true;
-var checkFocusInterval 			= 5; // seconds
+var checkFocusInterval 			= 2; // seconds
 var checkFocusForFileInterval 	= 0.5; // seconds
 
 
@@ -34,7 +34,7 @@ $(document).ready(function() {
 
 function CheckFocus () {
 	
-	if (hasFocus && window.blurred) {
+	if (hasFocus) {
 		//console.log("The document has focus.");
 		codiad.userlog.logUserHasFocusOnTheSystem();
 	}
