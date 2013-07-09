@@ -32,7 +32,9 @@ class Userlog {
 	// Session timeout
 	private $session_timeout		= 10; // minutes
 	// File timeout
-	private $file_timeout			= 0.016; // minutes
+	private $file_timeout			= 5; // seconds
+	// The session ID to be saved in the file
+	public $session_id				= '';
 	
     //////////////////////////////////////////////////////////////////
     // METHODS
@@ -85,10 +87,12 @@ class Userlog {
 			
 		$new_log = array( 	
 							"username" => $this->username,
-							"type" => "session",
+							"type" => "file",
 							"start_timestamp" => date("Y-m-d H:i:s"),
 							"last_update_timestamp" => date("Y-m-d H:i:s"),
-							"is_open" => 'TRUE'
+							"is_open" => 'TRUE',
+							"session_id" => $this->GetCurrentSessionId(),
+							"path" => $this->path
 						 );
 		
 		// Insert the log in the database:
@@ -133,25 +137,41 @@ class Userlog {
 		$collection = $this->GetCollection();
 		$current_type = "file";
 		
-		$log = $collection->findOne(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type));
+		$log = $collection->findOne(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path));
 		if (isset($log['username'])) {
 			$now = strtotime(date("Y-m-d H:i:s"));
 			$last_update_timestamp = strtotime($log['last_update_timestamp']);
-			$time_difference =  $this->DateMinuteDifference ($now, $last_update_timestamp);
+			$time_difference =  $this->DateSecondDifference($now, $last_update_timestamp);
+			
+			error_log("Time difference for file : " . $time_difference);
 			
 			if ($time_difference >= $this->file_timeout) {
-				$log['is_open']			= 'FALSE';
+				
+				//$log['is_open']	= 'FALSE';
 				
 				// Overwrite the log in the database:
-				$collection->update(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type), $log);
+				//$collection->update(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path), $log);
+				
+				// Update all the other logs for files to closed
+				$collection->update(
+				    array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type),
+				    array('$set' => array('is_open' => "FALSE")),
+				    array("multiple" => true)
+				);
 				
 				$this->SaveAsFile();
 			} else {
 				$log['last_update_timestamp'] = date("Y-m-d H:i:s");
 				// Overwrite the log in the database:
-				return $collection->update(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type), $log);	
+				return $collection->update(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path), $log);	
 			}
 		} else {
+			$collection->update(
+			    array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type),
+			    array('$set' => array('is_open' => "FALSE")),
+			    array("multiple" => true)
+			);
+				
 			$this->SaveAsFile();
 		}
     }
@@ -172,7 +192,15 @@ class Userlog {
 	}
 	
 	private function GetCurrentSessionId() {
-		// TODO
+		$collection = $this->GetCollection();
+		$log = $collection->findOne(array("username" => $this->username, "is_open" => 'TRUE', "type" =>"session"));
+		
+		if (!isset($log['username'])) {
+			$this->SaveAsSession();
+			$log = $collection->findOne(array("username" => $this->username, "is_open" => 'TRUE', "type" =>"session"));
+		} 
+		
+		return $log['_id'];
 	}
 	
 	private function DateMinuteDifference ($date1timestamp, $date2timestamp) {
@@ -183,5 +211,9 @@ class Userlog {
 		$minute = $all - ($day * 1440) - ($hour * 60);
 		
 		return $minute;
+	}
+	
+	private function DateSecondDifference ($date1timestamp, $date2timestamp) {
+		return ($date1timestamp - $date2timestamp);
 	}
 }

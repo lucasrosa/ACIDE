@@ -32,7 +32,7 @@ var checkFocusForFileInterval 	= 0.5; // seconds
 
 function CheckFocus () {
 	
-	if (hasFocus) {
+	if (hasFocus && window.blurred) {
 		//console.log("The document has focus.");
 		codiad.userlog.logUserHasFocusOnTheSystem();
 	}
@@ -44,15 +44,17 @@ function CheckFocus () {
 }
 
 function CheckFocusForFile () {
-	var file = document.getElementById('file_input');
-	var active_file_path = codiad.active.getPath();
 	
-	if ((file = document.activeElement) && file != document.body) {
-		 if (document.activeElement.tagName == 'TEXTAREA') {
-			codiad.userlog.logUserHasFocusOnFile(active_file_path); 	
-		 } else if (document.activeElement.tagName == 'INPUT') {
-		 	console.log("user has focus on the terminal") 
-		 }
+	if (hasFocus) {
+		var file = document.getElementById('file_input');
+		var active_file_path = codiad.active.getPath();
+		
+		if ((file = document.activeElement) && file != document.body) {
+			 if (document.activeElement.tagName == 'TEXTAREA') {
+				codiad.userlog.logUserHasFocusOnFile(active_file_path); 	
+			 } else if (document.activeElement.tagName == 'INPUT') {
+			 	console.log("user has focus on the terminal") 
+			 }
+		}	
 	}
-	        
 }
