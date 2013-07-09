@@ -3,6 +3,12 @@ var projectHasFocus 			= true;
 var checkFocusInterval 			= 5; // seconds
 var checkFocusForFileInterval 	= 0.5; // seconds
 
+
+$(document).ready(function() {
+	$('.ace_line').attr('id', 'file_input');
+	//$('.ace_text-input').attr('id', 'file_input_textarea');
+});
+	
 (function(global, $){
 	var codiad = global.codiad;
 	
@@ -22,10 +28,6 @@ var checkFocusForFileInterval 	= 0.5; // seconds
 	// Project logging
 	
 	// File logging
-	
-	$(document).ready(function() {
-		$('.ace_line').attr('id', 'file_input');
-	});
 	
 	
 })(this, jQuery);
@@ -51,8 +53,9 @@ function CheckFocusForFile () {
 		
 		if ((file = document.activeElement) && file != document.body) {
 			 if (document.activeElement.tagName == 'TEXTAREA') {
+			 	//console.log("The id is: " + document.activeElement.id);
 				codiad.userlog.logUserHasFocusOnFile(active_file_path); 	
-			 } else if (document.activeElement.tagName == 'INPUT') {
+			 } else if (document.activeElement.tagName == 'INPUT' && document.activeElement.id == 'prompt_text') {
 			 	console.log("user has focus on the terminal") 
 			 }
 		}	
