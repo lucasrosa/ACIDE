@@ -30,7 +30,7 @@ class Userlog {
 	// Path of the subject: can be a file path or a project name (path)
 	public $path					= '';
 	// Session timeout
-	private $session_timeout		= 1;//10; // minutes
+	private $session_timeout		= 2;//10; // minutes
 	// File timeout
 	private $file_timeout			= 5; // seconds
 	// Project timeout
@@ -348,5 +348,10 @@ class Userlog {
 	public function GetAllSessionsForUser () {
 		$collection = $this->GetCollection();
 		return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"session"));
+	}
+	
+	public function GetAllLogsForProject () {
+		$collection = $this->GetCollection();
+		return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"project", "path" => $this->path));
 	}
 }

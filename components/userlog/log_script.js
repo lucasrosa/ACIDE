@@ -38,7 +38,7 @@ function CheckFocus () {
 		//console.log("The document has focus.");
 		
 		if (codiad.project.getCurrent() != '') {
-			//console.log("Current opened project is: '" + codiad.project.getCurrent()+ "'");
+			console.log("Logging project: '" + codiad.project.getCurrent()+ "'");
 			codiad.userlog.logUserHasFocusOnProject(codiad.project.getCurrent());	
 		}
 		codiad.userlog.logUserHasFocusOnTheSystem();
