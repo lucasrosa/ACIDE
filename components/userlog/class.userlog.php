@@ -30,7 +30,7 @@ class Userlog {
 	// Path of the subject: can be a file path or a project name (path)
 	public $path					= '';
 	// Session timeout
-	private $session_timeout		= 10; // minutes
+	private $session_timeout		= 1;//10; // minutes
 	// File timeout
 	private $file_timeout			= 5; // seconds
 	// Project timeout
@@ -38,7 +38,7 @@ class Userlog {
 	// Terminal timeout
 	private $terminal_timeout		= 5; // seconds
 	// The session ID to be saved in the file
-	public $session_id				= '';
+	public  $session_id				= '';
 	
 	/*
 	 * TODO Create an array  for timeout like project => 5, terminal -> 2.5, file => 1
@@ -342,5 +342,11 @@ class Userlog {
 	
 	private function DateSecondDifference ($date1timestamp, $date2timestamp) {
 		return ($date1timestamp - $date2timestamp);
+	}
+	
+	
+	public function GetAllSessionsForUser () {
+		$collection = $this->GetCollection();
+		return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"session"));
 	}
 }
