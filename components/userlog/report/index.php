@@ -7,6 +7,10 @@
 	require_once('../../user/class.user.php');
 	require_once('../../project/class.project.php');
 	
+	
+	$MainUserlog = new Userlog();
+	$MainUserlog->CloseAllOpenSectionsThatReachedTimeout();
+	
 	$User = new User();
 	//$User->users = getJSON('users.php');
 	// Connect

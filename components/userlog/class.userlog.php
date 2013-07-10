@@ -44,12 +44,25 @@ class Userlog {
 	 * TODO Create an array  for timeout like project => 5, terminal -> 2.5, file => 1
 	 * so it can be called as $timeout['file'] for example and then change the methos to a single method
 	 */ 
+	 public $timeouts				= array();
+	 
 	
     //////////////////////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////////////////////
 
     // -----------------------------||----------------------------- //
+	
+	//////////////////////////////////////////////////////////////////
+    // Construct
+    //////////////////////////////////////////////////////////////////
+
+    public function __construct(){
+		$timeouts['session'] 	= 2; // Minutes
+		$timeouts['project'] 	= 5; // seconds 
+		$timeouts['file'] 		= 5; // seconds
+		$timeouts['terminal'] 	= 5; // seconds
+	}
 	
     //////////////////////////////////////////////////////////////////
     // Save
@@ -354,4 +367,27 @@ class Userlog {
 		$collection = $this->GetCollection();
 		return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"project", "path" => $this->path));
 	}
+	
+	public function CloseAllOpenSectionsThatReachedTimeout() {
+		// Session
+		$collection = $this->GetCollection();
+		$logs = $collection->find(array("is_open" => 'TRUE', "type" =>"session"));
+		
+		// TODO create an array for all
+		$type = "session";
+		foreach ($logs as $log) {
+			$now = strtotime(date("Y-m-d H:i:s"));
+			$last_update_timestamp = strtotime($log['last_update_timestamp']);
+			$time_difference =  $this->DateMinuteDifference ($now, $last_update_timestamp);
+			
+			if ($time_difference >= $this->timeouts[$type]) {
+				$log['is_open']			= 'FALSE';
+				$collection->update(array("_id" => $log['_id']), $log);
+			}
+		}
+		// Project
+		// Terminal
+		// File
+	}
+	
 }
