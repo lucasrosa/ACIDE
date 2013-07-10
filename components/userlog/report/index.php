@@ -75,9 +75,8 @@
 				$total_time_project_helper = clone $total_time_project;
 			
 				foreach ($project_sessions as $project_session) {
-					$date1 = new DateTime($session['start_timestamp']);
-					$date2 = new DateTime($session['last_update_timestamp']);
-					
+					$date1 = new DateTime($project_session['start_timestamp']);
+					$date2 = new DateTime($project_session['last_update_timestamp']);
 					$interval = $date1->diff($date2);
 					
 					$total_time_project->add($interval);
