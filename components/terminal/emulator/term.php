@@ -91,7 +91,7 @@
         ////////////////////////////////////////////////////
         
         public function ParseCommand(){
-            
+			
             // Explode command
             $command_parts = explode(" ",$this->command);
 			
@@ -115,12 +115,13 @@
 			$first_command = $command_parts[0];
 			$result = in_array($first_command, $allowed_commands);
 			
+			
 			if (!empty($result)) {
 	            // Handle 'cd' command
 	            if(in_array('cd',$command_parts)){
 	                $cd_key = array_search('cd', $command_parts);
 	                $cd_key++;
-					$previous_directory = $this->directory;
+					$unmodified_previous_directory = $this->directory;
 	                $this->directory = $command_parts[$cd_key];
 					
 					$cd_allowed = TRUE;
@@ -129,8 +130,7 @@
 					if ($this->directory[0] == '/') {
 						$cd_allowed = FALSE;
 					} else if (substr($this->directory, 0, 2) == '..') {
-						$previous_directory = explode('/', $previous_directory);
-						
+						$previous_directory = explode('/', $unmodified_previous_directory);
 						if ($previous_directory[count($previous_directory) -2] == "workspace") {
 							$cd_allowed = FALSE;
 						}
@@ -154,8 +154,10 @@
 		                // Remove from command
 		                $this->command = str_replace('cd '.$this->directory,'',$this->command);	
 					} else {
+						// Resetting the directory in case the last command modified it 
+						$this->directory = $unmodified_previous_directory;
 						$this->command = 'echo ERROR: Command not allowed';
-						$this->command_exec = $this->command . ' 2>&1';
+						//$this->command_exec = $this->command . ' 2>&1';
 					}
 	            }
             
@@ -175,7 +177,7 @@
 				$this->command = 'echo ERROR: Command not allowed';
 				$this->command_exec = $this->command . ' 2>&1';
 			}
-        }
+		}
         
         ////////////////////////////////////////////////////
         // Chnage Directory
