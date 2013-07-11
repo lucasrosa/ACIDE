@@ -70,10 +70,12 @@
 			echo "<h2>Projects:</h2>";
 			
 			foreach($projects as $project) {
-				echo "<h4>This is project " . $project['name']. "</h4>";
+				
 				$Userlog->path = $project['path'];
 				$project_sessions = $Userlog->GetAllLogsForProject();
-				
+				if ($project_sessions->count() != 0) {
+					echo "<h4><u>'" . $project['name']. "'</u></h4>";
+				}
 				
 				$total_time_project = new DateTime('0000-00-00 00:00:00');
 				$total_time_project_helper = clone $total_time_project;
@@ -84,22 +86,39 @@
 					$interval = $date1->diff($date2);
 					
 					$total_time_project->add($interval);
-					echo "Total time user spend in a session of project " . $project['path'] . ": <br>";
-					printf("&nbsp;&nbsp;&nbsp; %d years, %d months, %d days, %d hours, %d minutes, %d seconds <br>", $interval->y, $interval->m, $interval->d, $interval->h, $interval->i, $interval->s);
+					if (
+					$interval->y > 0 ||
+					$interval->m > 0 ||
+					$interval->d > 0 ||
+					$interval->h > 0 ||
+					$interval->i > 0 ||
+					$interval->s > 0 
+					){
+						echo "Total time user spend in a session of project " . $project['path'] . ": <br>";
+						printf("&nbsp;&nbsp;&nbsp; %d years, %d months, %d days, %d hours, %d minutes, %d seconds <br>", $interval->y, $interval->m, $interval->d, $interval->h, $interval->i, $interval->s);
+					}
 				}
 				
 				$total_time_project_interval = $total_time_project_helper->diff($total_time_project);
 				
-				
-				echo "<h3>Total time the user spend in the project is:<br>";
-				printf("&nbsp;&nbsp;&nbsp; %d years, %d months, %d days, %d hours, %d minutes, %d seconds <br>", 
-						$total_time_project_interval->y, 
-						$total_time_project_interval->m, 
-						$total_time_project_interval->d, 
-						$total_time_project_interval->h, 
-						$total_time_project_interval->i, 
-						$total_time_project_interval->s);
-				echo "</h3>";
+				if (
+					$total_time_project_interval->y > 0 ||
+					$total_time_project_interval->m > 0 ||
+					$total_time_project_interval->d > 0 ||
+					$total_time_project_interval->h > 0 ||
+					$total_time_project_interval->i > 0 ||
+					$total_time_project_interval->s > 0 
+					){
+						echo "<h3>Total time the user spend in the project is:<br>";
+						printf("&nbsp;&nbsp;&nbsp; %d years, %d months, %d days, %d hours, %d minutes, %d seconds <br>", 
+								$total_time_project_interval->y, 
+								$total_time_project_interval->m, 
+								$total_time_project_interval->d, 
+								$total_time_project_interval->h, 
+								$total_time_project_interval->i, 
+								$total_time_project_interval->s);
+						echo "</h3>";
+					}
 			}
 		}
 	}

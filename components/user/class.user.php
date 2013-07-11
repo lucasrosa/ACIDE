@@ -398,9 +398,10 @@ class User {
 		$this->project 	= $user['project'];
 		$this->projects = $user['projects'];
 		
-		if (isset($user['courses'])) {
+		if (isset($user['courses'][0])) {
 			$this->courses = $user['courses'];	
 		}
+		
 		return TRUE;
 	}
 	

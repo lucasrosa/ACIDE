@@ -58,15 +58,15 @@ class Userlog {
     //////////////////////////////////////////////////////////////////
 
     public function __construct(){
-    	$types[] = 'session';
-		$types[] = 'project';
-		$types[] = 'file';
-		$types[] = 'terminal';
+    	$this->types[0] = 'session';
+		$this->types[1] = 'project';
+		$this->types[2] = 'file';
+		$this->types[3] = 'terminal';
 		
-		$timeouts[$types[0]] 	= 2; // Minutes
-		$timeouts[$types[1]] 	= 5; // seconds 
-		$timeouts[$types[2]] 	= 5; // seconds
-		$timeouts[$types[3]] 	= 5; // seconds
+		$this->timeouts[$this->types[0]] 	= 2; // Minutes
+		$this->timeouts[$this->types[1]] 	= 5; // seconds 
+		$this->timeouts[$this->types[2]] 	= 5; // seconds
+		$this->timeouts[$this->types[3]] 	= 5; // seconds
 	}
 	
     //////////////////////////////////////////////////////////////////
@@ -383,6 +383,7 @@ class Userlog {
 		$collection = $this->GetCollection();
 		
 		for ($i = 0; $i < count($this->types); $i++) {
+			
 			$type = $this->types[$i];
 		
 			$logs = $collection->find(array("is_open" => 'TRUE', "type" =>$type));
@@ -392,7 +393,7 @@ class Userlog {
 				$now = strtotime(date("Y-m-d H:i:s"));
 				$last_update_timestamp = strtotime($log['last_update_timestamp']);
 				
-				if ($this->type == $this->type[0]) { // 0 = session
+				if ($this->type == $this->types[0]) { // 0 = session
 					$time_difference =  $this->DateMinuteDifference ($now, $last_update_timestamp);
 				} else {
 					$time_difference =  $this->DateSecondDifference($now, $last_update_timestamp);
