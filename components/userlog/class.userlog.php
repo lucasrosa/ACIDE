@@ -45,7 +45,7 @@ class Userlog {
 	 * so it can be called as $timeout['file'] for example and then change the methos to a single method
 	 */ 
 	 public $timeouts				= array();
-	 
+	 public $types					= array();
 	
     //////////////////////////////////////////////////////////////////
     // METHODS
@@ -58,10 +58,15 @@ class Userlog {
     //////////////////////////////////////////////////////////////////
 
     public function __construct(){
-		$timeouts['session'] 	= 2; // Minutes
-		$timeouts['project'] 	= 5; // seconds 
-		$timeouts['file'] 		= 5; // seconds
-		$timeouts['terminal'] 	= 5; // seconds
+    	$types[] = 'session';
+		$types[] = 'project';
+		$types[] = 'file';
+		$types[] = 'terminal';
+		
+		$timeouts[$types[0]] 	= 2; // Minutes
+		$timeouts[$types[1]] 	= 5; // seconds 
+		$timeouts[$types[2]] 	= 5; // seconds
+		$timeouts[$types[3]] 	= 5; // seconds
 	}
 	
     //////////////////////////////////////////////////////////////////
@@ -369,25 +374,36 @@ class Userlog {
 	}
 	
 	public function CloseAllOpenSectionsThatReachedTimeout() {
-		// Session
+		/*
+		 * Session
+		 * Project
+		 * Terminal
+		 * File
+		 */
 		$collection = $this->GetCollection();
-		$logs = $collection->find(array("is_open" => 'TRUE', "type" =>"session"));
 		
-		// TODO create an array for all
-		$type = "session";
-		foreach ($logs as $log) {
-			$now = strtotime(date("Y-m-d H:i:s"));
-			$last_update_timestamp = strtotime($log['last_update_timestamp']);
-			$time_difference =  $this->DateMinuteDifference ($now, $last_update_timestamp);
+		for ($i = 0; $i < count($this->types); $i++) {
+			$type = $this->types[$i];
+		
+			$logs = $collection->find(array("is_open" => 'TRUE', "type" =>$type));
 			
-			if ($time_difference >= $this->timeouts[$type]) {
-				$log['is_open']			= 'FALSE';
-				$collection->update(array("_id" => $log['_id']), $log);
+			
+			foreach ($logs as $log) {
+				$now = strtotime(date("Y-m-d H:i:s"));
+				$last_update_timestamp = strtotime($log['last_update_timestamp']);
+				
+				if ($this->type == $this->type[0]) { // 0 = session
+					$time_difference =  $this->DateMinuteDifference ($now, $last_update_timestamp);
+				} else {
+					$time_difference =  $this->DateSecondDifference($now, $last_update_timestamp);
+				}
+				
+				if ($time_difference >= $this->timeouts[$type]) {
+					$log['is_open'] = 'FALSE';
+					$collection->update(array("_id" => $log['_id']), $log);
+				}
 			}
 		}
-		// Project
-		// Terminal
-		// File
 	}
 	
 }
