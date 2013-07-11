@@ -109,6 +109,39 @@
 					$total_time_project_interval->i > 0 ||
 					$total_time_project_interval->s > 0 
 					){
+						// Get all the files for this project and make clear if the file doesn't have a log (like: 0 seconds, this file wasn't opened by the user)
+						// <!-- File
+						$project_directory = WORKSPACE . "/". $project['path'];
+						
+						echo "Directory = $project_directory";
+						$files = listdir($project_directory);// $files = listdir('.');
+						
+						for ($j = 0; $j < count($files); $j++) {
+							$exploded_path = explode("/", $files[$j]);
+							$filename = "";
+							$workspace_folder_index = 0;
+							
+							for ($k = 0; $k < count($exploded_path); $k++) {
+								
+								if ($exploded_path[$k] == "workspace") {
+									$workspace_folder_index = $k;
+								}
+								// If the iteration passed the workspace, start setting the name of the file
+								if ($k > $workspace_folder_index && $workspace_folder_index > 0) {
+									if ($k >($workspace_folder_index + 1)) {
+										$filename .= "/";
+									}
+									$filename .= $exploded_path[$k];
+								}
+							}	
+							
+							// Search the logs of file $filename
+							
+							echo "<br> $filename";
+						}
+						
+						// --> File
+						
 						echo "<h3>Total time the user spend in the project is:<br>";
 						printf("&nbsp;&nbsp;&nbsp; %d years, %d months, %d days, %d hours, %d minutes, %d seconds <br>", 
 								$total_time_project_interval->y, 
@@ -137,6 +170,30 @@
 	    }
 	    $retStr .= '</ul>';
 	    return $retStr;
+	}
+	
+	function listdir($start_dir='.') {
+
+	  $files = array();
+	  if (is_dir($start_dir)) {
+	    $fh = opendir($start_dir);
+	    while (($file = readdir($fh)) !== false) {
+	      # loop through the files, skipping . and .., and recursing if necessary
+	      if (strcmp($file, '.')==0 || strcmp($file, '..')==0) continue;
+	      $filepath = $start_dir . '/' . $file;
+	      if ( is_dir($filepath) )
+	        $files = array_merge($files, listdir($filepath));
+	      else
+	        array_push($files, $filepath);
+	    }
+	    closedir($fh);
+	  } else {
+	    # false if the function was called with an invalid non-directory argument
+	    $files = false;
+	  }
+	
+	  return $files;
+	
 	}
 		
 ?>
