@@ -7,6 +7,11 @@
 	require_once('../../user/class.user.php');
 	require_once('../../project/class.project.php');
 	
+	//////////////////////////////////////////////////////////////////
+    // Verify Session or Key
+    //////////////////////////////////////////////////////////////////
+	
+    checkSession();
 	
 	$MainUserlog = new Userlog();
 	$MainUserlog->CloseAllOpenSectionsThatReachedTimeout();
@@ -141,6 +146,58 @@
 						}
 						
 						// --> File
+						// <!-- Terminal
+						$terminal_sessions = $Userlog->GetAllLogsForTerminalInThisProject();
+						if ($terminal_sessions->count() != 0) {
+							echo "<h4><u>Terminal logs for: '" . $project['name']. "'</u></h4>";
+						}
+						
+						$total_time_terminal = new DateTime('0000-00-00 00:00:00');
+						$total_time_terminal_helper = clone $total_time_terminal;
+					
+						foreach ($terminal_sessions as $terminal_session) {
+							$date1 = new DateTime($terminal_session['start_timestamp']);
+							$date2 = new DateTime($terminal_session['last_update_timestamp']);
+							$interval = $date1->diff($date2);
+							
+							$total_time_terminal->add($interval);
+							if (
+							$interval->y > 0 ||
+							$interval->m > 0 ||
+							$interval->d > 0 ||
+							$interval->h > 0 ||
+							$interval->i > 0 ||
+							$interval->s > 0 
+							){
+								echo "Total time user spend in the terminal in this project " . $project['path'] . ": <br>";
+								printf("&nbsp;&nbsp;&nbsp; %d years, %d months, %d days, %d hours, %d minutes, %d seconds <br>", $interval->y, $interval->m, $interval->d, $interval->h, $interval->i, $interval->s);
+							}
+						}
+						
+						$total_time_terminal_interval = $total_time_terminal_helper->diff($total_time_terminal);
+						
+						if (
+							$total_time_terminal_interval->y > 0 ||
+							$total_time_terminal_interval->m > 0 ||
+							$total_time_terminal_interval->d > 0 ||
+							$total_time_terminal_interval->h > 0 ||
+							$total_time_terminal_interval->i > 0 ||
+							$total_time_terminal_interval->s > 0 
+							){
+								echo "<h4>Total time the user spend in the terminal in this project is:<br>";
+								printf("&nbsp;&nbsp;&nbsp; %d years, %d months, %d days, %d hours, %d minutes, %d seconds <br>", 
+										$total_time_terminal_interval->y,
+										$total_time_terminal_interval->m,
+										$total_time_terminal_interval->d,
+										$total_time_terminal_interval->h,
+										$total_time_terminal_interval->i,
+										$total_time_terminal_interval->s);
+								echo "</h4>";
+						}
+							
+						
+						// --> Terminal
+						
 						
 						echo "<h3>Total time the user spend in the project is:<br>";
 						printf("&nbsp;&nbsp;&nbsp; %d years, %d months, %d days, %d hours, %d minutes, %d seconds <br>", 
@@ -177,9 +234,10 @@
 	  $files = array();
 	  if (is_dir($start_dir)) {
 	    $fh = opendir($start_dir);
-	    while (($file = readdir($fh)) !== false) {
+	    while (($file = readdir($fh)) !== FALSE) {
 	      # loop through the files, skipping . and .., and recursing if necessary
-	      if (strcmp($file, '.')==0 || strcmp($file, '..')==0) continue;
+	      if (strcmp($file, '.')==0 || strcmp($file, '..')==0 || strcmp($file[0], '.')==0) 
+	      	continue;
 	      $filepath = $start_dir . '/' . $file;
 	      if ( is_dir($filepath) )
 	        $files = array_merge($files, listdir($filepath));

@@ -373,6 +373,11 @@ class Userlog {
 		return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"project", "path" => $this->path));
 	}
 	
+	public function GetAllLogsForTerminalInThisProject () {
+		$collection = $this->GetCollection();
+		return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"terminal", "path" => $this->path));
+	}
+	
 	public function CloseAllOpenSectionsThatReachedTimeout() {
 		/*
 		 * Session
