@@ -414,6 +414,7 @@ class User {
 		
 		$users = $this->users;
 		$returning_users = array();
+		
 		foreach ($users as $user) {
 			if (isset($user['courses'])) {
 				if (count(array_intersect($user['courses'], $CurrentUser->courses)) > 0) {
