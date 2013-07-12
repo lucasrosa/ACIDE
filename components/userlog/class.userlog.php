@@ -373,6 +373,13 @@ class Userlog {
 		return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"project", "path" => $this->path));
 	}
 	
+	public function GetAllLogsForFile () {
+		$collection = $this->GetCollection();
+		error_log("username  = " . $this->username);
+		error_log("path  = " . $this->path);
+		return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"file", "path" => $this->path));
+	}
+	
 	public function GetAllLogsForTerminalInThisProject () {
 		$collection = $this->GetCollection();
 		return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"terminal", "path" => $this->path));

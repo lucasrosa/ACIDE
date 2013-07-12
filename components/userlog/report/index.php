@@ -142,7 +142,71 @@
 							
 							// Search the logs of file $filename
 							
-							echo "<br> $filename";
+							echo "<br>$filename";
+							
+							// TODO show the files logs
+							// <!-- Show file log
+							
+							$FileUserlog = new Userlog();
+							$FileUserlog->username = $Userlog->username;
+							$FileUserlog->path = $filename;
+							$file_sessions = $FileUserlog->GetAllLogsForFile();
+							
+							$name_of_file = explode("/", $filename);
+							$name_of_file = $name_of_file[count($name_of_file)-1];
+							
+							
+							if ($file_sessions->count() != 0) {
+								echo "<h4><u>Logs for file: '" . $name_of_file . "'</u></h4>";
+							} else {
+								echo "<h1>NOPE</h1>";
+							}
+							
+							$total_time_file = new DateTime('0000-00-00 00:00:00');
+							$total_time_file_helper = clone $total_time_file;
+						
+							foreach ($file_sessions as $file_session) {
+								$date1 = new DateTime($file_session['start_timestamp']);
+								$date2 = new DateTime($file_session['last_update_timestamp']);
+								$interval = $date1->diff($date2);
+								
+								$total_time_file->add($interval);
+								if (
+								$interval->y > 0 ||
+								$interval->m > 0 ||
+								$interval->d > 0 ||
+								$interval->h > 0 ||
+								$interval->i > 0 ||
+								$interval->s > 0 
+								){
+									echo "Total time user spend in this session of file " . $name_of_file . ": <br>";
+									printf("&nbsp;&nbsp;&nbsp; %d years, %d months, %d days, %d hours, %d minutes, %d seconds <br>", $interval->y, $interval->m, $interval->d, $interval->h, $interval->i, $interval->s);
+								}
+							}
+							
+							$total_time_file_interval = $total_time_file_helper->diff($total_time_file);
+							
+							if (
+								$total_time_file_interval->y > 0 ||
+								$total_time_file_interval->m > 0 ||
+								$total_time_file_interval->d > 0 ||
+								$total_time_file_interval->h > 0 ||
+								$total_time_file_interval->i > 0 ||
+								$total_time_file_interval->s > 0 
+								){
+									echo "<h4>Total time the user spend in this file:<br>";
+									printf("&nbsp;&nbsp;&nbsp; %d years, %d months, %d days, %d hours, %d minutes, %d seconds <br>", 
+											$total_time_file_interval->y,
+											$total_time_file_interval->m,
+											$total_time_file_interval->d,
+											$total_time_file_interval->h,
+											$total_time_file_interval->i,
+											$total_time_file_interval->s);
+									echo "</h4>";
+							} else {
+								echo "<h4> The user never opened this file</h4>";
+							}
+							// --> Show file log
 						}
 						
 						// --> File
