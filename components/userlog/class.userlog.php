@@ -39,6 +39,10 @@ class Userlog {
 	private $terminal_timeout		= 5; // seconds
 	// The session ID to be saved in the file
 	public  $session_id				= '';
+	// The output of a compilation attempt
+	public $output					= '';
+	// The command of a compilation attempt
+	public $command					= '';
 	
 	/*
 	 * TODO Create an array  for timeout like project => 5, terminal -> 2.5, file => 1
@@ -62,6 +66,7 @@ class Userlog {
 		$this->types[1] = 'project';
 		$this->types[2] = 'file';
 		$this->types[3] = 'terminal';
+		//$this->types[4] = 'compilation_attempt';
 		
 		$this->timeouts[$this->types[0]] 	= 2; // Minutes
 		$this->timeouts[$this->types[1]] 	= 5; // seconds 
@@ -162,6 +167,28 @@ class Userlog {
 							"is_open" => 'TRUE',
 							"session_id" => $this->GetCurrentSessionId(),
 							"path" => $this->path
+						 );
+		
+		// Insert the log in the database:
+		return $collection->insert($new_log);
+    }
+	
+	
+	//////////////////////////////////////////////////////////////////
+    // Save as Compilation Attempt
+    //////////////////////////////////////////////////////////////////
+
+    public function SaveAsCompilationAttempt(){
+		$collection = $this->GetCollection();
+			
+		$new_log = array( 	
+							"username" => $this->username,
+							"type" => "compilation_attempt",
+							"start_timestamp" => date("Y-m-d H:i:s"),
+							"session_id" => $this->GetCurrentSessionId(),
+							"path" => $this->path,
+							"output" => $this->output,
+							"command" => $this->command
 						 );
 		
 		// Insert the log in the database:

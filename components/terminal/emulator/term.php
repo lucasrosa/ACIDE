@@ -86,6 +86,11 @@
 			
 			if (substr($this->command,0,5) == "javac") {
 				//$this->output .= "<br> JAVAC E X E C U T E D ! ! !";
+				if ($this->output != "") {
+					$this->output .= "Not compiled with success!";
+				} else {
+					$this->output .= "Compiled with success!";
+				}
 			}
             return $this->output;
         }
