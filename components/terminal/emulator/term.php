@@ -19,6 +19,7 @@
     //////////////////////////////////////////////////////////////////
     
     require_once('../../../common.php');
+	require_once('../../../components/userlog/class.userlog.php');
     
     //////////////////////////////////////////////////////////////////
     // Verify Session or Key
@@ -85,12 +86,20 @@
             $this->Execute();
 			
 			if (substr($this->command,0,5) == "javac") {
-				//$this->output .= "<br> JAVAC E X E C U T E D ! ! !";
+				$Userlog = new Userlog();
+				$Userlog->username = $_SESSION['user'];
+				$Userlog->path = $this->directory;
+				$Userlog->command = $this->command;
+				$Userlog->language = "java";
+				$Userlog->output = $this->output;
+				
 				if ($this->output != "") {
-					$this->output .= "Not compiled with success!";
+					$Userlog->succeeded = "FALSE";	
 				} else {
-					$this->output .= "Compiled with success!";
+					$Userlog->succeeded = "TRUE";
 				}
+				
+				$Userlog->SaveAsCompilationAttempt();				
 			}
             return $this->output;
         }

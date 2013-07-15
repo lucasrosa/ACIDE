@@ -43,7 +43,10 @@ class Userlog {
 	public $output					= '';
 	// The command of a compilation attempt
 	public $command					= '';
-	
+	// The language of the compilation
+	public $language				= '';
+	// Identify if the code was compiled successfuly
+	public $succeeded 				= '';
 	/*
 	 * TODO Create an array  for timeout like project => 5, terminal -> 2.5, file => 1
 	 * so it can be called as $timeout['file'] for example and then change the methos to a single method
@@ -188,7 +191,9 @@ class Userlog {
 							"session_id" => $this->GetCurrentSessionId(),
 							"path" => $this->path,
 							"output" => $this->output,
-							"command" => $this->command
+							"command" => $this->command,
+							"language" => $this->language,
+							"succeeded" => $this->succeeded
 						 );
 		
 		// Insert the log in the database:
