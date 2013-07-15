@@ -432,6 +432,13 @@ class Userlog {
 		return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" => "terminal"));
 	}
 	
+	public function GetAllLogsForCompilationAttempt () {
+		$collection = $this->GetCollection();
+		if ($this->path == "") {
+			return $collection->find(array("username" => $this->username, "type" => "compilation_attempt"));	
+		}
+	}
+	
 	public function CloseAllOpenSectionsThatReachedTimeout() {
 		/*
 		 * Session

@@ -543,6 +543,26 @@
 				
 			
 			// --> Terminal 
+			
+			$Compilation_userlog = new Userlog();
+			$Compilation_userlog->username = $user['username'];
+			$compilation_attempts = $Compilation_userlog->GetAllLogsForCompilationAttempt();
+			
+			$compilation_attempts_count = $compilation_attempts->count();
+			$compilation_attempts_successful = 0;
+			$compilation_attempts_failed	 = 0;
+			
+			echo "<h4><u>This user made $compilation_attempts_count compilation attempts,</u></h4>";
+			foreach ($compilation_attempts as $compilation_attempt) {
+				if ($compilation_attempt['succeeded'] == "TRUE") {
+					$compilation_attempts_successful++;	
+				} else {
+					$compilation_attempts_failed++;
+				}
+			}
+			
+			echo "<h5>$compilation_attempts_successful successful</h5>";
+			echo "<h5>$compilation_attempts_failed failed</h5>";
 		}
 	}
 
