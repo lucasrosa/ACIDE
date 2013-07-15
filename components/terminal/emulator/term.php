@@ -83,6 +83,10 @@
         public function Process(){
             $this->ParseCommand();
             $this->Execute();
+			
+			if (substr($this->command,0,5) == "javac") {
+				//$this->output .= "<br> JAVAC E X E C U T E D ! ! !";
+			}
             return $this->output;
         }
         
@@ -92,90 +96,98 @@
         
         public function ParseCommand(){
 			
-            // Explode command
-            $command_parts = explode(" ",$this->command);
+			$current_directory = explode("/", $this->directory);
+			$current_directory = $current_directory[count($current_directory)-1];
 			
-			////////////////////////////////////////////////////
-			// LF: Defining the allowed commands in the terminal
-			////////////////////////////////////////////////////
+			if ($current_directory == "emulator") {
+				$this->command = 'echo Warning: No working directory set. Please choose one project in the project navigator first.';
+				$this->command_exec = $this->command . ' 2>&1';
+			} else {			
+	            // Explode command
+	            $command_parts = explode(" ",$this->command);
+				
+				////////////////////////////////////////////////////
+				// LF: Defining the allowed commands in the terminal
+				////////////////////////////////////////////////////
+				
+				// LF: The blank command is necessary because apparently the terminal executes a blank command when it opens
+				$allowed_commands[] = "";
+				$allowed_commands[] = "ls";
+				$allowed_commands[] = "javac";
+				$allowed_commands[] = "java";
+				$allowed_commands[] = "cd";
+				
+				/* LF: 
+				 * Compare the array of allowed commands with the commands received from the terminal,
+				 * if there is at least one intersection, the rest of the code is executed, if not
+				 * a message "echo ERROR: Command not allowed" is showed in the terminal.
+				 */ 
+				
+				$first_command = $command_parts[0];
+				$result = in_array($first_command, $allowed_commands);
+				
 			
-			// LF: The blank command is necessary because apparently the terminal executes a blank command when it opens
-			$allowed_commands[] = "";
-			$allowed_commands[] = "ls";
-			$allowed_commands[] = "javac";
-			$allowed_commands[] = "java";
-			$allowed_commands[] = "cd";
-			
-			/* LF: 
-			 * Compare the array of allowed commands with the commands received from the terminal,
-			 * if there is at least one intersection, the rest of the code is executed, if not
-			 * a message "echo ERROR: Command not allowed" is showed in the terminal.
-			 */ 
-			
-			$first_command = $command_parts[0];
-			$result = in_array($first_command, $allowed_commands);
-			
-			
-			if (!empty($result)) {
-	            // Handle 'cd' command
-	            if(in_array('cd',$command_parts)){
-	                $cd_key = array_search('cd', $command_parts);
-	                $cd_key++;
-					$unmodified_previous_directory = $this->directory;
-	                $this->directory = $command_parts[$cd_key];
-					
-					$cd_allowed = TRUE;
-					
-					// LF: Handle access
-					if ($this->directory[0] == '/') {
-						$cd_allowed = FALSE;
-					} else if (substr($this->directory, 0, 2) == '..') {
-						$previous_directory = explode('/', $unmodified_previous_directory);
-						if ($previous_directory[count($previous_directory) -2] == "workspace") {
+				if (!empty($result)) {
+		            // Handle 'cd' command
+		            if(in_array('cd',$command_parts)){
+		                $cd_key = array_search('cd', $command_parts);
+		                $cd_key++;
+						$unmodified_previous_directory = $this->directory;
+		                $this->directory = $command_parts[$cd_key];
+						
+						$cd_allowed = TRUE;
+						
+						// LF: Handle access
+						if ($this->directory[0] == '/') {
+							$cd_allowed = FALSE;
+						} else if (substr($this->directory, 0, 2) == '..') {
+							$previous_directory = explode('/', $unmodified_previous_directory);
+							if ($previous_directory[count($previous_directory) -2] == "workspace") {
+								$cd_allowed = FALSE;
+							}
+						} 
+						
+						// LF: Get how many '..' are in the user's command
+						$two_dots_count = 0;
+						$current_directory = explode('/', $this->directory);
+						for ($in = 0; $in < count($current_directory); $in++) {
+							if ($current_directory[$in] == '..') {
+								$two_dots_count++;
+							}
+						}
+						
+						if ($two_dots_count > 1) {
 							$cd_allowed = FALSE;
 						}
-					} 
-					
-					// LF: Get how many '..' are in the user's command
-					$two_dots_count = 0;
-					$current_directory = explode('/', $this->directory);
-					for ($in = 0; $in < count($current_directory); $in++) {
-						if ($current_directory[$in] == '..') {
-							$two_dots_count++;
+						
+						if ($cd_allowed) {
+							$this->ChangeDirectory();
+			                // Remove from command
+			                $this->command = str_replace('cd '.$this->directory,'',$this->command);	
+						} else {
+							// Resetting the directory in case the last command modified it 
+							$this->directory = $unmodified_previous_directory;
+							$this->command = 'echo ERROR: Command not allowed';
+							//$this->command_exec = $this->command . ' 2>&1';
 						}
-					}
-					
-					if ($two_dots_count > 1) {
-						$cd_allowed = FALSE;
-					}
-					
-					if ($cd_allowed) {
-						$this->ChangeDirectory();
-		                // Remove from command
-		                $this->command = str_replace('cd '.$this->directory,'',$this->command);	
-					} else {
-						// Resetting the directory in case the last command modified it 
-						$this->directory = $unmodified_previous_directory;
-						$this->command = 'echo ERROR: Command not allowed';
-						//$this->command_exec = $this->command . ' 2>&1';
-					}
-	            }
-            
-	            // Replace text editors with cat
-	            $editors = array('vim','vi','nano');
-	            $this->command = str_replace($editors,'cat',$this->command);
-            
-	            // Handle blocked commands
-	            $blocked = explode(',',BLOCKED);
-	            if(in_array($command_parts[0],$blocked)){
-	                $this->command = 'echo ERROR: Command not allowed';
-	            }
-            
-	            // Update exec command
-	            $this->command_exec = $this->command . ' 2>&1';
-			} else {
-				$this->command = 'echo ERROR: Command not allowed';
-				$this->command_exec = $this->command . ' 2>&1';
+		            }
+	            
+		            // Replace text editors with cat
+		            $editors = array('vim','vi','nano');
+		            $this->command = str_replace($editors,'cat',$this->command);
+	            
+		            // Handle blocked commands
+		            $blocked = explode(',',BLOCKED);
+		            if(in_array($command_parts[0],$blocked)){
+		                $this->command = 'echo ERROR: Command not allowed';
+		            }
+	            
+		            // Update exec command
+		            $this->command_exec = $this->command . ' 2>&1';
+				} else {
+					$this->command = 'echo ERROR: Command not allowed';
+					$this->command_exec = $this->command . ' 2>&1';
+				}
 			}
 		}
         

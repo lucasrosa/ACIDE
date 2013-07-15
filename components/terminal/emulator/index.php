@@ -110,9 +110,13 @@
 	    
 	    change_directory : function(name){
 	    	var this_name = name;
-	        $.post(terminal.controller,{command:'change_directory', target_name: this_name},function(data) {
-	            terminal.display_output("Directory changed to '" + this_name + "' project root directory.", null);
-	        });
+	    	if (this_name != '') {
+		        $.post(terminal.controller,{command:'change_directory', target_name: this_name},function(data) {
+		            if (this_name != '') {
+		            	terminal.display_output("Directory changed to '" + this_name + "' project root directory.", null);	
+		            }
+		       });
+			}
 	    },
 	    
 	    get_command : function(){
