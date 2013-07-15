@@ -1,6 +1,6 @@
 var hasFocus 					= true;
 var projectHasFocus 			= true;
-var checkFocusInterval 			= 2; // seconds
+var checkFocusInterval 			= 0.5; // seconds
 var checkFocusForFileInterval 	= 0.5; // seconds
 
 

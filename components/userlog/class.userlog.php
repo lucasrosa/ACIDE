@@ -368,21 +368,36 @@ class Userlog {
 		return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"session"));
 	}
 	
-	public function GetAllLogsForProject () {
+	public function GetAllLogsForProject ($session = NULL) {
 		$collection = $this->GetCollection();
-		return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"project", "path" => $this->path));
+		if ($session == NULL) {
+			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"project", "path" => $this->path));
+		} else {
+			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"project", "path" => $this->path, "session_id" => $session));
+		}
 	}
 	
-	public function GetAllLogsForFile () {
+	public function GetAllLogsForFile ($session = NULL) {
 		$collection = $this->GetCollection();
-		error_log("username  = " . $this->username);
-		error_log("path  = " . $this->path);
-		return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"file", "path" => $this->path));
+		if ($session == NULL) {
+			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"file", "path" => $this->path));
+		} else {
+			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"file", "path" => $this->path, "session_id" => $session));
+		}
 	}
 	
-	public function GetAllLogsForTerminalInThisProject () {
+	public function GetAllLogsForTerminalInThisProject ($session = NULL) {
 		$collection = $this->GetCollection();
-		return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"terminal", "path" => $this->path));
+		if ($session == NULL) {
+			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"terminal", "path" => $this->path));
+		} else {
+			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"terminal", "path" => $this->path, "session_id" => $session));
+		}
+	}
+	
+	public function GetAllLogsForTerminal () {
+		$collection = $this->GetCollection();
+		return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" => "terminal"));
 	}
 	
 	public function CloseAllOpenSectionsThatReachedTimeout() {
