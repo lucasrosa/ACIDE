@@ -50,6 +50,7 @@
 				$interval = $date1->diff($date2);
 				
 				$total_time_system->add($interval);
+				
 				echo "<br><h3><u>This session consists of: </u><h3>";
 				// <!-- Session
 				
