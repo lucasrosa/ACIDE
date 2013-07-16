@@ -79,7 +79,7 @@ class Userlogreport {
 			$interval = $date1->diff($date2);
 			//$total_time_system->add($interval);
 			$this_section = array();
-			$this_section['_id'] = $session['_ id'];
+			$this_section['_id'] = $session['_id'];
 			$this_section['interval'] = $interval;
 			$sections_time[] = $this_section;
 		}
