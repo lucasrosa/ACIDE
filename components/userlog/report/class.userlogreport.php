@@ -87,7 +87,7 @@ class Userlogreport {
 		return $sections_time;
 	}
 
-	public function GetTimeSpentInProjectsInSession () {
+	public function GetTimeSpentInProjectsInSession ($session_id) {
 		$this->userlog = new Userlog();
 		
 		$this->userlog->username = $this->username;
@@ -110,7 +110,7 @@ class Userlogreport {
 			foreach($projects as $project) {
 				
 				$Userlog->path = $project['path'];
-				$project_sessions = $Userlog->GetAllLogsForProject($session['_id']);
+				$project_sessions = $this->userlog->GetAllLogsForProject($session_id);
 				if ($project_sessions->count() != 0) {
 					echo "<h4><u>'" . $project['name']. "'</u></h4>";
 				}
