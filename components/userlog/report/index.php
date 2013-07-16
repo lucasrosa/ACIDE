@@ -89,6 +89,8 @@
 					
 					$total_time_project_interval = $total_time_project_helper->diff($total_time_project);
 					
+					
+					// Files
 					if (
 						$total_time_project_interval->y > 0 ||
 						$total_time_project_interval->m > 0 ||
