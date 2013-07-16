@@ -39,26 +39,22 @@ class Userlogreport {
 	}
 	
     //////////////////////////////////////////////////////////////////
-    // Save
+    // Get Time Spent In The System
     //////////////////////////////////////////////////////////////////
 
     public function GetTimeSpentInTheSystem (){
     	$this->userlog = new Userlog();
 		
-		$this->userlog->username = $user['username'];
+		$this->userlog->username = $this->username;
 		$sessions = $this->userlog->GetAllSessionsForUser();
 		$total_time_system = new DateTime('0000-00-00 00:00:00');
 		$total_time_system_helper = clone $total_time_system;
 		
-		echo "<h2>Sessions:</h2>";
-		
 		foreach($sessions as $session) {
-			//$total_time_system += (strtotime($session['last_update_timestamp']) - strtotime($session['start_timestamp']));
 			$date1 = new DateTime($session['start_timestamp']);
 			$date2 = new DateTime($session['last_update_timestamp']);
 			
 			$interval = $date1->diff($date2);
-			
 			$total_time_system->add($interval);
 		}
 		
@@ -67,5 +63,28 @@ class Userlogreport {
 		return $total_time_system_interval;
     }
 	
+	public function GetTimeUserSpentInEachSection () {
+		$this->userlog = new Userlog();
+		
+		$this->userlog->username = $this->username;
+		$sessions = $this->userlog->GetAllSessionsForUser();
+		$total_time_system = new DateTime('0000-00-00 00:00:00');
+		$total_time_system_helper = clone $total_time_system;
+		$sections_time = array();
+		
+		foreach($sessions as $session) {
+			$date1 = new DateTime($session['start_timestamp']);
+			$date2 = new DateTime($session['last_update_timestamp']);
+			
+			$interval = $date1->diff($date2);
+			//$total_time_system->add($interval);
+			$this_section = array();
+			$this_section['_id'] = $session['_ id'];
+			$this_section['interval'] = $interval;
+			$sections_time[] = $this_section;
+		}
+		
+		return $sections_time;
+	}
 	
 }

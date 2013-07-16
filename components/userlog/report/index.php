@@ -1,7 +1,4 @@
 <?
-	// TODO Close all the sections that are open and passed the timeout
-	
-	
 	require_once('../../../common.php');
     require_once('../class.userlog.php');
 	require_once('../../user/class.user.php');
