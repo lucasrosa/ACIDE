@@ -163,7 +163,7 @@
 									$interval->h > 0 ||
 									$interval->i > 0 ||
 									$interval->s > 0 
-									){
+									) {
 										echo "Total time user spend in this session of file " . $name_of_file . ": <br>";
 										printf("&nbsp;&nbsp;&nbsp; %d years, %d months, %d days, %d hours, %d minutes, %d seconds <br>", $interval->y, $interval->m, $interval->d, $interval->h, $interval->i, $interval->s);
 									}
