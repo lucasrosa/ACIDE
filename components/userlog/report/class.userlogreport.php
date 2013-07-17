@@ -161,6 +161,7 @@ class Userlogreport {
 	}
 
 	public function GetTimeSpentInProject ($project_path) {
+		
 		$this->userlog = new Userlog();
 		$this->userlog->username = $this->username;
 		$projects_time = array();
@@ -186,12 +187,86 @@ class Userlogreport {
 		}
 	
 		$total_time_project_interval = $total_time_project_helper->diff($total_time_project);
+
+		return $total_time_project_interval;
+	}
+	
+	public function GetTimeSpentInFileOfProject ($file_name, $project_path) {
 		
-		$current_project_time = array();
-		$current_project_time['path'] = $project['path'];
-		$current_project_time['interval'] = $total_time_project_interval;
+		$project_directory = WORKSPACE . "/". $project_path;
 		
+		$files = $this->listdir($project_directory);// $files = listdir('.');
 		
-		return $current_project_time;
+		for ($j = 0; $j < count($files); $j++) {
+			$exploded_path = explode("/", $files[$j]);
+			$filename = "";
+			$workspace_folder_index = 0;
+			
+			
+			// get filename
+			for ($k = 0; $k < count($exploded_path); $k++) {
+				
+				if ($exploded_path[$k] == "workspace") {
+					$workspace_folder_index = $k;
+				}
+				// If the iteration passed the workspace, start setting the name of the file
+				if ($k > $workspace_folder_index && $workspace_folder_index > 0) {
+					if ($k >($workspace_folder_index + 1)) {
+						$filename .= "/";
+					}
+					$filename .= $exploded_path[$k];
+				}
+			}	
+			if ($filename == $file_name) {
+	 			$FileUserlog = new Userlog();
+				$FileUserlog->username = $Userlog->username;
+				$FileUserlog->path = $filename;
+				$file_sessions = $FileUserlog->GetAllLogsForFile($session['_id']);
+				
+				$name_of_file = explode("/", $filename);
+				$name_of_file = $name_of_file[count($name_of_file)-1];
+				
+				
+				$total_time_file = new DateTime('0000-00-00 00:00:00');
+				$total_time_file_helper = clone $total_time_file;
+			
+				foreach ($file_sessions as $file_session) {
+					$date1 = new DateTime($file_session['start_timestamp']);
+					$date2 = new DateTime($file_session['last_update_timestamp']);
+					$interval = $date1->diff($date2);
+					
+					$total_time_file->add($interval);
+				}
+				
+				$total_time_file_interval = $total_time_file_helper->diff($total_time_file);
+				
+				return $total_time_file_interval;
+			}
+		}
+	}
+	
+	public function listdir($start_dir='.') {
+
+	  $files = array();
+	  if (is_dir($start_dir)) {
+	    $fh = opendir($start_dir);
+	    while (($file = readdir($fh)) !== FALSE) {
+	      # loop through the files, skipping . and .., and recursing if necessary
+	      if (strcmp($file, '.')==0 || strcmp($file, '..')==0 || strcmp($file[0], '.')==0) 
+	      	continue;
+	      $filepath = $start_dir . '/' . $file;
+	      if ( is_dir($filepath) )
+	        $files = array_merge($files, $this->listdir($filepath));
+	      else
+	        array_push($files, $filepath);
+	    }
+	    closedir($fh);
+	  } else {
+	    # false if the function was called with an invalid non-directory argument
+	    $files = false;
+	  }
+	
+	  return $files;
+	
 	}	
 }
