@@ -436,15 +436,6 @@ class Userlog {
 		}
 	}
 	
-	public function GetAllLogsForTerminalInProject ($session = NULL) {
-		$collection = $this->GetCollection();
-		if ($session == NULL) {
-			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" => "terminal", "path" => $this->path));
-		} else {
-			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" => "terminal", "path" => $this->path, "session_id" => $session));
-		}
-	}
-	
 	public function GetAllLogsForCompilationAttempt () {
 		$collection = $this->GetCollection();
 		if ($this->path == "") {

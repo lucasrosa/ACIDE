@@ -239,11 +239,20 @@ class Userlogreport {
 			}
 		}
 	}
-
-	public function GetTimeUserSpentInTerminal ($session_id = NULL) {
+	
+	// If $project_path != null, the method will return the terminal logs related to that project
+	public function GetTimeUserSpentInTerminal ($session_id = NULL, $project_path = NULL) {
+		
 		$this -> userlog -> username = $this -> username;
-		$terminal_sessions = $this->userlog->GetAllLogsForTerminal($session_id);
-		echo "There are " . $terminal_sessions->count() . " terminal sessions.";
+		$terminal_sessions = NULL;
+		if ($project_path == NULL) {
+			$terminal_sessions = $this->userlog->GetAllLogsForTerminal($session_id);	
+		} else {
+			$this->userlog->path = $project_path;
+			$terminal_sessions = $this->userlog->GetAllLogsForTerminalInThisProject($session_id);
+		}
+		
+		
 		$total_time_terminal = new DateTime('0000-00-00 00:00:00');
 		$total_time_terminal_helper = clone $total_time_terminal;
 	
