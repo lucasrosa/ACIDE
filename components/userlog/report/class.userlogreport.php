@@ -268,6 +268,18 @@ class Userlogreport {
 		
 		return $total_time_terminal_interval;
 	}
+	
+	// Success means to return: if TRUE only succeeded compilations, if FALSE only failed, if NULL both 
+	public function GetAllCompilationAttempts ($success = NULL) {
+		$Compilation_userlog = new Userlog();
+		$Compilation_userlog->username = $this->username;
+		
+		if ($success == NULL) {
+			return $Compilation_userlog->GetAllLogsForCompilationAttempt();	
+		} else {
+			$Compilation_userlog->GetAllLogsForCompilationAttempt($success);
+		}
+	}
 
 	public function listdir($start_dir = '.') {
 

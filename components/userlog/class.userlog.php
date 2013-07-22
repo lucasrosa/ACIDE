@@ -183,13 +183,30 @@ class Userlog {
 
     public function SaveAsCompilationAttempt(){
 		$collection = $this->GetCollection();
+		
+		$project_path = "";
+		
+		$path_exploded = explode("/", $this->path);
+		$workspace_found = FALSE;
+		for ($i = 0; $i < count($path_exploded); $i++) {
 			
+			if ($workspace_found) {
+				$project_path = $path_exploded[$i];
+				break;
+			}
+			
+			if ($path_exploded[$i] == "workspace") {
+				$workspace_found = TRUE;
+			}	
+		}
+		
 		$new_log = array( 	
 							"username" => $this->username,
 							"type" => "compilation_attempt",
 							"start_timestamp" => date("Y-m-d H:i:s"),
 							"session_id" => $this->GetCurrentSessionId(),
-							"path" => $this->path,
+							"path" => $project_path,
+							"current_path" => $this->path,
 							"output" => $this->output,
 							"command" => $this->command,
 							"language" => $this->language,
@@ -436,10 +453,27 @@ class Userlog {
 		}
 	}
 	
-	public function GetAllLogsForCompilationAttempt () {
+	public function GetAllLogsForCompilationAttempt ($succeeded = NULL) {
 		$collection = $this->GetCollection();
-		if ($this->path == "") {
+		if ($this->path == "" && $succeeded == NULL) {
 			return $collection->find(array("username" => $this->username, "type" => "compilation_attempt"));	
+		} else if ($succeeded == NULL) {
+			return $collection->find(array("username" => $this->username, "type" => "compilation_attempt", "path" => $this->path));
+		} else {
+			$succeeded_string = "";
+			
+			if ($succeeded) {
+				$succeeded_string = "TRUE";
+			} else {
+				$succeeded_string = "FALSE";
+			}
+			
+			if ($this->path == "") {
+				return $collection->find(array("username" => $this->username, "type" => "compilation_attempt", "succeeded" => $succeeded_string));	
+			} else {
+				return $collection->find(array("username" => $this->username, "type" => "compilation_attempt", "succeeded" => $succeeded_string, "path" => $this->path));
+			}
+			
 		}
 	}
 	
