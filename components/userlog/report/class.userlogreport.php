@@ -31,10 +31,10 @@ class Userlogreport {
 	//////////////////////////////////////////////////////////////////
 
 	public function __construct() {
-		$this -> userlog = new Userlog();
-		$this -> user = new User();
+		$this->userlog = new Userlog();
+		$this->user = new User();
 		$user_types = $this -> user -> GetUsersTypes();
-		$this -> student_user_type = $user_types[0];
+		$this->student_user_type = $user_types[0];
 	}
 
 	//////////////////////////////////////////////////////////////////
@@ -241,42 +241,23 @@ class Userlogreport {
 	}
 
 	public function GetTimeUserSpentInTerminal ($session_id = NULL) {
-		$terminal_sessions = $Userlog->GetAllLogsForTerminal();
-			if ($terminal_sessions->count() != 0) {
-				echo "<h4><u>Total time this user spent in the terminal:</u></h4>";
-			}
+		$this -> userlog -> username = $this -> username;
+		$terminal_sessions = $this->userlog->GetAllLogsForTerminal($session_id);
+		echo "There are " . $terminal_sessions->count() . " terminal sessions.";
+		$total_time_terminal = new DateTime('0000-00-00 00:00:00');
+		$total_time_terminal_helper = clone $total_time_terminal;
+	
+		foreach ($terminal_sessions as $terminal_session) {
+			$date1 = new DateTime($terminal_session['start_timestamp']);
+			$date2 = new DateTime($terminal_session['last_update_timestamp']);
+			$interval = $date1->diff($date2);
 			
-			$total_time_terminal = new DateTime('0000-00-00 00:00:00');
-			$total_time_terminal_helper = clone $total_time_terminal;
+			$total_time_terminal->add($interval);
+		}
 		
-			foreach ($terminal_sessions as $terminal_session) {
-				$date1 = new DateTime($terminal_session['start_timestamp']);
-				$date2 = new DateTime($terminal_session['last_update_timestamp']);
-				$interval = $date1->diff($date2);
-				
-				$total_time_terminal->add($interval);
-			}
-			
-			$total_time_terminal_interval = $total_time_terminal_helper->diff($total_time_terminal);
-			
-			if (
-				$total_time_terminal_interval->y > 0 ||
-				$total_time_terminal_interval->m > 0 ||
-				$total_time_terminal_interval->d > 0 ||
-				$total_time_terminal_interval->h > 0 ||
-				$total_time_terminal_interval->i > 0 ||
-				$total_time_terminal_interval->s > 0 
-				){
-					echo "<h4>Total time the user spend in the terminal is:<br>";
-					printf("&nbsp;&nbsp;&nbsp; %d years, %d months, %d days, %d hours, %d minutes, %d seconds <br>", 
-							$total_time_terminal_interval->y,
-							$total_time_terminal_interval->m,
-							$total_time_terminal_interval->d,
-							$total_time_terminal_interval->h,
-							$total_time_terminal_interval->i,
-							$total_time_terminal_interval->s);
-					echo "</h4>";
-			}
+		$total_time_terminal_interval = $total_time_terminal_helper->diff($total_time_terminal);
+		
+		return $total_time_terminal_interval;
 	}
 
 	public function listdir($start_dir = '.') {
