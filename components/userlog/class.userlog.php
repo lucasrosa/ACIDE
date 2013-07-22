@@ -455,9 +455,10 @@ class Userlog {
 	
 	public function GetAllLogsForCompilationAttempt ($succeeded = NULL) {
 		$collection = $this->GetCollection();
-		if ($this->path == "" && $succeeded == NULL) {
+		
+		if ($this->path == "" && $succeeded === NULL) {
 			return $collection->find(array("username" => $this->username, "type" => "compilation_attempt"));	
-		} else if ($succeeded == NULL) {
+		} else if ($succeeded === NULL) {
 			return $collection->find(array("username" => $this->username, "type" => "compilation_attempt", "path" => $this->path));
 		} else {
 			$succeeded_string = "";

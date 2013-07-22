@@ -274,11 +274,26 @@ class Userlogreport {
 		$Compilation_userlog = new Userlog();
 		$Compilation_userlog->username = $this->username;
 		
-		if ($success == NULL) {
+		if ($success === NULL) {
 			return $Compilation_userlog->GetAllLogsForCompilationAttempt();	
 		} else {
 			$Compilation_userlog->GetAllLogsForCompilationAttempt($success);
 		}
+	}
+	
+	public function GetNumberOfCompilations ($path = "", $succeeded = NULL) {
+		$Compilation_userlog = new Userlog();
+		$Compilation_userlog->username = $this->username;
+		
+		if ($path != "") {
+			$Compilation_userlog->path = $path;	
+		}
+		
+		$compilation_attempts = $Compilation_userlog->GetAllLogsForCompilationAttempt($succeeded);
+		$compilation_attempts_count = $compilation_attempts->count();
+		
+		return $compilation_attempts_count;
+			
 	}
 
 	public function listdir($start_dir = '.') {
