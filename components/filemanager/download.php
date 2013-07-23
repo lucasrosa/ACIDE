@@ -13,7 +13,6 @@
     //////////////////////////////////////////////////////////////////
 
     checkSession();
-
     //////////////////////////////////////////////////////////////////
     // Check $_GET for incorrect chars or '..' for workspace ecape
     //////////////////////////////////////////////////////////////////
@@ -47,9 +46,13 @@
         if(isAvailable('system') && stripos(PHP_OS, 'win') === false){
           # Execute the tar command and save file
           $filename .= '.tar.gz';
-
-          system("tar -pczf ".$targetPath.$filename." ".$dir);
+			
+			//system("tar -pczf ".$targetPath.$filename." ".$dir);
+			#changed the command so only the last directory is compressed, not the whole directory structure
+			system("cd " . $dir . " && tar -pczf ".$targetPath.$filename. " *");
+          
           $download_file = $targetPath.$filename;
+		  
         }elseif(extension_loaded('zip')){ //Check if zip-Extension is availiable
           //build zipfile
           require_once 'class.dirzip.php';
@@ -57,6 +60,7 @@
           $filename .= '.zip';
           $download_file = $targetPath.$filename;
           DirZip::zipDir($dir, $targetPath .$filename);
+		  
         }else{
           exit('<script>parent.codiad.message.error("Could not pack the folder, zip-extension missing")</script>');
         }
