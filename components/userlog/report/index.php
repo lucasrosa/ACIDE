@@ -30,6 +30,8 @@ $student_user_type = $user_types[0];
 
 $compilation_errors = array();
 
+
+$error_to_log = "";
 // String test
 /*
  * $string = 'reply-234-private';
@@ -248,6 +250,7 @@ foreach ($users as $user) {
 		$array_of_errors = array();
 		$array_of_errors[] = "javac: invalid flag:";
 		$array_of_errors[] = "javac: file not found:";
+		
 		foreach ($compilation_attempts as $compilation_attempt) {
 			$current_error = "";
 			$display = array();
@@ -267,7 +270,7 @@ foreach ($users as $user) {
 				/*
 				 * Treat errors like: 'Class names, 'testhallo.txt', are only accepted if annotation processing is explicitly requested'
 				 */
-				// Remove class/file name --> $onlyconsonants = str_replace($vowels, "", "Hello World of PHP");
+				// Remove class/file name 
 				$current_error = $display[1];
 				
 				if (preg_match('/\'(.*?)\'/', $error, $display)) {
@@ -295,7 +298,9 @@ foreach ($users as $user) {
 				 	$single_error['error'] = $current_error;
 					$single_error['count'] = 1; 
 					$outputted_errors[] = $single_error;
+					$error_to_log = $error;
 				 }
+				 
 				 
 				//echo "<br> $current_error";
 				//echo "<br> {" . $compilation_attempt['output'] . "}";
@@ -359,7 +364,7 @@ foreach ($users as $user) {
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
                     '<td style="padding:0"><b>{point.y} </b></td></tr>',
                 footerFormat: '</table>',
-                shared: true,
+                //shared: true,
                 useHTML: true
             },
             plotOptions: {
@@ -403,11 +408,11 @@ foreach ($users as $user) {
 
 		</script>
 	</head>
-	<body style="background-color: #000000;">
+	<body style="background-color: #000000; color: #FFFFFF;">
 		<script src="../../highcharts/js/highcharts.js"></script>
 		<script src="../../highcharts/js/modules/exporting.js"></script>
 		<script src="../../highcharts/js/themes/gray.js"></script>
-
+		<div>Error to log = <?=$error_to_log?></div>
 		<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
 
 	</body>
