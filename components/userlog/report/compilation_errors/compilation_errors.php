@@ -2,14 +2,17 @@
 	/*
     *  Copyright (c) UPEI sbateman@upei.ca lrosa@upei.ca
     */
-    
-	require_once('../../../../common.php');
-    require_once('../../../user/class.user.php');
-	require_once('../../../project/class.project.php');
-//	require_once('class.assignment.php');
-	require_once('../../../permission/class.permission.php');
-	require_once('../../../course/class.course.php');
-	require_once('../../class.userlog.php');
+    // Gets the root folder
+	$root_folder = substr(substr($_SERVER["REQUEST_URI"],1), 0, strpos(substr($_SERVER["REQUEST_URI"],1), "/"));
+	// Sets the include path
+	set_include_path("/var/www/");
+	// Include the  require files
+	require_once($root_folder . '/common.php');
+    require_once($root_folder . '/components/user/class.user.php');
+	require_once($root_folder . '/components/project/class.project.php');
+	require_once($root_folder . '/components/permission/class.permission.php');
+	require_once($root_folder . '/components/course/class.course.php');
+	require_once($root_folder . '/components/userlog/class.userlog.php');
 	
 	//////////////////////////////////////////////////////////////////
     // This page offers an interface to manage assignments
@@ -100,39 +103,87 @@
 			}
 		</style>
 		<script>
+			var students 	= new Array();
+			var assignments = new Array();
+			var group_by 	= 0;
+			
+			function set_chart_data(students, assignments, group_by) {
+				//var form = $('#chart_options_form');
+				var data_array = new Array();
+				// [0] => students
+				data_array.push(students);
+				// [1] => assignments
+				data_array.push(assignments);
+				// [2] => group_by
+				data_array.push(group_by);
+				
+				$.ajax({
+					type : "POST",
+					url : 'controller.php?action=get_data_for_chart',
+					data : {data_array : data_array}, //form.serialize(),
+					dataType : 'json',
+					success : function(response) {
+						//console.log("asd");
+						//console.log(response.status);
+						//console.log(response.outputted_errors);
+						data = response.outputted_errors;
+						setChart(data);
+						/*
+						 if (response.status == 'success') {
+						 codiad.modal.unload();
+						 codiad.message.success(i18n('Project updated'));
+						 } else if (response.status == 'error_user_maximum_reached') {
+						 codiad.message.error(i18n('Maximum limit of users reached.'));
+						 } else if (response.status == 'error_database') {
+						 codiad.message.error(i18n('Changes couldn\'t be saved on database.'));
+						 }
+						 */
+					},
+					error : function(response) {
+						//codiad.modal.unload();
+						//codiad.message.error(i18n('An unexpected error ocurred. Please try again.'));
+												}
+				});
+			}
+			
+			$(document).ready(function() {
+				set_chart_data(students, assignments, group_by);
+			});
+			
 			$(function() {
 
 				$("#students_selectable").selectable({
 					stop : function() {
-						//var result = $("#select-result").empty();
+						students = new Array();
 						$(".ui-selected", this).each(function() {
-							var index = $(this).attr('id');
-							//result.append("<br> " + index);
-							set_chart_data();
+							var id = $(this).attr('id');
+							students.push(id);
 						});
+						set_chart_data(students, assignments, group_by);
 					}
 				});
 
 				$("#assignments_selectable").selectable({
 					stop : function() {
-						//var result = $("#assignments_select-result").empty();
+						assignments = new Array();
 						$(".ui-selected", this).each(function() {
-							var index = $(this).attr('id');
-							//result.append("<br> " + index);
+							var id = $(this).attr('id');
+							assignments.push(id);
 						});
+						set_chart_data(students, assignments, group_by);
 					}
 				});
 
 				$("#group_selectable li").click(function() {
 					$(this).addClass("ui-selected").siblings().removeClass("ui-selected");
-					//var result = $("#assignments_select-result").empty();
-					//var index = $(this).attr('id');
-					//result.append("<br> " + index);
+					var id = $(this).attr('id');
+					group_by = id;
+					set_chart_data(students, assignments, group_by);
 				});
 
 			});
 		</script>
-
+		
 	</head>
 	<body>
 		<div id="container" style="width: 960px; height: 360px; margin: 0 auto">
@@ -140,6 +191,7 @@
 		</div>
 		<!-- content -->
 		<div class="wrapper row2">
+
 			<div id="container" class="clear">
 
 				<!-- main content -->
@@ -227,32 +279,47 @@
 	</body>
 </html>
 <script type="text/javascript">
-	function setChart(janName) {
+	function setChart(data) {
+		var data_series = new Array();
+		for (var i = 0; i < data.length; i++) {
+			var serie = {
+				name : '' + data[i]['error'],
+				data : [data[i]['count']]
+			}
+			data_series.push(serie);	
+		}
+		
+		
 		$('#container').highcharts({
 			chart : {
 				type : 'column'
 			},
 			title : {
-				text : 'Monthly Average Rainfall'
+				text: 'Compilation errors of all students'
 			},
+			/*
 			subtitle : {
-				text : 'Source: WorldClimate.com'
+				text : '...'
 			},
+			*/
+			
 			xAxis : {
-				categories : [janName, 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+				categories : ['Errors']
 			},
+			
 			yAxis : {
 				min : 0,
 				title : {
-					text : 'Rainfall (mm)'
+					text: 'Number of occurrences'
 				}
 			},
 			tooltip : {
-				headerFormat : '<span style="font-size:10px">{point.key}</span><table>',
-				pointFormat : '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' + '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-				footerFormat : '</table>',
-				shared : true,
-				useHTML : true
+				headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y} </b></td></tr>',
+                footerFormat: '</table>',
+                //shared: true,
+                useHTML: true
 			},
 			plotOptions : {
 				column : {
@@ -260,57 +327,11 @@
 					borderWidth : 0
 				}
 			},
-			series : [{
-				name : 'Tokyo',
-				data : [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
-
-			}, {
-				name : 'New York',
-				data : [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
-
-			}, {
-				name : 'London',
-				data : [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
-
-			}, {
-				name : 'Berlin',
-				data : [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
-
-			}]
+			series: data_series
 		});
 	}
 
-	setChart('asd'); 
-</script>
-<script>
-	function set_chart_data () {
-		//var form = $('#chart_options_form');
-		$.ajax({
-			type : "POST",
-			url : 'components/userlog/report/compilation_errors/controller.php?action=get_data_for_chart',
-			data : form.serialize(),
-			dataType : 'json',
-			success : function(response) {
-				console.log("asd");
-				console.log(response.status);
-				console.log(response.robert);
-				/*
-				if (response.status == 'success') {
-					codiad.modal.unload();
-					codiad.message.success(i18n('Project updated'));
-				} else if (response.status == 'error_user_maximum_reached') {
-					codiad.message.error(i18n('Maximum limit of users reached.'));
-				} else if (response.status == 'error_database') {
-					codiad.message.error(i18n('Changes couldn\'t be saved on database.'));
-				}
-				*/
-			},
-			error : function(response) {
-				//codiad.modal.unload();
-				//codiad.message.error(i18n('An unexpected error ocurred. Please try again.'));
-			}
-		});
-	}
+	//setChart('asd', 12); 
 </script>
 <?
 }

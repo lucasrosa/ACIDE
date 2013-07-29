@@ -3,10 +3,15 @@
 /*
  *  Copyright (c) UPEI lrosa@upei.ca sbateman@upei.ca
  */
-require_once ('../../../common.php');
-require_once ('../class.userlog.php');
-require_once ('../../user/class.user.php');
-require_once ('../../project/class.project.php');
+ // Gets the root folder
+$root_folder = substr(substr($_SERVER["REQUEST_URI"],1), 0, strpos(substr($_SERVER["REQUEST_URI"],1), "/"));
+// Sets the include path
+set_include_path("/var/www/");
+// Include the  require files
+require_once($root_folder . '/common.php');
+require_once($root_folder . '/components/userlog/class.userlog.php');
+require_once($root_folder . '/components/user/class.user.php');
+require_once($root_folder . '/components/project/class.project.php');
 
 class Userlogreport {
 
