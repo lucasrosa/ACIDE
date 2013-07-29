@@ -108,6 +108,7 @@
 						$(".ui-selected", this).each(function() {
 							var index = $(this).attr('id');
 							//result.append("<br> " + index);
+							set_chart_data();
 						});
 					}
 				});
