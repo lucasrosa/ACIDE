@@ -110,12 +110,18 @@
 			function set_chart_data(students, assignments, group_by) {
 				//var form = $('#chart_options_form');
 				var data_array = new Array();
+				if (students.length == 0) {
+					students = null;
+				}
+				if (assignments.length == 0) {
+					assignments = null;
+				}
 				// [0] => students
-				data_array.push(students);
+				data_array[0] = students;
 				// [1] => assignments
-				data_array.push(assignments);
+				data_array[1] = assignments;
 				// [2] => group_by
-				data_array.push(group_by);
+				data_array[2] = group_by;
 				
 				$.ajax({
 					type : "POST",
@@ -154,10 +160,16 @@
 
 				$("#students_selectable").selectable({
 					stop : function() {
+						var all = false;
 						students = new Array();
 						$(".ui-selected", this).each(function() {
-							var id = $(this).attr('id');
-							students.push(id);
+							
+							else {
+								var id = $(this).attr('id');
+								students.push(id);	
+							}
+							
+							
 						});
 						set_chart_data(students, assignments, group_by);
 					}
@@ -205,6 +217,9 @@
 								</figcaption>
 								<div id="assignments" style='background-color:#404040; min-height: 300px; width:290px;height:100%'>
 									<ol id="assignments_selectable">
+										<li id="all" class="ui-widget-content  ui-selected">
+											All
+										</li>
 										<?
 										//////////////////////////////////////////////////////////////////
 										// LF: List all assignments which this user is the owner
@@ -235,15 +250,15 @@
 									<ol id="students_selectable">
 										<?
 										foreach ($users as $user) {
-										if ($user['type'] == $student_user_type) {
-										?>
-
-										<li id="<?=$user['username'] ?>" class="ui-widget-content">
-											<?=$user['username'] ?>
-										</li>
-
-										<?
-										}
+											if ($user['type'] == $student_user_type) {
+											?>
+	
+											<li id="<?=$user['username'] ?>" class="ui-widget-content">
+												<?=$user['username'] ?>
+											</li>
+	
+											<?
+											}
 										}
 										?>
 									</ol>
@@ -257,7 +272,7 @@
 								</figcaption>
 								<div id="group_by" style='background-color:#404040; min-height: 300px; width:290px;height:100%'>
 									<ol id="group_selectable">
-										<li id="0" class="ui-widget-content">
+										<li id="0" class="ui-widget-content ui-selected">
 											Don't group
 										</li>
 										<li id="1" class="ui-widget-content">

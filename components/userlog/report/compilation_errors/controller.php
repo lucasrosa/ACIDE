@@ -28,15 +28,16 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	$assignments= array();
 	$group_by = NULL;
 	
+	error_log(print_r($data_array, true));
 	
-	if (!empty($data_array[0])) {
+	if (isset($data_array[0])) {
 		$students = $data_array[0];	
 	}
-	if (!empty($data_array[1])) {
+	if (isset($data_array[1])) {
 		$assignments = $data_array[1];
 	}
 	
-	if (!empty($data_array[2])) {
+	if (isset($data_array[2])) {
 		$group_by = $data_array[2];
 	}
 	// Get data <--
@@ -50,7 +51,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	$single_error = array();
 	
 	// Check if there are no students, then load all of them
-	if (count($students) == 0) {
+	if (!isset($students[0]) || count($students[0]) == 0) {
 		$User = new User();
 		//$User->users = getJSON('users.php');
 		// Connect
@@ -74,6 +75,17 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		}
 	}
 	
+	// CHeck if there are no assignments, then load all of them
+	if (!isset($assignments[0]) || count($assignments[0]) == 0) {
+		$Project = new Project();
+		$current_user = $_SESSION['user'];
+		$raw_assignments = $Project->GetAssignmentsInTheSameCoursesOfUser($current_user);
+		
+		foreach($raw_assignments as $raw_assignment) {
+			$assignments[] =$raw_assignment['id'];
+		}
+	}
+	
 	for ($idx = 0; $idx < count($students); $idx++) {
 		
 		$user_assignments = $assignments;
@@ -87,7 +99,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		$Compilation_userlog = new Userlog();
 		$Compilation_userlog -> username = $students[$idx];
 		$compilation_attempts = $Compilation_userlog -> GetAllLogsForCompilationAttempt();
-
+		
 		$current_error = "";
 
 		/*
@@ -102,7 +114,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 			$display = array();
 			$error = $compilation_attempt['output'];
 			
-			if ($compilation_attempt['succeeded'] == 'FALSE' && (empty($assignments) || in_array($compilation_attempt['path'], $user_assignments))) {
+			if ($compilation_attempt['succeeded'] == 'FALSE' && in_array($compilation_attempt['path'], $user_assignments)) {
 				preg_match('/error:(.*?)\n/', $error, $display);
 
 				$array_of_errors_iterator = 0;
