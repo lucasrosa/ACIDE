@@ -37,7 +37,6 @@
 		$MainUserlog -> CloseAllOpenSectionsThatReachedTimeout();
 		
 		$User = new User();
-		//$User->users = getJSON('users.php');
 		// Connect
 		$mongo_client = new MongoClient();
 		// select the database
@@ -163,26 +162,45 @@
 						var all = false;
 						students = new Array();
 						$(".ui-selected", this).each(function() {
-							
-							else {
+							var index = $(this).index();
+							if (index == 0) {
+								all = true;
+							} else {
 								var id = $(this).attr('id');
 								students.push(id);	
 							}
 							
-							
 						});
+						
+						if (all) {
+							students = new Array();
+						}
+						
 						set_chart_data(students, assignments, group_by);
+						
 					}
 				});
 
 				$("#assignments_selectable").selectable({
 					stop : function() {
+						var all = false;
 						assignments = new Array();
 						$(".ui-selected", this).each(function() {
-							var id = $(this).attr('id');
-							assignments.push(id);
+							var index = $(this).index();
+							if (index == 0) {
+								all = true;
+							} else {
+								var id = $(this).attr('id');
+								assignments.push(id);
+							}
 						});
+						
+						if (all) {
+							assignments = new Array();
+						}
+						
 						set_chart_data(students, assignments, group_by);
+						
 					}
 				});
 
@@ -248,6 +266,9 @@
 								</figcaption>
 								<div id="students" style='background-color:#404040; min-height: 300px; width:290px;height:100%'>
 									<ol id="students_selectable">
+										<li id="all" class="ui-widget-content  ui-selected">
+											All
+										</li>
 										<?
 										foreach ($users as $user) {
 											if ($user['type'] == $student_user_type) {
