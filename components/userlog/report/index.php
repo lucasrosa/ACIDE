@@ -414,6 +414,99 @@ foreach ($users as $user) {
 		<script src="../../highcharts/js/themes/gray.js"></script>
 		<div>Error to log = <?=$error_to_log?></div>
 		<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+<div class="wrapper row2">
+			<div id="container" class="clear">
+				<!-- Slider -->
+				<div id="slider">
+					<article>
+						<figure>
+							<div id="container" style="background-color:#404040; width: 960px; height: 360px; margin: 0 auto">
+							
+							</div>
+						</figure>
+					</article>
+				</div>
+				<!-- main content -->
+				<div id="homepage">
+					<!-- Services -->
+					<section id="services" class="clear">
+						<article class="one_third">
+							<figure>
+								<figcaption>
+									<h2>Assignments</h2>
+								</figcaption>
+								<div id="assignments" style='background-color:#404040; min-height: 300px; width:290px;height:100%'>
+									<ol id="assignments_selectable">
+										<?
+										//////////////////////////////////////////////////////////////////
+										// LF: List all assignments which this user is the owner
+										//////////////////////////////////////////////////////////////////
+										$Project = new Project();
+										//$assignments = $Project->GetAssignments();
+										$current_user = $_SESSION['user'];
+										$assignments = $Project->GetAssignmentsInTheSameCoursesOfUser($current_user);
 
+										for ($k = 0; $k < count($assignments); $k++) {
+										//$Course->id = $assignments[$k]['course'];
+
+										?>
+										<li id="<?=$assignments[$k]['name']?>" class="ui-widget-content">
+											<?=$assignments[$k]['name']?>
+										</li>
+										<? } ?>
+									</ol>
+								</div>
+							</figure>
+						</article>
+						<article class="one_third">
+							<figure>
+								<figcaption>
+									<h2>Students</h2>
+								</figcaption>
+								<div id="students" style='background-color:#404040; min-height: 300px; width:290px;height:100%'>
+									<ol id="students_selectable">
+									<?
+									foreach ($users as $user) {
+										if ($user['type'] == $student_user_type) {
+									?>
+											
+												<li id="<?=$user['username']?>" class="ui-widget-content">
+													<?=$user['username']?>
+												</li>
+											
+										<?
+										}
+									}
+									?>
+									</ol>
+								</div>
+							</figure>
+						</article>
+						<article class="one_third lastbox">
+							<figure>
+								<figcaption>
+									<h2>Groups</h2>
+								</figcaption>
+								<div id="group_by" style='background-color:#404040; min-height: 300px; width:290px;height:100%'>
+									<ol id="group_selectable">
+										<li id="0" class="ui-widget-content">
+											Don't group
+										</li>
+										<li id="1" class="ui-widget-content">
+											Group by students
+										</li>
+										<li id="2" class="ui-widget-content">
+											Group by assignment
+										</li>
+									</ol>
+								</div>
+							</figure>
+						</article>
+					</section>
+					<!-- / Services -->
+				</div>
+				<!-- / content body -->
+			</div>
+		</div>
 	</body>
 </html>

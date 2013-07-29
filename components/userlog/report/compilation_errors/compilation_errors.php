@@ -121,7 +121,7 @@
 						});
 					}
 				});
-				
+
 				$("#group_selectable li").click(function() {
 					$(this).addClass("ui-selected").siblings().removeClass("ui-selected");
 					//var result = $("#assignments_select-result").empty();
@@ -131,22 +131,16 @@
 
 			});
 		</script>
-		
+
 	</head>
 	<body>
+		<div id="container" style="width: 960px; height: 360px; margin: 0 auto">
+
+		</div>
 		<!-- content -->
 		<div class="wrapper row2">
 			<div id="container" class="clear">
-				<!-- Slider -->
-				<div id="slider">
-					<article>
-						<figure>
-							<div id="container" style="background-color:#404040; width: 960px; height: 360px; margin: 0 auto">
-							
-							</div>
-						</figure>
-					</article>
-				</div>
+
 				<!-- main content -->
 				<div id="homepage">
 					<!-- Services -->
@@ -171,8 +165,8 @@
 										//$Course->id = $assignments[$k]['course'];
 
 										?>
-										<li id="<?=$assignments[$k]['name']?>" class="ui-widget-content">
-											<?=$assignments[$k]['name']?>
+										<li id="<?=$assignments[$k]['name'] ?>" class="ui-widget-content">
+											<?=$assignments[$k]['name'] ?>
 										</li>
 										<? } ?>
 									</ol>
@@ -186,19 +180,19 @@
 								</figcaption>
 								<div id="students" style='background-color:#404040; min-height: 300px; width:290px;height:100%'>
 									<ol id="students_selectable">
-									<?
-									foreach ($users as $user) {
+										<?
+										foreach ($users as $user) {
 										if ($user['type'] == $student_user_type) {
-									?>
-											
-												<li id="<?=$user['username']?>" class="ui-widget-content">
-													<?=$user['username']?>
-												</li>
-											
+										?>
+
+										<li id="<?=$user['username'] ?>" class="ui-widget-content">
+											<?=$user['username'] ?>
+										</li>
+
 										<?
 										}
-									}
-									?>
+										}
+										?>
 									</ol>
 								</div>
 							</figure>
@@ -232,75 +226,91 @@
 	</body>
 </html>
 <script type="text/javascript">
-$(function () {
-        $('#coasntainer').highcharts({
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: 'Monthly Average Rainfall'
-            },
-            subtitle: {
-                text: 'Source: WorldClimate.com'
-            },
-            xAxis: {
-                categories: [
-                    'Jan',
-                    'Feb',
-                    'Mar',
-                    'Apr',
-                    'May',
-                    'Jun',
-                    'Jul',
-                    'Aug',
-                    'Sep',
-                    'Oct',
-                    'Nov',
-                    'Dec'
-                ]
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Rainfall (mm)'
-                }
-            },
-            tooltip: {
-                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0
-                }
-            },
-            series: [{
-                name: 'Tokyo',
-                data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
-    
-            }, {
-                name: 'New York',
-                data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
-    
-            }, {
-                name: 'London',
-                data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
-    
-            }, {
-                name: 'Berlin',
-                data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
-    
-            }]
-        });
-    });
-    
+	function setChart(janName) {
+		$('#container').highcharts({
+			chart : {
+				type : 'column'
+			},
+			title : {
+				text : 'Monthly Average Rainfall'
+			},
+			subtitle : {
+				text : 'Source: WorldClimate.com'
+			},
+			xAxis : {
+				categories : [janName, 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+			},
+			yAxis : {
+				min : 0,
+				title : {
+					text : 'Rainfall (mm)'
+				}
+			},
+			tooltip : {
+				headerFormat : '<span style="font-size:10px">{point.key}</span><table>',
+				pointFormat : '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' + '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+				footerFormat : '</table>',
+				shared : true,
+				useHTML : true
+			},
+			plotOptions : {
+				column : {
+					pointPadding : 0.2,
+					borderWidth : 0
+				}
+			},
+			series : [{
+				name : 'Tokyo',
+				data : [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
 
-		</script>
+			}, {
+				name : 'New York',
+				data : [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
+
+			}, {
+				name : 'London',
+				data : [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
+
+			}, {
+				name : 'Berlin',
+				data : [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
+
+			}]
+		});
+	}
+
+	setChart('asd'); 
+</script>
+<script>
+	function set_chart_data () {
+		//var form = $('#chart_options_form');
+		$.ajax({
+			type : "POST",
+			url : 'components/userlog/report/compilation_errors/controller.php?action=get_data_for_chart',
+			data : form.serialize(),
+			dataType : 'json',
+			success : function(response) {
+				console.log("asd");
+				console.log(response.status);
+				console.log(response.robert);
+				/*
+				if (response.status == 'success') {
+					codiad.modal.unload();
+					codiad.message.success(i18n('Project updated'));
+				} else if (response.status == 'error_user_maximum_reached') {
+					codiad.message.error(i18n('Maximum limit of users reached.'));
+				} else if (response.status == 'error_database') {
+					codiad.message.error(i18n('Changes couldn\'t be saved on database.'));
+				}
+				*/
+			},
+			error : function(response) {
+				//codiad.modal.unload();
+				//codiad.message.error(i18n('An unexpected error ocurred. Please try again.'));
+			}
+		});
+	}
+</script>
 <?
 }
 ?>
