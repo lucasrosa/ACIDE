@@ -321,7 +321,8 @@
 </html>
 <script type="text/javascript">
 	function setChart(data, group_by) {
-		console.log(JSON.stringify(data));
+		//console.log(JSON.stringify(data));
+		
 		var data_series = new Array();
 		var x_axis = {
 			categories : ['Errors']
@@ -343,7 +344,7 @@
 				}
 				data_series.push(serie);
 			}
-		} else if (group_by == 1) {
+		} else if (group_by == 1 && data.length > 0) {
 			var students_series = new Array();
 			var x_categories = new Array();
 			//console.log(JSON.stringify(data));

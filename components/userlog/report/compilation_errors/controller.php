@@ -28,7 +28,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	$assignments= array();
 	$group_by = NULL;
 	
-	error_log(print_r($data_array, true));
+	//error_log(print_r($data_array, true));
 	
 	if (isset($data_array[0])) {
 		$students = $data_array[0];	
@@ -217,12 +217,13 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		//echo "<hr>";
 	//}
 	// Get data -->
-
+	
+	
 	header('Content-type: application/json');
 	$response_array['status'] = 'success';
 	$response_array['outputted_errors'] = $outputted_errors;
 	//error_log(print_r($response_array['outputted_errors'], true));
-	$response_array['group_by'] = $group_by;
+	//$response_array['group_by'] = $group_by;
 	
 	echo json_encode($response_array);
 }
