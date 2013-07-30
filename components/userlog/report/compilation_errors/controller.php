@@ -75,7 +75,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		}
 	}
 	
-	// CHeck if there are no assignments, then load all of them
+	// Check if there are no assignments, then load all of them
 	if (!isset($assignments[0]) || count($assignments[0]) == 0) {
 		$Project = new Project();
 		$current_user = $_SESSION['user'];
@@ -143,22 +143,56 @@ if ($_GET['action'] == 'get_data_for_chart') {
 				 * Verify if the error is already inserted in the array
 				 */
 				$error_already_inserted = FALSE;
-				for ($k = 0; $k < count($outputted_errors); $k++) {
-					if ($outputted_errors[$k]['error'] == $current_error) {
-						$error_already_inserted = TRUE;
-						$outputted_errors[$k]['count']++;
-					}
+				if ($group_by == 0) {
+					for ($k = 0; $k < count($outputted_errors); $k++) {
+						if ($outputted_errors[$k]['error'] == $current_error) {
+							$error_already_inserted = TRUE;
+							$outputted_errors[$k]['count']++;
+						}
+					}	
+				} else if ($group_by == 1) {
+					for ($k = 0; $k < count($outputted_errors); $k++) {
+						if ($outputted_errors[$k]['error'] == $current_error) {
+							$error_already_inserted = TRUE;
+							for ($l = 0; $l < count($outputted_errors[$k]['users']); $l++) {
+								if ($outputted_errors[$k]['users'][$l]['username'] == $students[$idx]) {
+									$outputted_errors[$k]['users'][$l]['count']++;
+								}
+							}
+						}
+					}					
 				}
+				
 
 				/*
 				 * If it's not inserted yet, insert it
 				 */
-				if (!$error_already_inserted) {
-					$single_error['error'] = $current_error;
-					$single_error['count'] = 1;
-					$outputted_errors[] = $single_error;
-					$error_to_log = $error;
-				}
+				 if ($group_by == 0) {
+				 	if (!$error_already_inserted) {
+						$single_error['error'] = $current_error;
+						$single_error['count'] = 1;
+						$outputted_errors[] = $single_error;
+						$error_to_log = $error;
+					}
+				 } else if ($group_by == 1) {
+				 	if (!$error_already_inserted) {
+						$single_error['error'] = $current_error;
+						$single_error['users'] = array();
+						//$single_error['count'] = 1;
+						for ($idx2 = 0; $idx2 < count($students); $idx2++) {
+							$single_error['users'][$idx2]['username'] = $students[$idx2];
+							$single_error['users'][$idx2]['count'] = 0;
+							
+							if ($single_error['users'][$idx2]['username'] == $students[$idx]) {
+								$single_error['users'][$idx2]['count'] = 1;
+							}	
+						}
+						
+						$outputted_errors[] = $single_error;
+						$error_to_log = $error;
+					}
+						
+				 }
 
 				//echo "<br> $current_error";
 				//echo "<br> {" . $compilation_attempt['output'] . "}";
