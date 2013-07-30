@@ -215,7 +215,7 @@
 		</script>
 		
 	</head>
-	<body>
+	<body style="background-color: black;">
 		<div id="container" style="width: 960px; height: 360px; margin: 0 auto">
 
 		</div>
@@ -225,9 +225,9 @@
 			<div id="container" class="clear">
 
 				<!-- main content -->
-				<div id="homepage">
+				<div id="homepage" style="background-color: black;">
 					<!-- Services -->
-					<section id="services" class="clear">
+					<section id="assignments_section" class="clear">
 						<article class="one_third">
 							<figure>
 								<figcaption>
