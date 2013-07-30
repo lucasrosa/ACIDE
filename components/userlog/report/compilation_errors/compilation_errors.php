@@ -102,10 +102,10 @@
 			}
 		</style>
 		<script>
-			var students 	= new Array();
+			var students = new Array();
 			var assignments = new Array();
-			var group_by 	= 0;
-			
+			var group_by = 0;
+
 			function set_chart_data(students, assignments, group_by) {
 				//var form = $('#chart_options_form');
 				var data_array = new Array();
@@ -121,18 +121,20 @@
 				data_array[1] = assignments;
 				// [2] => group_by
 				data_array[2] = group_by;
-				
+
 				$.ajax({
 					type : "POST",
 					url : 'controller.php?action=get_data_for_chart',
-					data : {data_array : data_array}, //form.serialize(),
+					data : {
+						data_array : data_array
+					}, //form.serialize(),
 					dataType : 'json',
 					success : function(response) {
 						//console.log("asd");
 						//console.log(response.status);
 						//console.log(response.outputted_errors);
 						data = response.outputted_errors;
-						setChart(data);
+						setChart(data, group_by);
 						/*
 						 if (response.status == 'success') {
 						 codiad.modal.unload();
@@ -147,14 +149,15 @@
 					error : function(response) {
 						//codiad.modal.unload();
 						//codiad.message.error(i18n('An unexpected error ocurred. Please try again.'));
-												}
+					}
 				});
 			}
-			
+
+
 			$(document).ready(function() {
 				set_chart_data(students, assignments, group_by);
 			});
-			
+
 			$(function() {
 
 				$("#students_selectable").selectable({
@@ -167,18 +170,18 @@
 								all = true;
 							} else {
 								var id = $(this).attr('id');
-								students.push(id);	
+								students.push(id);
 							}
-							
+
 						});
-						
+
 						if (all) {
 							$("#students_selectable li").first().addClass("ui-selected").siblings().removeClass("ui-selected");
 							students = new Array();
 						}
-						
+
 						set_chart_data(students, assignments, group_by);
-						
+
 					}
 				});
 
@@ -195,14 +198,14 @@
 								assignments.push(id);
 							}
 						});
-						
+
 						if (all) {
 							$("#assignments_selectable li").first().addClass("ui-selected").siblings().removeClass("ui-selected");
 							assignments = new Array();
 						}
-						
+
 						set_chart_data(students, assignments, group_by);
-						
+
 					}
 				});
 
@@ -215,7 +218,7 @@
 
 			});
 		</script>
-		
+
 	</head>
 	<body style="background-color: black;">
 		<div id="container" style="width: 960px; height: 360px; margin: 0 auto">
@@ -273,15 +276,15 @@
 										</li>
 										<?
 										foreach ($users as $user) {
-											if ($user['type'] == $student_user_type) {
-											?>
-	
-											<li id="<?=$user['username'] ?>" class="ui-widget-content">
-												<?=$user['username'] ?>
-											</li>
-	
-											<?
-											}
+										if ($user['type'] == $student_user_type) {
+										?>
+
+										<li id="<?=$user['username'] ?>" class="ui-widget-content">
+											<?=$user['username'] ?>
+										</li>
+
+										<?
+										}
 										}
 										?>
 									</ol>
@@ -317,59 +320,125 @@
 	</body>
 </html>
 <script type="text/javascript">
-	function setChart(data) {
+	function setChart(data, group_by) {
+		console.log(JSON.stringify(data));
 		var data_series = new Array();
-		for (var i = 0; i < data.length; i++) {
-			var serie = {
-				name : '' + data[i]['error'],
-				data : [data[i]['count']]
+		var x_axis = {
+			categories : ['Errors']
+		};
+
+		var plot_options = {
+			column : {
+				pointPadding : 0.2,
+				borderWidth : 0
 			}
-			data_series.push(serie);	
+		};
+
+		//console.log(JSON.stringify(data));
+		if (group_by == 0) {
+			for (var i = 0; i < data.length; i++) {
+				var serie = {
+					name : '' + data[i]['error'],
+					data : [data[i]['count']]
+				}
+				data_series.push(serie);
+			}
+		} else if (group_by == 1) {
+			var students_series = new Array();
+			var x_categories = new Array();
+			//console.log(JSON.stringify(data));
+			for (var i = 0; i < data.length; i++) {
+				x_categories.push(data[i]['error']);
+			}
+			
+			for (var i = 0; i < data[0]['users'].length; i++) {
+				var student = new Array();
+				student['username'] = data[0]['users'][i]['username'];
+				students_series.push(student);
+			}
+			
+			
+			for (var x = 0; x < students_series.length; x++) {
+				var counters = new Array();
+
+				for (var o = 0; o < data.length; o++) {
+					for (var m = 0; m < data[o]['users'].length; m++) {
+						if (data[o]['users'][m]['username'] == students_series[x]['username']) {
+							counters.push(data[o]['users'][m]['count']);
+						}
+					}
+				}
+
+				var this_student = new Array();
+				//console.log(JSON.stringify(students_series[x]['username']));
+				//console.log(JSON.stringify(counters));
+				this_student[0] = students_series[x]['username'];
+				this_student[1] = counters;
+				//console.log(JSON.stringify(this_student));
+				students_series[x] = this_student;
+				//console.log("Student "+ x + ": "+students_series[x]['username']);
+			}
+			// console.log(JSON.stringify(data[0]['users']));
+			//console.log(JSON.stringify(students_series));
+
+			for (var x = 0; x < students_series.length; x++) {
+				var serie = {
+					name : '' + students_series[x][0],
+					data : students_series[x][1]
+				}
+				data_series.push(serie);
+			}
+
+			// Set the plot options :
+			plot_options = {
+				column : {
+					stacking : 'normal',
+					dataLabels : {
+						enabled : true,
+						color : (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+					}
+				}
+			};
+			// set the x axis
+			x_axis = {
+				categories : x_categories
+			};
 		}
-		
-		
+
 		$('#container').highcharts({
 			chart : {
 				type : 'column'
 			},
 			title : {
-				text: 'Compilation errors of all students'
+				text : 'Compilation errors of all students'
 			},
 			/*
-			subtitle : {
-				text : '...'
-			},
-			*/
-			
-			xAxis : {
-				categories : ['Errors']
-			},
-			
+			 subtitle : {
+			 text : '...'
+			 },
+			 */
+
+			xAxis : x_axis,
+
 			yAxis : {
 				min : 0,
 				title : {
-					text: 'Number of occurrences'
+					text : 'Number of occurrences'
 				}
 			},
 			tooltip : {
-				headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y} </b></td></tr>',
-                footerFormat: '</table>',
-                //shared: true,
-                useHTML: true
+				headerFormat : '<span style="font-size:10px">{point.key}</span><table>',
+				pointFormat : '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' + '<td style="padding:0"><b>{point.y} </b></td></tr>',
+				footerFormat : '</table>',
+				//shared: true,
+				useHTML : true
 			},
-			plotOptions : {
-				column : {
-					pointPadding : 0.2,
-					borderWidth : 0
-				}
-			},
-			series: data_series
+			plotOptions : plot_options,
+			series : data_series
 		});
 	}
 
-	//setChart('asd', 12); 
+	//setChart('asd', 12);
 </script>
 <?
 }

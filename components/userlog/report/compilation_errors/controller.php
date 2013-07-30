@@ -221,7 +221,9 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	header('Content-type: application/json');
 	$response_array['status'] = 'success';
 	$response_array['outputted_errors'] = $outputted_errors;
-
+	//error_log(print_r($response_array['outputted_errors'], true));
+	$response_array['group_by'] = $group_by;
+	
 	echo json_encode($response_array);
 }
 ?>
