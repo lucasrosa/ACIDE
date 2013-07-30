@@ -173,6 +173,7 @@
 						});
 						
 						if (all) {
+							$("#students_selectable li").first().addClass("ui-selected").siblings().removeClass("ui-selected");
 							students = new Array();
 						}
 						
@@ -196,6 +197,7 @@
 						});
 						
 						if (all) {
+							$("#assignments_selectable li").first().addClass("ui-selected").siblings().removeClass("ui-selected");
 							assignments = new Array();
 						}
 						
