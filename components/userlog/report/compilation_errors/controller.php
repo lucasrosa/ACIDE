@@ -89,9 +89,18 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	for ($idx = 0; $idx < count($students); $idx++) {
 		
 		$user_assignments = $assignments;
+		$assignments_with_counters = array();
+
 		for ($k = 0; $k < count($user_assignments); $k++) {
-			$user_assignments[$k] = "AS_" . $students[$idx] . "_" . $user_assignments[$k];	
+			$user_assignments[$k] = "AS_" . $students[$idx] . "_" . $user_assignments[$k];
+			if ($group_by == 2) {
+				$this_assignment_counters = array();
+				$this_assignment_counters['assignment'] = $assignments[$k];
+				$this_assignment_counters['counters'] = array();
+				$assignments_with_counters[] = $this_assignment_counters;		
+			}	
 		}
+		
 		
 		$Userlogreport = new Userlogreport();
 		$Userlogreport -> username =  $students[$idx];
@@ -161,6 +170,19 @@ if ($_GET['action'] == 'get_data_for_chart') {
 							}
 						}
 					}					
+				} else if ($group_by == 2) {
+					for ($k = 0; $k < count($outputted_errors); $k++) {
+						if ($outputted_errors[$k]['error'] == $current_error) {
+							$error_already_inserted = TRUE;
+							//$outputted_errors[$k]['count']++;
+							// Add 1 more to the counter in the assignment
+							for ($p = 0; $p < count($assignments_with_counters); $p++) {
+								if ($assignments_with_counters[$p]['assignment'] == $compilation_attempt['path']) {
+									$assignments_with_counters[$p]['counters'][$k]++;
+								}
+							}
+						}
+					}
 				}
 				
 
@@ -190,6 +212,23 @@ if ($_GET['action'] == 'get_data_for_chart') {
 						
 						$outputted_errors[] = $single_error;
 						$error_to_log = $error;
+					}
+						
+				 } else if ($group_by == 2) {
+				 	if (!$error_already_inserted) {
+						$single_error['error'] = $current_error;
+						//$single_error['count'] = 1;
+						$outputted_errors[] = $single_error;
+						$error_to_log = $error;
+						
+						// Insert the counter in the assignment
+						for ($p = 0; $p < count($assignments_with_counters); $p++) {
+							if ($assignments_with_counters[$p]['assignment'] == $compilation_attempt['path']) {
+								$assignments_with_counters[$p]['counters'][] = 1;
+							} else {
+								$assignments_with_counters[$p]['counters'][] = 0;
+							}
+						}
 					}
 						
 				 }
@@ -222,6 +261,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	header('Content-type: application/json');
 	$response_array['status'] = 'success';
 	$response_array['outputted_errors'] = $outputted_errors;
+	$response_array['assignments_with_counters'] = $assignments_with_counters;
 	//error_log(print_r($response_array['outputted_errors'], true));
 	//$response_array['group_by'] = $group_by;
 	
