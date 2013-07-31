@@ -86,19 +86,22 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		}
 	}
 	
+	$assignments_with_counters = array();
+	for ($k = 0; $k < count($assignments); $k++) {
+		if ($group_by == 2) {
+			$this_assignment_counters = array();
+			$this_assignment_counters['assignment'] = $assignments[$k];
+			$this_assignment_counters['counters'] = array();
+			$assignments_with_counters[] = $this_assignment_counters;		
+		}	
+	}
+	
 	for ($idx = 0; $idx < count($students); $idx++) {
 		
 		$user_assignments = $assignments;
-		$assignments_with_counters = array();
 
 		for ($k = 0; $k < count($user_assignments); $k++) {
 			$user_assignments[$k] = "AS_" . $students[$idx] . "_" . $user_assignments[$k];
-			if ($group_by == 2) {
-				$this_assignment_counters = array();
-				$this_assignment_counters['assignment'] = $assignments[$k];
-				$this_assignment_counters['counters'] = array();
-				$assignments_with_counters[] = $this_assignment_counters;		
-			}	
 		}
 		
 		
@@ -177,7 +180,10 @@ if ($_GET['action'] == 'get_data_for_chart') {
 							//$outputted_errors[$k]['count']++;
 							// Add 1 more to the counter in the assignment
 							for ($p = 0; $p < count($assignments_with_counters); $p++) {
-								if ($assignments_with_counters[$p]['assignment'] == $compilation_attempt['path']) {
+								if (("AS_" . $students[$idx] . "_" . $assignments_with_counters[$p]['assignment']) == $compilation_attempt['path']) {
+									//error_log(("AS_" . $students[$idx] . "_" . $assignments_with_counters[$p]['assignment']) . " == " . $compilation_attempt['path']);
+									//error_log("p = $p and k = $k");
+									//error_log("Assignment '" .$assignments_with_counters[$p]['assignment'] . " have " . count($assignments_with_counters[$p]['counters']) . " counters." );
 									$assignments_with_counters[$p]['counters'][$k]++;
 								}
 							}
@@ -223,14 +229,16 @@ if ($_GET['action'] == 'get_data_for_chart') {
 						
 						// Insert the counter in the assignment
 						for ($p = 0; $p < count($assignments_with_counters); $p++) {
-							if ($assignments_with_counters[$p]['assignment'] == $compilation_attempt['path']) {
-								$assignments_with_counters[$p]['counters'][] = 1;
+							if (("AS_" . $students[$idx] . "_" . $assignments_with_counters[$p]['assignment']) == $compilation_attempt['path']) {
+								$assignments_with_counters[$p]['counters'][count($assignments_with_counters[$p]['counters'])] = 1;
 							} else {
-								$assignments_with_counters[$p]['counters'][] = 0;
+								$assignments_with_counters[$p]['counters'][count($assignments_with_counters[$p]['counters'])] = 0;
 							}
+							//error_log("it crossed here");
+							//error_log("Assignment '" .$assignments_with_counters[$p]['assignment'] . " have " . count($assignments_with_counters[$p]['counters']) . " counters." );
+							//error_log("Count = " . count($assignments_with_counters[$p]['counters']));
 						}
 					}
-						
 				 }
 
 				//echo "<br> $current_error";
@@ -244,7 +252,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 				//echo "<hr>";
 			}
 		}
-
+		//error_log("Assignments with counters: " . print_r($assignments_with_counters, true));
 	}
 
 	/*

@@ -133,7 +133,14 @@
 						//console.log("asd");
 						//console.log(response.status);
 						//console.log(response.outputted_errors);
-						data = response.outputted_errors;
+						if (group_by == 2) {
+							data = new Array();
+							data[0] = response.outputted_errors;
+							data[1] = response.assignments_with_counters;
+						} else {
+							data = response.outputted_errors;	
+						}
+						
 						setChart(data, group_by);
 						/*
 						 if (response.status == 'success') {
@@ -321,7 +328,9 @@
 </html>
 <script type="text/javascript">
 	function setChart(data, group_by) {
-		//console.log(JSON.stringify(data));
+		//if (group_by == 2) {
+		//	console.log(JSON.stringify(data));
+		//}
 		
 		var data_series = new Array();
 		var x_axis = {
@@ -390,6 +399,40 @@
 				data_series.push(serie);
 			}
 
+			// Set the plot options :
+			plot_options = {
+				column : {
+					stacking : 'normal',
+					dataLabels : {
+						enabled : true,
+						color : (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+					}
+				}
+			};
+			// set the x axis
+			x_axis = {
+				categories : x_categories
+			};
+		} else if (group_by == 2 && data[1].length > 0) {
+			
+			var x_categories = new Array();
+			//console.log(JSON.stringify(data[0]));
+			//console.log(JSON.stringify(data));
+			var errors = data[0];
+			for (var i = 0; i < errors.length; i++) {
+				x_categories.push(errors[i]['error']);
+			}
+			//console.log(JSON.stringify(x_categories));
+			assignment_series = data[1];
+			console.log(JSON.stringify(assignment_series));
+			for (var x = 0; x < assignment_series.length; x++) {
+				var serie = {
+					name : '' + assignment_series[x]['assignment'],
+					data : assignment_series[x]['counters']
+				}
+				data_series.push(serie);
+			}
+			console.log(JSON.stringify(data_series));
 			// Set the plot options :
 			plot_options = {
 				column : {
