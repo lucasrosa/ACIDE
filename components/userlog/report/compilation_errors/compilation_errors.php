@@ -344,7 +344,6 @@
 			}
 		};
 
-		//console.log(JSON.stringify(data));
 		if (group_by == 0) {
 			for (var i = 0; i < data.length; i++) {
 				var serie = {
@@ -356,7 +355,6 @@
 		} else if (group_by == 1 && data.length > 0) {
 			var students_series = new Array();
 			var x_categories = new Array();
-			//console.log(JSON.stringify(data));
 			for (var i = 0; i < data.length; i++) {
 				x_categories.push(data[i]['error']);
 			}
@@ -380,16 +378,10 @@
 				}
 
 				var this_student = new Array();
-				//console.log(JSON.stringify(students_series[x]['username']));
-				//console.log(JSON.stringify(counters));
 				this_student[0] = students_series[x]['username'];
 				this_student[1] = counters;
-				//console.log(JSON.stringify(this_student));
 				students_series[x] = this_student;
-				//console.log("Student "+ x + ": "+students_series[x]['username']);
 			}
-			// console.log(JSON.stringify(data[0]['users']));
-			//console.log(JSON.stringify(students_series));
 
 			for (var x = 0; x < students_series.length; x++) {
 				var serie = {
@@ -416,13 +408,11 @@
 		} else if (group_by == 2 && data[1].length > 0) {
 			
 			var x_categories = new Array();
-			//console.log(JSON.stringify(data[0]));
-			//console.log(JSON.stringify(data));
+			
 			var errors = data[0];
 			for (var i = 0; i < errors.length; i++) {
 				x_categories.push(errors[i]['error']);
 			}
-			//console.log(JSON.stringify(x_categories));
 			assignment_series = data[1];
 			console.log(JSON.stringify(assignment_series));
 			for (var x = 0; x < assignment_series.length; x++) {
