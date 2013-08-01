@@ -85,14 +85,25 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		}
 	}
 	
-	$assignments_with_counters = array();
 	
-	for ($k = 0; $k < count($assignments); $k++) {
-			$this_assignment_counters = array();
-			$this_assignment_counters['assignment'] = $assignments[$k];
-			$this_assignment_counters['count'] = 0;
-			$assignments_with_counters[] = $this_assignment_counters;		
+	if ($group_by == 0) {
+		$assignments_with_counters = array();
+		for ($k = 0; $k < count($assignments); $k++) {
+				$this_assignment_counters = array();
+				$this_assignment_counters['assignment'] = $assignments[$k];
+				$this_assignment_counters['count'] = 0;
+				$assignments_with_counters[] = $this_assignment_counters;		
+		}	
+	} else {
+		$students_with_counters = array();
+		for ($k = 0; $k < count($students); $k++) {
+			$this_students_counters = array();
+			$this_students_counters['assignment'] = $assignments[$k];
+			$this_students_counters['count'] = 0;
+			$students_with_counters[] = $this_students_counters;
+		}
 	}
+	
 	
 	for ($idx = 0; $idx < count($students); $idx++) {
 		
