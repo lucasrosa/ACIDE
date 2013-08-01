@@ -76,7 +76,7 @@
 		<script src="../../../highcharts/js/highcharts.js"></script>
 		<script src="../../../highcharts/js/modules/exporting.js"></script>
 		<script src="../../../highcharts/js/themes/gray.js"></script>
-		<link rel="stylesheet" href="styles/layout.css" type="text/css">
+		<link rel="stylesheet" href="../styles/layout.css" type="text/css">
 		<style>
 			#feedback, #assignments_feedback {
 				font-size: 1.4em;
