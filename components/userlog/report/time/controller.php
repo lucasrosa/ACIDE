@@ -119,7 +119,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 			if ($group_by == 0) {
 				$assignments_with_counters[$k]['count'] += $minutes_spent;	
 			} else {
-				$students_with_counters[$idx]['counters'][$k] = $minutes_spent;
+				$students_with_counters[$idx]['counters'][$k] = round($minutes_spent, 1);
 			}
 			
 		}

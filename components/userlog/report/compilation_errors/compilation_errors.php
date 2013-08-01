@@ -76,7 +76,7 @@
 		<script src="../../../highcharts/js/highcharts.js"></script>
 		<script src="../../../highcharts/js/modules/exporting.js"></script>
 		<script src="../../../highcharts/js/themes/gray.js"></script>
-		<link rel="stylesheet" href="styles/layout.css" type="text/css">
+		<link rel="stylesheet" href="../styles/layout.css" type="text/css">
 		<style>
 			#feedback, #assignments_feedback {
 				font-size: 1.4em;
@@ -97,8 +97,11 @@
 			#group_selectable li, #assignments_selectable li, #students_selectable li {
 				margin: 3px;
 				padding: 0.4em;
-				font-size: 1.4em;
-				height: 18px;
+				font-size: 1.0em;
+				height: 14px;
+			}
+			h2 {
+				font-size: 20px;
 			}
 		</style>
 		<script>
@@ -213,7 +216,7 @@
 
 	</head>
 	<body style="background-color: black;">
-		<div id="container" style="width: 960px; height: 360px; margin: 0 auto">
+		<div id="container" style="width: 960px; height: 480px; margin: 0 auto">
 		</div>
 		<!-- content -->
 		<div class="wrapper row2">

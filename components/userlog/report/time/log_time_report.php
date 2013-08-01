@@ -97,8 +97,11 @@
 			#group_selectable li, #assignments_selectable li, #students_selectable li {
 				margin: 3px;
 				padding: 0.4em;
-				font-size: 1.4em;
-				height: 18px;
+				font-size: 1.0em;
+				height: 14px;
+			}
+			h2 {
+				font-size: 20px;
 			}
 		</style>
 		<script>
@@ -213,7 +216,7 @@
 
 	</head>
 	<body style="background-color: black;">
-		<div id="container" style="width: 960px; height: 360px; margin: 0 auto">
+		<div id="container" style="width: 960px; height: 480px; margin: 0 auto">
 		</div>
 		<!-- content -->
 		<div class="wrapper row2">
@@ -375,7 +378,7 @@
 				type : 'column'
 			},
 			title : {
-				text : 'Compilation errors of all students'
+				text : 'Time spent in projects'
 			},
 			/*
 			 subtitle : {
@@ -388,12 +391,13 @@
 			yAxis : {
 				min : 0,
 				title : {
-					text : 'Number of occurrences'
+					text : 'Minutes'
 				}
 			},
 			tooltip : {
 				headerFormat : '<span style="font-size:10px">{point.key}</span><table>',
-				pointFormat : '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' + '<td style="padding:0"><b>{point.y} </b></td></tr>',
+				pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} minutes</b></td></tr>',
 				footerFormat : '</table>',
 				//shared: true,
 				useHTML : true
