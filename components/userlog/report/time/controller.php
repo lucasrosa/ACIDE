@@ -88,12 +88,10 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	$assignments_with_counters = array();
 	
 	for ($k = 0; $k < count($assignments); $k++) {
-		if ($group_by == 2) {
 			$this_assignment_counters = array();
 			$this_assignment_counters['assignment'] = $assignments[$k];
 			$this_assignment_counters['counters'] = array();
 			$assignments_with_counters[] = $this_assignment_counters;		
-		}	
 	}
 	
 	for ($idx = 0; $idx < count($students); $idx++) {
@@ -103,7 +101,6 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		for ($k = 0; $k < count($user_assignments); $k++) {
 			$user_assignments[$k] = "AS_" . $students[$idx] . "_" . $user_assignments[$k];
 		}
-		
 		
 		$Userlogreport = new Userlogreport();
 		$Userlogreport -> username =  $students[$idx];

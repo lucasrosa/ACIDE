@@ -295,9 +295,11 @@
 										<li id="1" class="ui-widget-content">
 											Group by students
 										</li>
+										<!--
 										<li id="2" class="ui-widget-content">
 											Group by assignment
 										</li>
+										-->
 									</ol>
 								</div>
 							</figure>
