@@ -107,7 +107,6 @@
 			var group_by = 0;
 
 			function set_chart_data(students, assignments, group_by) {
-				//var form = $('#chart_options_form');
 				var data_array = new Array();
 				if (students.length == 0) {
 					students = null;
@@ -127,35 +126,21 @@
 					url : 'controller.php?action=get_data_for_chart',
 					data : {
 						data_array : data_array
-					}, //form.serialize(),
+					}, 
 					dataType : 'json',
 					success : function(response) {
-						//console.log("asd");
-						//console.log(response.status);
-						//console.log(response.outputted_errors);
 						if (group_by == 2) {
 							data = new Array();
 							data[0] = response.outputted_errors;
 							data[1] = response.assignments_with_counters;
 						} else {
-							data = response.outputted_errors;	
+							data = response.outputted_errors;
 						}
-						
+
 						setChart(data, group_by);
-						/*
-						 if (response.status == 'success') {
-						 codiad.modal.unload();
-						 codiad.message.success(i18n('Project updated'));
-						 } else if (response.status == 'error_user_maximum_reached') {
-						 codiad.message.error(i18n('Maximum limit of users reached.'));
-						 } else if (response.status == 'error_database') {
-						 codiad.message.error(i18n('Changes couldn\'t be saved on database.'));
-						 }
-						 */
 					},
 					error : function(response) {
-						//codiad.modal.unload();
-						//codiad.message.error(i18n('An unexpected error ocurred. Please try again.'));
+						// <!---->
 					}
 				});
 			}
@@ -229,7 +214,6 @@
 	</head>
 	<body style="background-color: black;">
 		<div id="container" style="width: 960px; height: 360px; margin: 0 auto">
-
 		</div>
 		<!-- content -->
 		<div class="wrapper row2">
@@ -283,15 +267,15 @@
 										</li>
 										<?
 										foreach ($users as $user) {
-										if ($user['type'] == $student_user_type) {
-										?>
+											if ($user['type'] == $student_user_type) {
+											?>
 
-										<li id="<?=$user['username'] ?>" class="ui-widget-content">
-											<?=$user['username'] ?>
-										</li>
+											<li id="<?=$user['username'] ?>" class="ui-widget-content">
+												<?=$user['username'] ?>
+											</li>
 
-										<?
-										}
+											<?
+											}
 										}
 										?>
 									</ol>
@@ -331,7 +315,7 @@
 		//if (group_by == 2) {
 		//	console.log(JSON.stringify(data));
 		//}
-		
+
 		var data_series = new Array();
 		var x_axis = {
 			categories : ['Errors']
@@ -358,14 +342,13 @@
 			for (var i = 0; i < data.length; i++) {
 				x_categories.push(data[i]['error']);
 			}
-			
+
 			for (var i = 0; i < data[0]['users'].length; i++) {
 				var student = new Array();
 				student['username'] = data[0]['users'][i]['username'];
 				students_series.push(student);
 			}
-			
-			
+
 			for (var x = 0; x < students_series.length; x++) {
 				var counters = new Array();
 
@@ -406,15 +389,14 @@
 				categories : x_categories
 			};
 		} else if (group_by == 2 && data[1].length > 0) {
-			
+
 			var x_categories = new Array();
-			
+
 			var errors = data[0];
 			for (var i = 0; i < errors.length; i++) {
 				x_categories.push(errors[i]['error']);
 			}
 			assignment_series = data[1];
-			console.log(JSON.stringify(assignment_series));
 			for (var x = 0; x < assignment_series.length; x++) {
 				var serie = {
 					name : '' + assignment_series[x]['assignment'],
@@ -422,7 +404,6 @@
 				}
 				data_series.push(serie);
 			}
-			console.log(JSON.stringify(data_series));
 			// Set the plot options :
 			plot_options = {
 				column : {
