@@ -90,20 +90,25 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	for ($k = 0; $k < count($assignments); $k++) {
 			$this_assignment_counters = array();
 			$this_assignment_counters['assignment'] = $assignments[$k];
-			$this_assignment_counters['counters'] = array();
+			$this_assignment_counters['count'] = 0;
 			$assignments_with_counters[] = $this_assignment_counters;		
 	}
 	
 	for ($idx = 0; $idx < count($students); $idx++) {
 		
-		$user_assignments = $assignments;
-
-		for ($k = 0; $k < count($user_assignments); $k++) {
-			$user_assignments[$k] = "AS_" . $students[$idx] . "_" . $user_assignments[$k];
-		}
-		
 		$Userlogreport = new Userlogreport();
 		$Userlogreport -> username =  $students[$idx];
+		
+		for ($k = 0; $k < count($assignments); $k++) {
+			$project_path = "AS_" . $students[$idx] . "_" . $assignments[$k];
+			$time_spent = $Userlogreport->GetTimeSpentInProject($project_path);
+			$minutes_spent =	($time_spent->d*24*60) +
+								($time_spent->h*60) +
+								($time_spent->i) +
+								($time_spent->s / 60);
+			$assignments_with_counters[$k]['count'] += $minutes_spent;
+		}
+		error_log(print_r($assignments_with_counters, TRUE));
 	}
 	
 	
