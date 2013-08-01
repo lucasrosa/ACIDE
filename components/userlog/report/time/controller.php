@@ -114,7 +114,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	
 	header('Content-type: application/json');
 	$response_array['status'] = 'success';
-	$response_array['outputted_errors'] = $outputted_errors;
+	//$response_array['outputted_errors'] = $outputted_errors;
 	$response_array['assignments_with_counters'] = $assignments_with_counters;
 	//error_log(print_r($response_array['outputted_errors'], true));
 	//$response_array['group_by'] = $group_by;

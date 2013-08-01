@@ -129,13 +129,13 @@
 					}, 
 					dataType : 'json',
 					success : function(response) {
-						if (group_by == 2) {
-							data = new Array();
-							data[0] = response.outputted_errors;
-							data[1] = response.assignments_with_counters;
-						} else {
-							data = response.outputted_errors;
-						}
+						//if (group_by == 2) {
+						//	data = new Array();
+						//	data[0] = response.outputted_errors;
+						//	data[1] = response.assignments_with_counters;
+						//} else {
+							data = response.assignments_with_counters;
+						//}
 
 						setChart(data, group_by);
 					},
@@ -320,7 +320,7 @@
 
 		var data_series = new Array();
 		var x_axis = {
-			categories : ['Errors']
+			categories : ['Assignments']
 		};
 
 		var plot_options = {
@@ -333,7 +333,7 @@
 		if (group_by == 0) {
 			for (var i = 0; i < data.length; i++) {
 				var serie = {
-					name : '' + data[i]['error'],
+					name : '' + data[i]['assignment'],
 					data : [data[i]['count']]
 				}
 				data_series.push(serie);
