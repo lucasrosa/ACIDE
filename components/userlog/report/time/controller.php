@@ -27,8 +27,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	$students = array();
 	$assignments= array();
 	$group_by = NULL;
-	
-	//error_log(print_r($data_array, true));
+
 	
 	if (isset($data_array[0])) {
 		$students = $data_array[0];	
@@ -87,6 +86,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	}
 	
 	$assignments_with_counters = array();
+	
 	for ($k = 0; $k < count($assignments); $k++) {
 		if ($group_by == 2) {
 			$this_assignment_counters = array();
@@ -107,163 +107,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		
 		$Userlogreport = new Userlogreport();
 		$Userlogreport -> username =  $students[$idx];
-		// Compilation attempt test
-		$Compilation_userlog = new Userlog();
-		$Compilation_userlog -> username = $students[$idx];
-		$compilation_attempts = $Compilation_userlog -> GetAllLogsForCompilationAttempt();
-		
-		$current_error = "";
-
-		/*
-		 * $array_of_errors keeps the common errors to be compared with the javac output
-		 */
-		$array_of_errors = array();
-		$array_of_errors[] = "javac: invalid flag:";
-		$array_of_errors[] = "javac: file not found:";
-
-		foreach ($compilation_attempts as $compilation_attempt) {
-			$current_error = "";
-			$display = array();
-			$error = $compilation_attempt['output'];
-			
-			if ($compilation_attempt['succeeded'] == 'FALSE' && in_array($compilation_attempt['path'], $user_assignments)) {
-				preg_match('/error:(.*?)\n/', $error, $display);
-
-				$array_of_errors_iterator = 0;
-				// Iterate through the errors to find which one it corresponds to
-				while ((!isset($display[1])) || @$display[1] == "") {
-					$this_error = $array_of_errors[$array_of_errors_iterator];
-					if (substr($error, 0, (strlen($this_error))) == $this_error) {
-						$display[1] = $this_error . " 'FILENAME'";
-					}
-					$array_of_errors_iterator++;
-				}
-				/*
-				 * Treat errors like: 'Class names, 'testhallo.txt', are only accepted if annotation processing is explicitly requested'
-				 */
-				// Remove class/file name
-				$current_error = $display[1];
-
-				if (preg_match('/\'(.*?)\'/', $error, $display)) {
-					$array_of_symbols = array(";", "\"", "(", ")", "{", "}", "[", "]", ":", ".", "!", "=");
-					if (!in_array($display[1], $array_of_symbols)) {
-						$current_error = str_replace($display[1], 'FILENAME', $current_error);
-					}
-				}
-
-				/*
-				 * Verify if the error is already inserted in the array
-				 */
-				$error_already_inserted = FALSE;
-				if ($group_by == 0) {
-					for ($k = 0; $k < count($outputted_errors); $k++) {
-						if ($outputted_errors[$k]['error'] == $current_error) {
-							$error_already_inserted = TRUE;
-							$outputted_errors[$k]['count']++;
-						}
-					}	
-				} else if ($group_by == 1) {
-					for ($k = 0; $k < count($outputted_errors); $k++) {
-						if ($outputted_errors[$k]['error'] == $current_error) {
-							$error_already_inserted = TRUE;
-							for ($l = 0; $l < count($outputted_errors[$k]['users']); $l++) {
-								if ($outputted_errors[$k]['users'][$l]['username'] == $students[$idx]) {
-									$outputted_errors[$k]['users'][$l]['count']++;
-								}
-							}
-						}
-					}					
-				} else if ($group_by == 2) {
-					for ($k = 0; $k < count($outputted_errors); $k++) {
-						if ($outputted_errors[$k]['error'] == $current_error) {
-							$error_already_inserted = TRUE;
-							//$outputted_errors[$k]['count']++;
-							// Add 1 more to the counter in the assignment
-							for ($p = 0; $p < count($assignments_with_counters); $p++) {
-								if (("AS_" . $students[$idx] . "_" . $assignments_with_counters[$p]['assignment']) == $compilation_attempt['path']) {
-									//error_log(("AS_" . $students[$idx] . "_" . $assignments_with_counters[$p]['assignment']) . " == " . $compilation_attempt['path']);
-									//error_log("p = $p and k = $k");
-									//error_log("Assignment '" .$assignments_with_counters[$p]['assignment'] . " have " . count($assignments_with_counters[$p]['counters']) . " counters." );
-									$assignments_with_counters[$p]['counters'][$k]++;
-								}
-							}
-						}
-					}
-				}
-				
-
-				/*
-				 * If it's not inserted yet, insert it
-				 */
-				 if ($group_by == 0) {
-				 	if (!$error_already_inserted) {
-						$single_error['error'] = $current_error;
-						$single_error['count'] = 1;
-						$outputted_errors[] = $single_error;
-						$error_to_log = $error;
-					}
-				 } else if ($group_by == 1) {
-				 	if (!$error_already_inserted) {
-						$single_error['error'] = $current_error;
-						$single_error['users'] = array();
-						//$single_error['count'] = 1;
-						for ($idx2 = 0; $idx2 < count($students); $idx2++) {
-							$single_error['users'][$idx2]['username'] = $students[$idx2];
-							$single_error['users'][$idx2]['count'] = 0;
-							
-							if ($single_error['users'][$idx2]['username'] == $students[$idx]) {
-								$single_error['users'][$idx2]['count'] = 1;
-							}	
-						}
-						
-						$outputted_errors[] = $single_error;
-						$error_to_log = $error;
-					}
-						
-				 } else if ($group_by == 2) {
-				 	if (!$error_already_inserted) {
-						$single_error['error'] = $current_error;
-						//$single_error['count'] = 1;
-						$outputted_errors[] = $single_error;
-						$error_to_log = $error;
-						
-						// Insert the counter in the assignment
-						for ($p = 0; $p < count($assignments_with_counters); $p++) {
-							if (("AS_" . $students[$idx] . "_" . $assignments_with_counters[$p]['assignment']) == $compilation_attempt['path']) {
-								$assignments_with_counters[$p]['counters'][count($assignments_with_counters[$p]['counters'])] = 1;
-							} else {
-								$assignments_with_counters[$p]['counters'][count($assignments_with_counters[$p]['counters'])] = 0;
-							}
-							//error_log("it crossed here");
-							//error_log("Assignment '" .$assignments_with_counters[$p]['assignment'] . " have " . count($assignments_with_counters[$p]['counters']) . " counters." );
-							//error_log("Count = " . count($assignments_with_counters[$p]['counters']));
-						}
-					}
-				 }
-
-				//echo "<br> $current_error";
-				//echo "<br> {" . $compilation_attempt['output'] . "}";
-				//echo "<br>" . $display[1];
-				//preg_match('/\'(.*?)\'/', $error, $display);
-				//echo "<br> this: ";
-				//echo "<br> 0 = " . $display[0];
-				//echo "<br> 1 = " . $display[1];
-				//echo "<br> 2 = " . $display[2];
-				//echo "<hr>";
-			}
-		}
-		//error_log("Assignments with counters: " . print_r($assignments_with_counters, true));
 	}
-
-	/*
-	 * Show the errors and their counts
-	 */
-	//for ($k = 0; $k < count($outputted_errors); $k++) {
-		//echo "<br>Error: " . $outputted_errors[$k]['error'];
-		//echo "<br>Count: " . $outputted_errors[$k]['count'];
-		//echo "<hr>";
-	//}
-	// Get data -->
 	
 	
 	header('Content-type: application/json');
