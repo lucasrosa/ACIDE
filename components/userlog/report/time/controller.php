@@ -84,10 +84,9 @@ if ($_GET['action'] == 'get_data_for_chart') {
 			$assignments[] =$raw_assignment['id'];
 		}
 	}
-	
-	
+	$assignments_with_counters = array();
+	$students_with_counters = array();
 	if ($group_by == 0) {
-		$assignments_with_counters = array();
 		for ($k = 0; $k < count($assignments); $k++) {
 				$this_assignment_counters = array();
 				$this_assignment_counters['assignment'] = $assignments[$k];
@@ -95,11 +94,10 @@ if ($_GET['action'] == 'get_data_for_chart') {
 				$assignments_with_counters[] = $this_assignment_counters;		
 		}	
 	} else {
-		$students_with_counters = array();
 		for ($k = 0; $k < count($students); $k++) {
 			$this_students_counters = array();
-			$this_students_counters['assignment'] = $assignments[$k];
-			$this_students_counters['count'] = 0;
+			$this_students_counters['student'] = $students[$k];
+			$this_students_counters['counters'] = array();
 			$students_with_counters[] = $this_students_counters;
 		}
 	}
@@ -117,16 +115,28 @@ if ($_GET['action'] == 'get_data_for_chart') {
 								($time_spent->h*60) +
 								($time_spent->i) +
 								($time_spent->s / 60);
-			$assignments_with_counters[$k]['count'] += $minutes_spent;
+								
+			if ($group_by == 0) {
+				$assignments_with_counters[$k]['count'] += $minutes_spent;	
+			} else {
+				$students_with_counters[$idx]['counters'][$k] = $minutes_spent;
+			}
+			
 		}
-		error_log(print_r($assignments_with_counters, TRUE));
+		//error_log(print_r($assignments_with_counters, TRUE));
 	}
 	
 	
 	header('Content-type: application/json');
 	$response_array['status'] = 'success';
 	//$response_array['outputted_errors'] = $outputted_errors;
-	$response_array['assignments_with_counters'] = $assignments_with_counters;
+	if ($group_by == 0) {
+		$response_array['assignments_with_counters'] = $assignments_with_counters;	
+	} else {
+		$response_array['students_with_counters'] = $students_with_counters;
+		$response_array['assignments'] = $assignments;
+	}
+	
 	//error_log(print_r($response_array['outputted_errors'], true));
 	//$response_array['group_by'] = $group_by;
 	
