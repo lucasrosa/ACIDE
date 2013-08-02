@@ -315,7 +315,34 @@
 		//if (group_by == 2) {
 		//	console.log(JSON.stringify(data));
 		//}
-
+		var this_tooltip = '';
+		var this_title = '';
+		var y_axis_title = '';
+		
+		if (group_by == 0) {
+			this_tooltip = {
+				headerFormat : '<span style="font-size:10px">{point.key}</span><table>',
+				pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.2f} minutes</b></td></tr>',
+				footerFormat : '</table>',
+				//shared: true,
+				useHTML : true
+			};
+			this_title = 'Time spent in session';
+			y_axis_title = 'Minutes';
+		} else if (group_by == 1) {
+			this_tooltip = {
+				headerFormat : '<span style="font-size:10px">{point.key}</span><table>',
+				pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y} sessions</b></td></tr>',
+				footerFormat : '</table>',
+				//shared: true,
+				useHTML : true
+			};
+			
+			this_title = 'Total number of sessions per user';
+			y_axis_title = 'Number of sessions';
+		}
 		var data_series = new Array();
 		var x_axis = {
 			categories : ['Students']
@@ -343,7 +370,7 @@
 				type : 'column'
 			},
 			title : {
-				text : 'Time spent in session'
+				text : this_title
 			},
 			/*
 			 subtitle : {
@@ -356,17 +383,10 @@
 			yAxis : {
 				min : 0,
 				title : {
-					text : 'Minutes'
+					text : y_axis_title
 				}
 			},
-			tooltip : {
-				headerFormat : '<span style="font-size:10px">{point.key}</span><table>',
-				pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.2f} minutes</b></td></tr>',
-				footerFormat : '</table>',
-				//shared: true,
-				useHTML : true
-			},
+			tooltip : this_tooltip,
 			plotOptions : plot_options,
 			series : data_series
 		});
