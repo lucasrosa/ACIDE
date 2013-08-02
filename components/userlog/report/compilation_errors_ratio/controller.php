@@ -84,65 +84,76 @@ if ($_GET['action'] == 'get_data_for_chart') {
 			$assignments[] =$raw_assignment['id'];
 		}
 	}
+	
 	$assignments_with_counters = array();
 	$students_with_counters = array();
-	if ($group_by == 0 || $group_by == 2) {
+	
+	if ($group_by == 0) {
+		for ($k = 0; $k < count($students); $k++) {
+				$this_assignment_counters = array();
+				$this_assignment_counters[0] = 0;
+				$this_assignment_counters[1] = 0;
+				$assignments_with_counters[] = $this_assignment_counters;		
+		}
+	} else {
 		for ($k = 0; $k < count($assignments); $k++) {
 				$this_assignment_counters = array();
 				$this_assignment_counters['assignment'] = $assignments[$k];
 				$this_assignment_counters['count'] = 0;
 				$assignments_with_counters[] = $this_assignment_counters;		
-		}	
-	} else {
-		for ($k = 0; $k < count($students); $k++) {
-			$this_students_counters = array();
-			$this_students_counters['student'] = $students[$k];
-			$this_students_counters['counters'] = array();
-			$students_with_counters[] = $this_students_counters;
 		}
 	}
-	
 	
 	for ($idx = 0; $idx < count($students); $idx++) {
 		
 		$Userlogreport = new Userlogreport();
 		$Userlogreport -> username =  $students[$idx];
 		
-		for ($k = 0; $k < count($assignments); $k++) {
-			$project_path = "AS_" . $students[$idx] . "_" . $assignments[$k];
-			$time_spent = $Userlogreport->GetTimeSpentInProject($project_path);
-			$minutes_spent =	($time_spent->d*24*60) +
-								($time_spent->h*60) +
-								($time_spent->i) +
-								($time_spent->s / 60);
-								
-			if ($group_by == 0 || $group_by == 2) {
-				$assignments_with_counters[$k]['count'] += $minutes_spent;	
-			} else if ($group_by == 1) {
-				$students_with_counters[$idx]['counters'][$k] = round($minutes_spent, 2);
+		if ($group_by == 0) {
+			for ($k = 0; $k < count($assignments); $k++) {
+				$project_path = "AS_" . $students[$idx] . "_" . $assignments[$k];
+				//$time_spent = $Userlogreport->GetTimeSpentInProject($project_path);
+									
+				//if ($group_by == 0 || $group_by == 2) {
+				//	$assignments_with_counters[$k]['count'] += $minutes_spent;	
+				//} else if ($group_by == 1) {
+				//$total_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, TRUE);	
+				$succeded_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, TRUE);	
+				$failed_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, FALSE);
+					
+				$assignments_with_counters[$idx]['counters'][0] += $succeded_compilation_attempts;
+				$assignments_with_counters[$idx]['counters'][1] += $failed_compilation_attempts;
+				//}
 			}
-			
+		} else {
+		
+			for ($k = 0; $k < count($assignments); $k++) {
+				$project_path = "AS_" . $students[$idx] . "_" . $assignments[$k];
+				//$time_spent = $Userlogreport->GetTimeSpentInProject($project_path);
+									
+				//if ($group_by == 0 || $group_by == 2) {
+				//	$assignments_with_counters[$k]['count'] += $minutes_spent;	
+				//} else if ($group_by == 1) {
+				//$total_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, TRUE);	
+				$succeded_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, TRUE);	
+				$failed_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, FALSE);
+					
+				$assignments_with_counters[$k]['counters'][0] = $succeded_compilation_attempts;
+				$assignments_with_counters[$k]['counters'][1] = $failed_compilation_attempts;
+				//}
+			}
 		}
 		//error_log(print_r($assignments_with_counters, TRUE));
-	}
-	
-	if ($group_by == 2) {
-		$students_count = count($students);
-		for ($k = 0; $k < count($assignments); $k++) {
-			$assignments_with_counters[$k]['count'] = round(($assignments_with_counters[$k]['count'] / $students_count), 2);
-		}
 	}
 	
 	
 	header('Content-type: application/json');
 	$response_array['status'] = 'success';
 	//$response_array['outputted_errors'] = $outputted_errors;
-	if ($group_by == 0 || $group_by == 2) {
+	//if ($group_by == 0 || $group_by == 2) {
 		$response_array['assignments_with_counters'] = $assignments_with_counters;	
-	} else {
-		$response_array['students_with_counters'] = $students_with_counters;
-		$response_array['assignments'] = $assignments;
-	}
+		$response_array['students'] = $students;
+	//}
 	
 	//error_log(print_r($response_array['outputted_errors'], true));
 	//$response_array['group_by'] = $group_by;

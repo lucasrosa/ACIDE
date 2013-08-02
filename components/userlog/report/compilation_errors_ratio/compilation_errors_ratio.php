@@ -132,13 +132,10 @@
 					}, 
 					dataType : 'json',
 					success : function(response) {
-						if (group_by == 1) {
-							data = new Array();
-							data[0] = response.assignments;
-							data[1] = response.students_with_counters;
-						} else {
-							data = response.assignments_with_counters;
-						}
+						data = new Array();
+						data[0] = response.students;
+						data[1] = response.assignments_with_counters;
+						
 
 						setChart(data, group_by);
 					},
@@ -295,11 +292,13 @@
 										<li id="0" class="ui-widget-content ui-selected">
 											Don't group
 										</li>
+									<!--	
 										<li id="1" class="ui-widget-content">
 											Group by students
 										</li>
-										<li id="2" class="ui-widget-content">
-											Group by assignment (average time)
+									-->
+										<li id="1" class="ui-widget-content">
+											Group by assignment
 										</li>
 									</ol>
 								</div>
@@ -330,7 +329,7 @@
 				borderWidth : 0
 			}
 		};
-
+		/*
 		if (group_by == 0 || group_by == 2) {
 			for (var i = 0; i < data.length; i++) {
 				var serie = {
@@ -340,36 +339,36 @@
 				data_series.push(serie);
 			}
 		} else if (group_by == 1 && data[1].length > 0) {
+		*/
+		var x_categories = new Array();
 
-			var x_categories = new Array();
-
-			var assignments = data[0];
-			for (var i = 0; i < assignments.length; i++) {
-				x_categories.push(assignments[i]);
-			}
-			var student_series = data[1];
-			for (var x = 0; x < student_series.length; x++) {
-				var serie = {
-					name : '' + student_series[x]['student'],
-					data : student_series[x]['counters']
-				}
-				data_series.push(serie);
-			}
-			// Set the plot options :
-			plot_options = {
-				column : {
-					stacking : 'normal',
-					dataLabels : {
-						enabled : true,
-						color : (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-					}
-				}
-			};
-			// set the x axis
-			x_axis = {
-				categories : x_categories
-			};
+		var students = data[0];
+		for (var i = 0; i < students.length; i++) {
+			x_categories.push(students[i]);
 		}
+		var assignment_series = data[1];
+		for (var x = 0; x < assignment_series.length; x++) {
+			var serie = {
+				name : '' + assignment_series[x]['assignment'],
+				data : [assignment_series[x]['counters'][0], assignment_series[x]['counters'][1]] 
+			}
+			data_series.push(serie);
+		}
+		// Set the plot options :
+		plot_options = {
+			column : {
+				stacking : 'normal',
+				dataLabels : {
+					enabled : true,
+					color : (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+				}
+			}
+		};
+		// set the x axis
+		x_axis = {
+			categories : x_categories
+		};
+		//}
 
 		$('#container').highcharts({
 			chart : {
@@ -395,7 +394,7 @@
 			tooltip : {
 				headerFormat : '<span style="font-size:10px">{point.key}</span><table>',
 				pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.2f} minutes</b></td></tr>',
+                    '<td style="padding:0"><b>{point.y} </b></td></tr>',
 				footerFormat : '</table>',
 				//shared: true,
 				useHTML : true
