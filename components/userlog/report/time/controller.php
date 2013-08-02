@@ -86,7 +86,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	}
 	$assignments_with_counters = array();
 	$students_with_counters = array();
-	if ($group_by == 0) {
+	if ($group_by == 0 || $group_by == 2) {
 		for ($k = 0; $k < count($assignments); $k++) {
 				$this_assignment_counters = array();
 				$this_assignment_counters['assignment'] = $assignments[$k];
@@ -119,7 +119,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 			if ($group_by == 0 || $group_by == 2) {
 				$assignments_with_counters[$k]['count'] += $minutes_spent;	
 			} else if ($group_by == 1) {
-				$students_with_counters[$idx]['counters'][$k] = round($minutes_spent, 1);
+				$students_with_counters[$idx]['counters'][$k] = round($minutes_spent, 2);
 			}
 			
 		}
@@ -129,7 +129,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	if ($group_by == 2) {
 		$students_count = count($students);
 		for ($k = 0; $k < count($assignments); $k++) {
-			$assignments_with_counters[$k]['count'] = round($assignments_with_counters[$k]['count'] / $students_count);
+			$assignments_with_counters[$k]['count'] = round(($assignments_with_counters[$k]['count'] / $students_count), 2);
 		}
 	}
 	
