@@ -91,6 +91,16 @@ class Userlogreport {
 		return $sections_time;
 	}
 
+	public function GetNumberOfSessions() {
+		$this -> userlog = new Userlog();
+
+		$this -> userlog -> username = $this -> username;
+		$number_of_sessions = $this -> userlog -> GetAllSessionsForUser() -> count();
+	
+		return $number_of_sessions;
+	}
+	
+
 	public function GetTimeSpentInProjectsInSession($session_id, $return_projects_without_logs = TRUE) {
 		$this -> userlog = new Userlog();
 		$this -> userlog -> username = $this -> username;

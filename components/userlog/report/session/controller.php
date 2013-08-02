@@ -74,76 +74,45 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		}
 	}
 	
-	// Check if there are no assignments, then load all of them
-	if (!isset($assignments[0]) || count($assignments[0]) == 0) {
-		$Project = new Project();
-		$current_user = $_SESSION['user'];
-		$raw_assignments = $Project->GetAssignmentsInTheSameCoursesOfUser($current_user);
-		
-		foreach($raw_assignments as $raw_assignment) {
-			$assignments[] =$raw_assignment['id'];
-		}
-	}
-	$assignments_with_counters = array();
 	$students_with_counters = array();
-	if ($group_by == 0 || $group_by == 2) {
-		for ($k = 0; $k < count($assignments); $k++) {
-				$this_assignment_counters = array();
-				$this_assignment_counters['assignment'] = $assignments[$k];
-				$this_assignment_counters['count'] = 0;
-				$assignments_with_counters[] = $this_assignment_counters;		
-		}	
-	} else {
-		for ($k = 0; $k < count($students); $k++) {
-			$this_students_counters = array();
-			$this_students_counters['student'] = $students[$k];
-			$this_students_counters['counters'] = array();
-			$students_with_counters[] = $this_students_counters;
-		}
+
+	for ($k = 0; $k < count($students); $k++) {
+		$this_students_counters = array();
+		$this_students_counters['student'] = $students[$k];
+		$this_students_counters['count'] = 0;
+		$students_with_counters[] = $this_students_counters;
 	}
-	
 	
 	for ($idx = 0; $idx < count($students); $idx++) {
 		
 		$Userlogreport = new Userlogreport();
 		$Userlogreport -> username =  $students[$idx];
 		
-		for ($k = 0; $k < count($assignments); $k++) {
-			$project_path = "AS_" . $students[$idx] . "_" . $assignments[$k];
-			$time_spent = $Userlogreport->GetTimeSpentInProject($project_path);
-			$minutes_spent =	($time_spent->d*24*60) +
-								($time_spent->h*60) +
-								($time_spent->i) +
-								($time_spent->s / 60);
-								
-			if ($group_by == 0 || $group_by == 2) {
-				$assignments_with_counters[$k]['count'] += $minutes_spent;	
-			} else if ($group_by == 1) {
-				$students_with_counters[$idx]['counters'][$k] = round($minutes_spent, 2);
+		if ($group_by == 0) {
+			$sessions_times = $Userlogreport->GetTimeUserSpentInEachSection();
+			for ($k = 0; $k < count($sessions_times); $k++) {
+				$time_spent = $sessions_times[$k]['interval'];
+				$minutes_spent =	($time_spent->d*24*60) +
+									($time_spent->h*60) +
+									($time_spent->i) +
+									($time_spent->s / 60);
+									
+				
+					$students_with_counters[$idx]['count'] += $minutes_spent;	
 			}
 			
-		}
-		//error_log(print_r($assignments_with_counters, TRUE));
-	}
-	
-	if ($group_by == 2) {
-		$students_count = count($students);
-		for ($k = 0; $k < count($assignments); $k++) {
-			$assignments_with_counters[$k]['count'] = round(($assignments_with_counters[$k]['count'] / $students_count), 2);
+			$students_with_counters[$idx]['count'] = round(($students_with_counters[$idx]['count']/count($sessions_times)), 2); 
+		} else if ($group_by == 1) {
+			$number_of_sessions = $sessions_times = $Userlogreport->GetNumberOfSessions();
+			$students_with_counters[$idx]['count'] = $number_of_sessions;
 		}
 	}
-	
 	
 	header('Content-type: application/json');
 	$response_array['status'] = 'success';
 	//$response_array['outputted_errors'] = $outputted_errors;
-	if ($group_by == 0 || $group_by == 2) {
-		$response_array['assignments_with_counters'] = $assignments_with_counters;	
-	} else {
-		$response_array['students_with_counters'] = $students_with_counters;
-		$response_array['assignments'] = $assignments;
-	}
-	
+	$response_array['students_with_counters'] = $students_with_counters;
+
 	//error_log(print_r($response_array['outputted_errors'], true));
 	//$response_array['group_by'] = $group_by;
 	
