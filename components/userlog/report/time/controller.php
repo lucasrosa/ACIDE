@@ -125,18 +125,19 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		}
 		//error_log(print_r($assignments_with_counters, TRUE));
 	}
-	$students_count = count($students_count);
 	
-	for ($k = 0; $k < count($assignments); $k++) {
-		$students_with_counters[$idx]['counters'][$k] = round($students_with_counters[$idx]['counters'][$k]/ $students_count);
+	if ($group_by == 2) {
+		$students_count = count($students);
+		for ($k = 0; $k < count($assignments); $k++) {
+			$assignments_with_counters[$k]['count'] = round($assignments_with_counters[$k]['count'] / $students_count);
+		}
 	}
-	
 	
 	
 	header('Content-type: application/json');
 	$response_array['status'] = 'success';
 	//$response_array['outputted_errors'] = $outputted_errors;
-	if ($group_by == 0) {
+	if ($group_by == 0 || $group_by == 2) {
 		$response_array['assignments_with_counters'] = $assignments_with_counters;	
 	} else {
 		$response_array['students_with_counters'] = $students_with_counters;

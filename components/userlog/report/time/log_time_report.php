@@ -331,7 +331,7 @@
 			}
 		};
 
-		if (group_by == 0) {
+		if (group_by == 0 || group_by == 2) {
 			for (var i = 0; i < data.length; i++) {
 				var serie = {
 					name : '' + data[i]['assignment'],
