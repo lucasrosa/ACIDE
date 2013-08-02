@@ -120,7 +120,7 @@
 				// [0] => students
 				data_array[0] = students;
 				// [1] => assignments
-				//data_array[1] = assignments;
+				data_array[1] = assignments;
 				// [2] => group_by
 				data_array[2] = group_by;
 
@@ -132,7 +132,14 @@
 					}, 
 					dataType : 'json',
 					success : function(response) {
-						data = response.students_with_counters;
+						if (group_by == 1) {
+							data = new Array();
+							data[0] = response.assignments;
+							data[1] = response.students_with_counters;
+						} else {
+							data = response.assignments_with_counters;
+						}
+
 						setChart(data, group_by);
 					},
 					error : function(response) {
@@ -172,7 +179,7 @@
 
 					}
 				});
-				/*
+
 				$("#assignments_selectable").selectable({
 					stop : function() {
 						var all = false;
@@ -196,7 +203,7 @@
 
 					}
 				});
-				*/
+
 				$("#group_selectable li").click(function() {
 					$(this).addClass("ui-selected").siblings().removeClass("ui-selected");
 					var id = $(this).attr('id');
@@ -217,10 +224,9 @@
 			<div id="container" class="clear">
 
 				<!-- main content -->
-				<div id="homepage" style="background-color: black; margin-left:auto; margin-right:auto; width:70%;">
+				<div id="homepage" style="background-color: black;">
 					<!-- Services -->
 					<section id="assignments_section" class="clear">
-						<!--
 						<article class="one_third">
 							<figure>
 								<figcaption>
@@ -252,7 +258,6 @@
 								</div>
 							</figure>
 						</article>
-						-->
 						<article class="one_third">
 							<figure>
 								<figcaption>
@@ -283,21 +288,19 @@
 						<article class="one_third lastbox">
 							<figure>
 								<figcaption>
-									<h2>Sessions</h2>
+									<h2>Groups</h2>
 								</figcaption>
 								<div id="group_by" style='background-color:#404040; min-height: 300px; width:290px;height:100%'>
 									<ol id="group_selectable">
 										<li id="0" class="ui-widget-content ui-selected">
-											Average length
+											Don't group
 										</li>
 										<li id="1" class="ui-widget-content">
-											Total number
+											Group by students
 										</li>
-										<!--
 										<li id="2" class="ui-widget-content">
 											Group by assignment (average time)
 										</li>
-										-->
 									</ol>
 								</div>
 							</figure>
@@ -315,37 +318,10 @@
 		//if (group_by == 2) {
 		//	console.log(JSON.stringify(data));
 		//}
-		var this_tooltip = '';
-		var this_title = '';
-		var y_axis_title = '';
-		
-		if (group_by == 0) {
-			this_tooltip = {
-				headerFormat : '<span style="font-size:10px">{point.key}</span><table>',
-				pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.2f} minutes</b></td></tr>',
-				footerFormat : '</table>',
-				//shared: true,
-				useHTML : true
-			};
-			this_title = 'Time spent in session';
-			y_axis_title = 'Minutes';
-		} else if (group_by == 1) {
-			this_tooltip = {
-				headerFormat : '<span style="font-size:10px">{point.key}</span><table>',
-				pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y} sessions</b></td></tr>',
-				footerFormat : '</table>',
-				//shared: true,
-				useHTML : true
-			};
-			
-			this_title = 'Total number of sessions per user	';
-			y_axis_title = 'Number of sessions';
-		}
+
 		var data_series = new Array();
 		var x_axis = {
-			categories : ['Students']
+			categories : ['Assignments']
 		};
 
 		var plot_options = {
@@ -355,22 +331,52 @@
 			}
 		};
 
-		//if (group_by == 0 || group_by == 2) {
-		for (var i = 0; i < data.length; i++) {
-			var serie = {
-				name : '' + data[i]['student'],
-				data : [data[i]['count']]
+		if (group_by == 0 || group_by == 2) {
+			for (var i = 0; i < data.length; i++) {
+				var serie = {
+					name : '' + data[i]['assignment'],
+					data : [data[i]['count']]
+				}
+				data_series.push(serie);
 			}
-			data_series.push(serie);
+		} else if (group_by == 1 && data[1].length > 0) {
+
+			var x_categories = new Array();
+
+			var assignments = data[0];
+			for (var i = 0; i < assignments.length; i++) {
+				x_categories.push(assignments[i]);
+			}
+			var student_series = data[1];
+			for (var x = 0; x < student_series.length; x++) {
+				var serie = {
+					name : '' + student_series[x]['student'],
+					data : student_series[x]['counters']
+				}
+				data_series.push(serie);
+			}
+			// Set the plot options :
+			plot_options = {
+				column : {
+					stacking : 'normal',
+					dataLabels : {
+						enabled : true,
+						color : (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+					}
+				}
+			};
+			// set the x axis
+			x_axis = {
+				categories : x_categories
+			};
 		}
-		//}
 
 		$('#container').highcharts({
 			chart : {
 				type : 'column'
 			},
 			title : {
-				text : this_title
+				text : 'Time spent in assignments'
 			},
 			/*
 			 subtitle : {
@@ -383,10 +389,17 @@
 			yAxis : {
 				min : 0,
 				title : {
-					text : y_axis_title
+					text : 'Minutes'
 				}
 			},
-			tooltip : this_tooltip,
+			tooltip : {
+				headerFormat : '<span style="font-size:10px">{point.key}</span><table>',
+				pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.2f} minutes</b></td></tr>',
+				footerFormat : '</table>',
+				//shared: true,
+				useHTML : true
+			},
 			plotOptions : plot_options,
 			series : data_series
 		});
