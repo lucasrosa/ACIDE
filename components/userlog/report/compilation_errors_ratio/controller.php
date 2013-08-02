@@ -121,8 +121,8 @@ if ($_GET['action'] == 'get_data_for_chart') {
 				$succeded_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, TRUE);	
 				$failed_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, FALSE);
 					
-				$assignments_with_counters[$idx]['counters'][0] += $succeded_compilation_attempts;
-				$assignments_with_counters[$idx]['counters'][1] += $failed_compilation_attempts;
+				$assignments_with_counters[$idx][0] += $succeded_compilation_attempts;
+				$assignments_with_counters[$idx][1] += $failed_compilation_attempts;
 				//}
 			}
 		} else {

@@ -346,14 +346,45 @@
 		for (var i = 0; i < students.length; i++) {
 			x_categories.push(students[i]);
 		}
-		var assignment_series = data[1];
-		for (var x = 0; x < assignment_series.length; x++) {
+		
+		if (group_by == 0) {
+			var assignment_series = data[1];
+			
+			var successful_compilations = new Array();
+			
+			for (var x = 0; x < assignment_series.length; x++) {
+				successful_compilations.push(assignment_series[x][0]);
+			}
+			
 			var serie = {
-				name : '' + assignment_series[x]['assignment'],
-				data : [assignment_series[x]['counters'][0], assignment_series[x]['counters'][1]] 
+				name : 'Successful compilations',
+				data : successful_compilations
 			}
 			data_series.push(serie);
+			
+			var failed_compilations = new Array();
+			
+			for (var x = 0; x < assignment_series.length; x++) {
+				failed_compilations.push(assignment_series[x][1]);
+			}
+			
+			var serie = {
+				name : 'Failed compilations',
+				data : failed_compilations
+			}
+			data_series.push(serie);
+				
+		} else {
+			var assignment_series = data[1];
+			for (var x = 0; x < assignment_series.length; x++) {
+				var serie = {
+					name : '' + assignment_series[x]['assignment'],
+					data : [assignment_series[x]['counters'][0], assignment_series[x]['counters'][1]] 
+				}
+				data_series.push(serie);
+			}	
 		}
+		
 		// Set the plot options :
 		plot_options = {
 			column : {
@@ -375,7 +406,7 @@
 				type : 'column'
 			},
 			title : {
-				text : 'Time spent in assignments'
+				text : 'Compilation attempts'
 			},
 			/*
 			 subtitle : {
@@ -388,7 +419,7 @@
 			yAxis : {
 				min : 0,
 				title : {
-					text : 'Minutes'
+					text : 'Attempts'
 				}
 			},
 			tooltip : {
