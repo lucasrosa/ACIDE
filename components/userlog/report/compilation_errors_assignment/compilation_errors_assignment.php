@@ -282,6 +282,7 @@
 								</div>
 							</figure>
 						</article>
+						<!--
 						<article class="one_third lastbox">
 							<figure>
 								<figcaption>
@@ -296,7 +297,7 @@
 										<li id="1" class="ui-widget-content">
 											Group by students
 										</li>
-									-->
+									--><!--
 										<li id="1" class="ui-widget-content">
 											Group by assignment
 										</li>
@@ -304,6 +305,7 @@
 								</div>
 							</figure>
 						</article>
+						-->
 					</section>
 					<!-- / Services -->
 				</div>
@@ -351,22 +353,27 @@
 			//percentage_string = '({point.percentage:.0f}%)';
 			var student_series = data[1];
 			
-			var total_compilations = new Array();
-			var failed_compilations = new Array();
-			
 			for (var x = 0; x < student_series.length; x++) {
-				total_compilations.push(student_series[x]['total']);
-				failed_compilations.push(student_series[x]['failed']);
+				var total_compilations = new Array();
+				var failed_compilations = new Array();
+				for (var m = 0; m < student_series[x]['total'].length; m++) {
+					total_compilations.push(student_series[x]['total'][m]);
+				}
+				
+				for (var m = 0; m < student_series[x]['failed'].length; m++) {
+					failed_compilations.push(student_series[x]['failed'][m]);
+				}
+				
 				
 				var serie = {
-					name : student_series[x]['username'],
+					name : student_series[x]['username'] + ' (total)',
 					data : total_compilations,
 					stack : 'total'
 				}
 				data_series.push(serie);
 				
 				serie = {
-					name : student_series[x]['username'],
+					name : student_series[x]['username'] + ' (errors)',
 					data : failed_compilations,
 					stack : 'failed'
 				}
@@ -401,8 +408,11 @@
 		// Set the plot options :
 		plot_options = {
 			column : {
-				stacking : 'normal'
-				
+				stacking : 'normal',
+				dataLabels : {
+					enabled : true,
+					color : (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+				}
 			}
 		};
 		// set the x axis
