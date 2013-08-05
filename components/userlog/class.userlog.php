@@ -325,7 +325,7 @@ class Userlog {
 			}
 		} else {
 			$collection->update(
-			    array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, "assignment_submitted" => $this->assignment_submitted),
+			    array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type),
 			    array('$set' => array('is_open' => "FALSE")),
 			    array("multiple" => true)
 			);
