@@ -122,7 +122,11 @@ class Userlog {
 
     public function SaveAsFile(){
 		$collection = $this->GetCollection();
-		$this->assignment_submitted = $this->GetAssignmentSubmitted();
+		$project_path = explode("/", $this->path);
+		$project_path = $project_path[0];
+		
+		$this->assignment_submitted = $this->GetAssignmentSubmitted($project_path);
+		
 		$new_log = array( 	
 							"username" => $this->username,
 							"type" => "file",
@@ -138,7 +142,7 @@ class Userlog {
 		return $collection->insert($new_log);
     }
 	
-	public function GetAssignmentSubmitted () {
+	public function GetAssignmentSubmitted ($project_path = "") {
 		// Connect
 		$mongo_client = new MongoClient();
 		// select the database
@@ -147,12 +151,15 @@ class Userlog {
 		$collection = $database->users;	
 		
 		$users = $collection->find();
+		if ($project_path == "") {
+			$project_path = $this->path;
+		}
 		
 		foreach ($users as $user) {
 		//$user = $collection->findOne(array("username" => $this->user));
 			if (isset($user["projects"][0])) {	
 				for ($i = 0; $i < count($user["projects"]); $i++) {
-					if ($user["projects"][$i]["path"] == $this->path) {
+					if ($user["projects"][$i]["path"] ==$project_path) {
 						if (isset($user["projects"][$i]["assignment"]['submitted_date'])) {
 							return "TRUE";	
 						} else {
@@ -289,6 +296,10 @@ class Userlog {
 	public function UpdateCurrentFile(){
 		$collection = $this->GetCollection();
 		$current_type = "file";
+		$project_path = explode("/", $this->path);
+		$project_path = $project_path[0];
+		
+		$this->assignment_submitted = $this->GetAssignmentSubmitted($project_path);
 		
 		$log = $collection->findOne(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path));
 		if (isset($log['username'])) {
@@ -307,12 +318,14 @@ class Userlog {
 				$this->SaveAsFile();
 			} else {
 				$log['last_update_timestamp'] = date("Y-m-d H:i:s");
+				$log["assignment_submitted"] = $this->assignment_submitted;
+				
 				// Overwrite the log in the database:
 				return $collection->update(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path), $log);	
 			}
 		} else {
 			$collection->update(
-			    array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type),
+			    array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, "assignment_submitted" => $this->assignment_submitted),
 			    array('$set' => array('is_open' => "FALSE")),
 			    array("multiple" => true)
 			);
@@ -328,7 +341,7 @@ class Userlog {
 	public function UpdateCurrentProject(){
 		$collection = $this->GetCollection();
 		$current_type = "project";
-		
+		$this->assignment_submitted = $this->GetAssignmentSubmitted();
 		$log = $collection->findOne(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path));
 		if (isset($log['username'])) {
 			$now = strtotime(date("Y-m-d H:i:s"));
@@ -346,6 +359,8 @@ class Userlog {
 				$this->SaveAsProject();
 			} else {
 				$log['last_update_timestamp'] = date("Y-m-d H:i:s");
+				$log["assignment_submitted"] = $this->assignment_submitted;
+				
 				// Overwrite the log in the database:
 				return $collection->update(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path), $log);	
 			}
@@ -367,7 +382,7 @@ class Userlog {
 	public function UpdateCurrentTerminal(){
 		$collection = $this->GetCollection();
 		$current_type = "terminal";
-		
+		$this->assignment_submitted = $this->GetAssignmentSubmitted();
 		$log = $collection->findOne(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path));
 		if (isset($log['username'])) {
 			$now = strtotime(date("Y-m-d H:i:s"));
@@ -391,6 +406,7 @@ class Userlog {
 				$this->SaveAsTerminal();
 			} else {
 				$log['last_update_timestamp'] = date("Y-m-d H:i:s");
+				$log["assignment_submitted"] = $this->assignment_submitted;
 				// Overwrite the log in the database:
 				return $collection->update(array("username" => $this->username, "is_open" => 'TRUE', "type" => $current_type, 'path' => $this->path), $log);	
 			}
