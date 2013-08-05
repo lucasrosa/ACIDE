@@ -112,9 +112,9 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	
 	header('Content-type: application/json');
 	$response_array['status'] = 'success';
-		$response_array['students_with_counters'] = $students_with_counters;
-		error_log(print_r($response_array['students_with_counters'], TRUE));	
-		$response_array['assignments'] = $assignments;
+	$response_array['students_with_counters'] = $students_with_counters;
+	error_log(print_r($response_array['students_with_counters'], TRUE));	
+	$response_array['assignments'] = $assignments;
 		
 	echo json_encode($response_array);
 }

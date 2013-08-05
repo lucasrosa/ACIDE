@@ -203,15 +203,15 @@
                     deleteResponse = codiad.jsend.parse(data);
                     if (deleteResponse != 'error') {
                         codiad.message.success('Project Deleted');
-                        var deletefiles = $('input:checkbox[name="delete"]:checked').val();
-                        var followlinks = $('input:checkbox[name="follow"]:checked').val();
-                        if( typeof deletefiles !== 'undefined' ) {
-                            if( typeof followlinks !== 'undefined' ) {
+                        //var deletefiles = $('input:checkbox[name="delete"]:checked').val();
+                        //var followlinks = $('input:checkbox[name="follow"]:checked').val();
+                        //if( typeof deletefiles !== 'undefined' ) {
+                            //if( typeof followlinks !== 'undefined' ) {
                                 $.get(codiad.filemanager.controller + '?action=delete&follow=true&path=' + projectPath);
-                            } else {
-                                $.get(codiad.filemanager.controller + '?action=delete&path=' + projectPath);
-                            }
-                        }
+                            //} else {
+                            //    $.get(codiad.filemanager.controller + '?action=delete&path=' + projectPath);
+                            //}
+                        //}
                         _this.list();
                         _this.loadSide();
                         // Remove any active files that may be open

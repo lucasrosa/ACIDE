@@ -316,8 +316,9 @@ class Filemanager extends Common {
     //////////////////////////////////////////////////////////////////
 
     public function delete(){
-
-        function rrmdir($path, $follow) { 
+		
+        function rrmdir($path, $follow) {
+        // error_log("removing " . $path . " and following = '". $follow . "'"); 
            if(is_file($path)) {
                unlink($path);
            } else {
