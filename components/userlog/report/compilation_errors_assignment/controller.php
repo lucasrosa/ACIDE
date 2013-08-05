@@ -52,7 +52,6 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	// Check if there are no students, then load all of them
 	if (!isset($students[0]) || count($students[0]) == 0) {
 		$User = new User();
-		//$User->users = getJSON('users.php');
 		// Connect
 		$mongo_client = new MongoClient();
 		// select the database
@@ -88,24 +87,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	$assignments_with_counters = array();
 	$students_with_counters = array();
 	
-	/*
-	if ($group_by == 0) {
-		for ($k = 0; $k < count($students); $k++) {
-				$this_assignment_counters = array();
-				$this_assignment_counters[0] = 0;
-				$this_assignment_counters[1] = 0;
-				$assignments_with_counters[] = $this_assignment_counters;		
-		}
-	} else {
- 		for ($k = 0; $k < count($assignments); $k++) {
-			$this_assignment_counters = array();
-			$this_assignment_counters['assignment'] = $assignments[$k];
-			$this_assignment_counters['count'] = 0;
-			$assignments_with_counters[] = $this_assignment_counters;		
-		}
-	 */ 
-	//}
-	
+
 	for ($idx = 0; $idx < count($students); $idx++) {
 		
 		$Userlogreport = new Userlogreport();
@@ -119,68 +101,21 @@ if ($_GET['action'] == 'get_data_for_chart') {
 				$project_path = "AS_" . $students[$idx] . "_" . $assignments[$k];
 				
 				$total_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path);
-				error_log("total_compilation_attempts = $total_compilation_attempts");	
-				//$succeded_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, TRUE);	
+				error_log("total_compilation_attempts = $total_compilation_attempts");		
 				$failed_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, FALSE);
 
 				$students_with_counters[$idx]['total'][$k] = $total_compilation_attempts;
 				$students_with_counters[$idx]['failed'][$k] = $failed_compilation_attempts;
 		}
-		/*
-		if ($group_by == 0) {
-			for ($k = 0; $k < count($assignments); $k++) {
-				$project_path = "AS_" . $students[$idx] . "_" . $assignments[$k];
-				//$time_spent = $Userlogreport->GetTimeSpentInProject($project_path);
-									
-				//if ($group_by == 0 || $group_by == 2) {
-				//	$assignments_with_counters[$k]['count'] += $minutes_spent;	
-				//} else if ($group_by == 1) {
-				//$total_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, TRUE);	
-				$succeded_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, TRUE);	
-				$failed_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, FALSE);
-					
-				$assignments_with_counters[$idx][0] += $succeded_compilation_attempts;
-				$assignments_with_counters[$idx][1] += $failed_compilation_attempts;
-				//}
-			}
-		} else {
-		
-			for ($k = 0; $k < count($assignments); $k++) {
-				$project_path = "AS_" . $students[$idx] . "_" . $assignments[$k];
-				//$time_spent = $Userlogreport->GetTimeSpentInProject($project_path);
-									
-				//if ($group_by == 0 || $group_by == 2) {
-				//	$assignments_with_counters[$k]['count'] += $minutes_spent;	
-				//} else if ($group_by == 1) {
-				//$total_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, TRUE);	
-				$succeded_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, TRUE);	
-				$failed_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, FALSE);
-					
-				$assignments_with_counters[$k]['counters'][0] = $succeded_compilation_attempts;
-				$assignments_with_counters[$k]['counters'][1] = $failed_compilation_attempts;
-				//}
-			}
-		}
-		*/
-		 
-		//error_log(print_r($assignments_with_counters, TRUE));
 	}
 	
 	
 	header('Content-type: application/json');
 	$response_array['status'] = 'success';
-	//$response_array['outputted_errors'] = $outputted_errors;
-	//if ($group_by == 0 || $group_by == 2) {
-		// $response_array['assignments_with_counters'] = $assignments_with_counters;	
-		// $response_array['students'] = $students;
 		$response_array['students_with_counters'] = $students_with_counters;
 		error_log(print_r($response_array['students_with_counters'], TRUE));	
 		$response_array['assignments'] = $assignments;
-	//}
-	
-	//error_log(print_r($response_array['outputted_errors'], true));
-	//$response_array['group_by'] = $group_by;
-	
+		
 	echo json_encode($response_array);
 }
 ?>

@@ -221,7 +221,7 @@
 			<div id="container" class="clear">
 
 				<!-- main content -->
-				<div id="homepage" style="background-color: black;">
+				<div id="homepage" style="background-color: black; margin-left:auto; margin-right:auto; width:70%;">
 					<!-- Services -->
 					<section id="assignments_section" class="clear">
 						<article class="one_third">
@@ -255,7 +255,7 @@
 								</div>
 							</figure>
 						</article>
-						<article class="one_third">
+						<article class="one_third lastbox">
 							<figure>
 								<figcaption>
 									<h2>Students</h2>
