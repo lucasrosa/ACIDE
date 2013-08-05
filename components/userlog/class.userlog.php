@@ -122,7 +122,7 @@ class Userlog {
 
     public function SaveAsFile(){
 		$collection = $this->GetCollection();
-			
+		$this->assignment_submitted = $this->GetAssignmentSubmitted();
 		$new_log = array( 	
 							"username" => $this->username,
 							"type" => "file",
@@ -130,7 +130,8 @@ class Userlog {
 							"last_update_timestamp" => date("Y-m-d H:i:s"),
 							"is_open" => 'TRUE',
 							"session_id" => $this->GetCurrentSessionId(),
-							"path" => $this->path
+							"path" => $this->path,
+							"assignment_submitted" => $this->assignment_submitted
 						 );
 		
 		// Insert the log in the database:
@@ -191,7 +192,7 @@ class Userlog {
 
     public function SaveAsTerminal(){
 		$collection = $this->GetCollection();
-			
+		$this->assignment_submitted = $this->GetAssignmentSubmitted();	
 		$new_log = array( 	
 							"username" => $this->username,
 							"type" => "terminal",
@@ -199,7 +200,8 @@ class Userlog {
 							"last_update_timestamp" => date("Y-m-d H:i:s"),
 							"is_open" => 'TRUE',
 							"session_id" => $this->GetCurrentSessionId(),
-							"path" => $this->path
+							"path" => $this->path,
+							"assignment_submitted" => $this->assignment_submitted
 						 );
 		
 		// Insert the log in the database:
@@ -230,6 +232,8 @@ class Userlog {
 			}	
 		}
 		
+		$this->path = $project_path;
+		$this->assignment_submitted = $this->GetAssignmentSubmitted();
 		$new_log = array( 	
 							"username" => $this->username,
 							"type" => "compilation_attempt",
@@ -240,7 +244,8 @@ class Userlog {
 							"output" => $this->output,
 							"command" => $this->command,
 							"language" => $this->language,
-							"succeeded" => $this->succeeded
+							"succeeded" => $this->succeeded,
+							"assignment_submitted" => $this->assignment_submitted
 						 );
 		
 		// Insert the log in the database:
