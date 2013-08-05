@@ -317,7 +317,7 @@
 		//if (group_by == 2) {
 		//	console.log(JSON.stringify(data));
 		//}
-
+		var percentage_string = '';
 		var data_series = new Array();
 		var x_axis = {
 			categories : ['Assignments']
@@ -348,6 +348,7 @@
 		}
 		
 		if (group_by == 0) {
+			percentage_string = '({point.percentage:.0f}%)';
 			var assignment_series = data[1];
 			
 			var successful_compilations = new Array();
@@ -425,7 +426,7 @@
 			tooltip : {
 				headerFormat : '<span style="font-size:10px">{point.key}</span><table>',
 				pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y} </b></td></tr>',
+                    '<td style="padding:0"><b>{point.y} </b>'+percentage_string+'</td></tr>',
 				footerFormat : '</table>',
 				//shared: true,
 				useHTML : true
