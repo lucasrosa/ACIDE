@@ -47,6 +47,9 @@ class Userlog {
 	public $language				= '';
 	// Identify if the code was compiled successfuly
 	public $succeeded 				= '';
+	// Identify if the project was submitted or not
+	public $assignment_submitted = '';
+	
 	/*
 	 * TODO Create an array  for timeout like project => 5, terminal -> 2.5, file => 1
 	 * so it can be called as $timeout['file'] for example and then change the methos to a single method
@@ -134,13 +137,39 @@ class Userlog {
 		return $collection->insert($new_log);
     }
 	
+	public function GetAssignmentSubmitted () {
+		// Connect
+		$mongo_client = new MongoClient();
+		// select the database
+		$database = $mongo_client->codiad_database;
+		// Select the collection 
+		$collection = $database->users;	
+		
+		$users = $collection->find();
+		
+		foreach ($users as $user) {
+		//$user = $collection->findOne(array("username" => $this->user));
+			if (isset($user["projects"][0])) {	
+				for ($i = 0; $i < count($user["projects"]); $i++) {
+					if ($user["projects"][$i]["path"] == $this->path) {
+						if (isset($user["projects"][$i]["assignment"]['submitted_date'])) {
+							return "TRUE";	
+						} else {
+							return "FALSE";
+						}
+					}
+				}
+			}
+		}
+	}
 	//////////////////////////////////////////////////////////////////
     // Save as Project
     //////////////////////////////////////////////////////////////////
 
     public function SaveAsProject(){
 		$collection = $this->GetCollection();
-			
+		$this->assignment_submitted = $this->GetAssignmentSubmitted();
+		
 		$new_log = array( 	
 							"username" => $this->username,
 							"type" => "project",
@@ -148,7 +177,8 @@ class Userlog {
 							"last_update_timestamp" => date("Y-m-d H:i:s"),
 							"is_open" => 'TRUE',
 							"session_id" => $this->GetCurrentSessionId(),
-							"path" => $this->path
+							"path" => $this->path,
+							"assignment_submitted" => $this->assignment_submitted
 						 );
 		
 		// Insert the log in the database:
