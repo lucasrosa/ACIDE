@@ -198,7 +198,7 @@ if(!file_exists(DATA . '/plugins.php')) {
                    </ul>
                 </div>
                 <a id="lock-left-sidebar" class="icon-lock icon"></a>
-                <a id="finder-quick" class="icon icon-archive"></a>
+                <a id="finder-quick" class="icon icon-eye"></a>
                 <a id="tree-search" class="icon-search icon"></a>
             </div>
 
@@ -251,10 +251,11 @@ if(!file_exists(DATA . '/plugins.php')) {
                 
                     <div class="project-list-title">
                         <h2>Projects</h2>
-                        <a id="projects-collapse" class="icon-down-dir icon" alt="Collapse"></a>
+                        <a id="projects-collapse" class="icon-down-dir icon" alt="Collapse" title="Collapse"></a>
                         <?php if(checkAccess()) { ?>
-                        <a id="projects-create" class="icon-plus icon" alt="Create Project"></a>
+                        <a id="projects-create" class="icon-plus icon" alt="Create Project" title="Create Project"></a>
                         <?php } ?>
+                        <a onclick="codiad.project.list();" class="icon-archive icon" alt="Projects" title="Projects"></a>
                     </div>
                     
                     <div class="sb-projects-content">
