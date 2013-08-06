@@ -471,36 +471,36 @@ class Userlog {
 	public function GetAllLogsForProject ($session = NULL) {
 		$collection = $this->GetCollection();
 		if ($session == NULL) {
-			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"project", "path" => $this->path));
+			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"project", "path" => $this->path, "assignment_submitted" => 'FALSE'));
 		} else {
-			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"project", "path" => $this->path, "session_id" => $session));
+			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"project", "path" => $this->path, "session_id" => $session, "assignment_submitted" => 'FALSE'));
 		}
 	}
 	
 	public function GetAllLogsForFile ($session = NULL) {
 		$collection = $this->GetCollection();
 		if ($session == NULL) {
-			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"file", "path" => $this->path));
+			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"file", "path" => $this->path, "assignment_submitted" => 'FALSE'));
 		} else {
-			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"file", "path" => $this->path, "session_id" => $session));
+			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"file", "path" => $this->path, "session_id" => $session, "assignment_submitted" => 'FALSE'));
 		}
 	}
 	
 	public function GetAllLogsForTerminalInThisProject ($session = NULL) {
 		$collection = $this->GetCollection();
 		if ($session == NULL) {
-			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"terminal", "path" => $this->path));
+			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"terminal", "path" => $this->path, "assignment_submitted" => 'FALSE'));
 		} else {
-			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"terminal", "path" => $this->path, "session_id" => $session));
+			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" =>"terminal", "path" => $this->path, "session_id" => $session, "assignment_submitted" => 'FALSE'));
 		}
 	}
 	
 	public function GetAllLogsForTerminal ($session = NULL) {
 		$collection = $this->GetCollection();
 		if ($session == NULL) {
-			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" => "terminal"));
+			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" => "terminal", "assignment_submitted" => 'FALSE'));
 		} else {
-			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" => "terminal", "session_id" => $session));
+			return $collection->find(array("username" => $this->username, "is_open" => 'FALSE', "type" => "terminal", "session_id" => $session, "assignment_submitted" => 'FALSE'));
 		}
 	}
 	
@@ -508,9 +508,9 @@ class Userlog {
 		$collection = $this->GetCollection();
 		
 		if ($this->path == "" && $succeeded === NULL) {
-			return $collection->find(array("username" => $this->username, "type" => "compilation_attempt"));	
+			return $collection->find(array("username" => $this->username, "type" => "compilation_attempt", "assignment_submitted" => 'FALSE'));	
 		} else if ($succeeded === NULL) {
-			return $collection->find(array("username" => $this->username, "type" => "compilation_attempt", "path" => $this->path));
+			return $collection->find(array("username" => $this->username, "type" => "compilation_attempt", "path" => $this->path, "assignment_submitted" => 'FALSE'));
 		} else {
 			$succeeded_string = "";
 			
@@ -521,9 +521,9 @@ class Userlog {
 			}
 			
 			if ($this->path == "") {
-				return $collection->find(array("username" => $this->username, "type" => "compilation_attempt", "succeeded" => $succeeded_string));	
+				return $collection->find(array("username" => $this->username, "type" => "compilation_attempt", "succeeded" => $succeeded_string, "assignment_submitted" => 'FALSE'));	
 			} else {
-				return $collection->find(array("username" => $this->username, "type" => "compilation_attempt", "succeeded" => $succeeded_string, "path" => $this->path));
+				return $collection->find(array("username" => $this->username, "type" => "compilation_attempt", "succeeded" => $succeeded_string, "path" => $this->path, "assignment_submitted" => 'FALSE'));
 			}
 			
 		}
