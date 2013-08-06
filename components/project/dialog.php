@@ -255,6 +255,9 @@
             ?>
             </table>
             </div>
+            <div style="text-align: right;">
+            	<span>The icon <span class="icon-users bigger-icon"></span> indicates that the group members can be edited.</span>
+            </div>
             <?php if(checkAccess()){ ?><button class="btn-left" onclick="codiad.project.create();">New Project</button><?php } ?><button class="<?php if(checkAccess()){ echo('btn-right'); } ?>" onclick="codiad.modal.unload();return false;">Close</button>
             <?php
             
