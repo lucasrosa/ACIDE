@@ -119,10 +119,7 @@
 				}
 				// [0] => students
 				data_array[0] = students;
-				// [1] => assignments
-				data_array[1] = assignments;
-				// [2] => group_by
-				data_array[2] = group_by;
+				
 
 				$.ajax({
 					type : "POST",
@@ -132,13 +129,7 @@
 					}, 
 					dataType : 'json',
 					success : function(response) {
-						if (group_by == 1) {
-							data = new Array();
-							data[0] = response.assignments;
-							data[1] = response.students_with_counters;
-						} else {
-							data = response.assignments_with_counters;
-						}
+						data = response.students_with_counters;
 
 						setChart(data, group_by);
 					},
@@ -179,38 +170,6 @@
 
 					}
 				});
-
-				$("#assignments_selectable").selectable({
-					stop : function() {
-						var all = false;
-						assignments = new Array();
-						$(".ui-selected", this).each(function() {
-							var index = $(this).index();
-							if (index == 0) {
-								all = true;
-							} else {
-								var id = $(this).attr('id');
-								assignments.push(id);
-							}
-						});
-
-						if (all) {
-							$("#assignments_selectable li").first().addClass("ui-selected").siblings().removeClass("ui-selected");
-							assignments = new Array();
-						}
-
-						set_chart_data(students, assignments, group_by);
-
-					}
-				});
-
-				$("#group_selectable li").click(function() {
-					$(this).addClass("ui-selected").siblings().removeClass("ui-selected");
-					var id = $(this).attr('id');
-					group_by = id;
-					set_chart_data(students, assignments, group_by);
-				});
-
 			});
 		</script>
 
@@ -224,41 +183,10 @@
 			<div id="container" class="clear">
 
 				<!-- main content -->
-				<div id="homepage" style="background-color: black;">
+				<div id="homepage" style="background-color: black; margin-left:auto; margin-right:auto; width:70%;">
 					<!-- Services -->
 					<section id="assignments_section" class="clear">
-						<article class="one_third">
-							<figure>
-								<figcaption>
-									<h2>Assignments</h2>
-								</figcaption>
-								<div id="assignments" style='background-color:#404040; min-height: 300px; width:290px;height:100%'>
-									<ol id="assignments_selectable">
-										<li id="all" class="ui-widget-content  ui-selected">
-											All
-										</li>
-										<?
-										//////////////////////////////////////////////////////////////////
-										// LF: List all assignments which this user is the owner
-										//////////////////////////////////////////////////////////////////
-										$Project = new Project();
-										//$assignments = $Project->GetAssignments();
-										$current_user = $_SESSION['user'];
-										$assignments = $Project->GetAssignmentsInTheSameCoursesOfUser($current_user);
-
-										for ($k = 0; $k < count($assignments); $k++) {
-										//$Course->id = $assignments[$k]['course'];
-
-										?>
-										<li id="<?=$assignments[$k]['name'] ?>" class="ui-widget-content">
-											<?=$assignments[$k]['name'] ?>
-										</li>
-										<? } ?>
-									</ol>
-								</div>
-							</figure>
-						</article>
-						<article class="one_third">
+						<article class="one_third lastbox">
 							<figure>
 								<figcaption>
 									<h2>Students</h2>
@@ -285,26 +213,6 @@
 								</div>
 							</figure>
 						</article>
-						<article class="one_third lastbox">
-							<figure>
-								<figcaption>
-									<h2>Groups</h2>
-								</figcaption>
-								<div id="group_by" style='background-color:#404040; min-height: 300px; width:290px;height:100%'>
-									<ol id="group_selectable">
-										<li id="0" class="ui-widget-content ui-selected">
-											Don't group
-										</li>
-										<li id="1" class="ui-widget-content">
-											Group by students
-										</li>
-										<li id="2" class="ui-widget-content">
-											Group by assignment (average time)
-										</li>
-									</ol>
-								</div>
-							</figure>
-						</article>
 					</section>
 					<!-- / Services -->
 				</div>
@@ -315,13 +223,11 @@
 </html>
 <script type="text/javascript">
 	function setChart(data, group_by) {
-		//if (group_by == 2) {
-		//	console.log(JSON.stringify(data));
-		//}
+		console.log(JSON.stringify(data));
 
 		var data_series = new Array();
 		var x_axis = {
-			categories : ['Assignments']
+			categories : ['Students']
 		};
 
 		var plot_options = {
@@ -331,52 +237,21 @@
 			}
 		};
 
-		if (group_by == 0 || group_by == 2) {
-			for (var i = 0; i < data.length; i++) {
-				var serie = {
-					name : '' + data[i]['assignment'],
-					data : [data[i]['count']]
-				}
-				data_series.push(serie);
+		for (var i = 0; i < data.length; i++) {
+			var serie = {
+				name : '' + data[i]['username'],
+				data : [data[i]['count']]
 			}
-		} else if (group_by == 1 && data[1].length > 0) {
-
-			var x_categories = new Array();
-
-			var assignments = data[0];
-			for (var i = 0; i < assignments.length; i++) {
-				x_categories.push(assignments[i]);
-			}
-			var student_series = data[1];
-			for (var x = 0; x < student_series.length; x++) {
-				var serie = {
-					name : '' + student_series[x]['student'],
-					data : student_series[x]['counters']
-				}
-				data_series.push(serie);
-			}
-			// Set the plot options :
-			plot_options = {
-				column : {
-					stacking : 'normal',
-					dataLabels : {
-						enabled : true,
-						color : (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-					}
-				}
-			};
-			// set the x axis
-			x_axis = {
-				categories : x_categories
-			};
+			data_series.push(serie);
 		}
+		
 
 		$('#container').highcharts({
 			chart : {
 				type : 'column'
 			},
 			title : {
-				text : 'Time spent in assignments'
+				text : 'Time spent in the system'
 			},
 			/*
 			 subtitle : {
