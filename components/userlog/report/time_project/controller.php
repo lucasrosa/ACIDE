@@ -39,20 +39,10 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	if (isset($data_array[2])) {
 		$group_by = $data_array[2];
 	}
-	// Get data <--
-	$compilation_errors = array();
-
-	$error_to_log = "";
-	/*
-	 * $outputted_errors groups the errors and count them, each position is another array $error
-	 */
-	$outputted_errors = array();
-	$single_error = array();
 	
 	// Check if there are no students, then load all of them
 	if (!isset($students[0]) || count($students[0]) == 0) {
 		$User = new User();
-		//$User->users = getJSON('users.php');
 		// Connect
 		$mongo_client = new MongoClient();
 		// select the database
@@ -123,7 +113,6 @@ if ($_GET['action'] == 'get_data_for_chart') {
 			}
 			
 		}
-		//error_log(print_r($assignments_with_counters, TRUE));
 	}
 	
 	if ($group_by == 2) {
@@ -136,16 +125,12 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	
 	header('Content-type: application/json');
 	$response_array['status'] = 'success';
-	//$response_array['outputted_errors'] = $outputted_errors;
 	if ($group_by == 0 || $group_by == 2) {
 		$response_array['assignments_with_counters'] = $assignments_with_counters;	
 	} else {
 		$response_array['students_with_counters'] = $students_with_counters;
 		$response_array['assignments'] = $assignments;
 	}
-	
-	//error_log(print_r($response_array['outputted_errors'], true));
-	//$response_array['group_by'] = $group_by;
 	
 	echo json_encode($response_array);
 }
