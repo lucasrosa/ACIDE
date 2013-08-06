@@ -86,15 +86,14 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		$Userlogreport = new Userlogreport();
 		$Userlogreport -> username =  $students[$idx];
 		
-		for ($k = 0; $k < count($assignments); $k++) {
-			$time_spent = $Userlogreport->GetTimeSpentInTheSystem();
-			$minutes_spent =	($time_spent->d*24*60) +
-								($time_spent->h*60) +
-								($time_spent->i) +
-								($time_spent->s / 60);
-								
-			$students_with_counters[$idx]['count'] = round($minutes_spent, 2);
-		}
+		$time_spent  = $Userlogreport->GetTimeSpentInTheSystem();
+		$hours_spent =	($time_spent->d*24) +
+						($time_spent->h) +
+						($time_spent->i / 60) +
+						($time_spent->s / 60 / 60);
+							
+		$students_with_counters[$idx]['count'] = round($hours_spent, 2);
+		
 	}
 	
 	header('Content-type: application/json');
