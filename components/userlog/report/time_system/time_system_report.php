@@ -183,10 +183,10 @@
 			<div id="container" class="clear">
 
 				<!-- main content -->
-				<div id="homepage" style="background-color: black; margin-left:auto; margin-right:auto; width:70%;">
+				<div id="homepage" style="background-color: black; margin-left:auto; margin-right:auto; width:33%;">
 					<!-- Services -->
 					<section id="assignments_section" class="clear">
-						<article class="one_third lastbox">
+						<article class="one_third">
 							<figure>
 								<figcaption>
 									<h2>Students</h2>
@@ -253,18 +253,12 @@
 			title : {
 				text : 'Time spent in the system'
 			},
-			/*
-			 subtitle : {
-			 text : '...'
-			 },
-			 */
-
 			xAxis : x_axis,
 
 			yAxis : {
 				min : 0,
 				title : {
-					text : 'Minutes'
+					text : 'Hours'
 				}
 			},
 			tooltip : {
@@ -279,8 +273,6 @@
 			series : data_series
 		});
 	}
-
-	//setChart('asd', 12);
 </script>
 <?
 }

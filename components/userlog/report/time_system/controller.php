@@ -25,29 +25,11 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	$data_array = $_POST['data_array'];
 	
 	$students = array();
-	$assignments= array();
-	$group_by = NULL;
 
 	
 	if (isset($data_array[0])) {
 		$students = $data_array[0];	
 	}
-	if (isset($data_array[1])) {
-		$assignments = $data_array[1];
-	}
-	
-	if (isset($data_array[2])) {
-		$group_by = $data_array[2];
-	}
-	// Get data <--
-	$compilation_errors = array();
-
-	$error_to_log = "";
-	/*
-	 * $outputted_errors groups the errors and count them, each position is another array $error
-	 */
-	$outputted_errors = array();
-	$single_error = array();
 	
 	// Check if there are no students, then load all of them
 	if (!isset($students[0]) || count($students[0]) == 0) {
