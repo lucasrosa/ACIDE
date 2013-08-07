@@ -295,8 +295,10 @@ if(!file_exists(DATA . '/plugins.php')) {
             <div id="editor-bottom-bar">
 				<!-- Terminal -->
 				<div id='terminal_container' style='height:90%;'>
-					<div id="terminal-editor-resizing" style="cursor: ns-resize; text-align: center; width: 70%; height: 8px;">
-						----
+					<div id="terminal-editor-resizing" style="cursor: ns-resize; text-align: center; height: 8px;">
+						<div style="width: 70%;">
+							------
+						</div>
 					</div>
 					<div style='font-size: 15px; '>
 						<a id='terminal-close-button' class='icon-cancel-circled bigger-icon' style='padding-top:2px;'></a>
