@@ -441,15 +441,6 @@ if(!file_exists(DATA . '/plugins.php')) {
 		var originY = 0;
 		var lastY = 0;
     	$(document).ready(function() {
-    		/*
-    		$( "#terminal-editor-resizing" ).click(function() {
-  				$("#terminal-editor-resizing").mousemove(function(event) {
-					var msg = "Handler for .mousemove() called at ";
-					msg += event.pageX + ", " + event.pageY;
-					console.log(msg);
-				});
-			});
-			*/
 			
 			$(function() {
 			    var isDragging = false;
@@ -464,11 +455,11 @@ if(!file_exists(DATA . '/plugins.php')) {
 			        	//console.log("Current Y = " + event.pageY);
 			            isDragging = true;
 			            var mouseChangeInYAxis = originY - event.pageY;
-						console.log(mouseChangeInYAxis);
+						//console.log(mouseChangeInYAxis);
 						
 						console.log("terminal_container_height = "+ terminal_container_height);
 						var new_terminal_container_height = terminal_container_height + mouseChangeInYAxis;
-						console.log("new_terminal_container_height = "+ new_terminal_container_height);
+						//console.log("new_terminal_container_height = "+ new_terminal_container_height);
 						
 						if (new_terminal_container_height >= 115 && new_terminal_container_height <= two_thirds_editor_region_height) {
 							$("#editor-bottom-bar").height(new_terminal_container_height);
@@ -489,21 +480,6 @@ if(!file_exists(DATA . '/plugins.php')) {
 			    
 			});
 		});
-		$(function(){
-			$.extend($.fn.disableTextSelect = function() {
-				return this.each(function(){
-					if($.browser.mozilla){//Firefox
-						$(this).css('MozUserSelect','none');
-					}else if($.browser.msie){//IE
-						$(this).bind('selectstart',function(){return false;});
-					}else{//Opera, etc.
-						$(this).mousedown(function(){return false;});
-					}
-				});
-			});
-			$("#root-editor-wrapper").disableTextSelect();//No text selection on elements with a class of 'noSelect'
-		});
-		
     </script>
 </body>
 </html>
