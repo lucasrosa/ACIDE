@@ -442,12 +442,14 @@ if(!file_exists(DATA . '/plugins.php')) {
 		var lastY = 0;
     	$(document).ready(function() {
 			
+			
 			$(function() {
 			    var isDragging = false;
 			    $("#terminal-editor-resizing")
 			    .mousedown(function() {
 			    	originY = event.pageY;
 			    	var terminal_container_height = $("#editor-bottom-bar").height();
+			    	var root_editor_wrapper_height = $("#root-editor-wrapper").outerHeight(true) + 12;
 			    	//console.log("Origin Y = " + originY);
 			    	var two_thirds_editor_region_height = ($("#editor-region").height() * 0.75);
 			    	
@@ -456,16 +458,23 @@ if(!file_exists(DATA . '/plugins.php')) {
 			            isDragging = true;
 			            var mouseChangeInYAxis = originY - event.pageY;
 						//console.log(mouseChangeInYAxis);
-						
-						console.log("terminal_container_height = "+ terminal_container_height);
+						//console.log("terminal_container_height = "+ terminal_container_height);
 						var new_terminal_container_height = terminal_container_height + mouseChangeInYAxis;
+						var new_root_editor_wrapper_height = root_editor_wrapper_height - mouseChangeInYAxis;
 						//console.log("new_terminal_container_height = "+ new_terminal_container_height);
 						
 						if (new_terminal_container_height >= 115 && new_terminal_container_height <= two_thirds_editor_region_height) {
 							$("#editor-bottom-bar").height(new_terminal_container_height);
+							$("#root-editor-wrapper").attr('style', 'height:'+new_root_editor_wrapper_height+'px !important; top:45px');
+							//$("#root-editor-wrapper").height(new_root_editor_wrapper_height);
+							
+							$('.editor').attr('id', 'editor');
+							var aceEditor = ace.edit("editor");
+							aceEditor.resize();
 						}
 						
 						$("#page_body").addClass("unselectable");
+						
 						
 						//$(window).unbind("mousemove");
 			        });
