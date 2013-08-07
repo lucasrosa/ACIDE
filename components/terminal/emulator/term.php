@@ -130,7 +130,7 @@
 				$allowed_commands[] = "javac";
 				$allowed_commands[] = "java";
 				$allowed_commands[] = "cd";
-				
+				$java_command_executed = FALSE;
 				/* LF: 
 				 * Compare the array of allowed commands with the commands received from the terminal,
 				 * if there is at least one intersection, the rest of the code is executed, if not
@@ -184,20 +184,28 @@
 							$this->command = 'echo ERROR: Command not allowed';
 							//$this->command_exec = $this->command . ' 2>&1';
 						}
-		            }
-	            
-		            // Replace text editors with cat
-		            $editors = array('vim','vi','nano');
-		            $this->command = str_replace($editors,'cat',$this->command);
-	            
-		            // Handle blocked commands
-		            $blocked = explode(',',BLOCKED);
-		            if(in_array($command_parts[0],$blocked)){
-		                $this->command = 'echo ERROR: Command not allowed';
-		            }
-	            
-		            // Update exec command
-		            $this->command_exec = $this->command . ' 2>&1';
+		            } else if(in_array('java',$command_parts)){            	
+						// Handle java command
+						error_log("Java executed!");
+						$java_command_executed = TRUE;
+						$this->command = 'echo Java executed!!! :D :D :D';
+						$this->command_exec = $this->command . ' 2>&1';
+					}
+		            
+					if (!$java_command_executed) {
+						// Replace text editors with cat
+			            $editors = array('vim','vi','nano');
+			            $this->command = str_replace($editors,'cat',$this->command);
+		            
+			            // Handle blocked commands
+			            $blocked = explode(',',BLOCKED);
+			            if(in_array($command_parts[0],$blocked)){
+			                $this->command = 'echo ERROR: Command not allowed';
+			            }
+		            	
+			            // Update exec command
+			            $this->command_exec = $this->command . ' 2>&1';
+					}
 				} else {
 					$this->command = 'echo ERROR: Command not allowed';
 					$this->command_exec = $this->command . ' 2>&1';
