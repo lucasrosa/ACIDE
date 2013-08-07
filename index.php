@@ -307,18 +307,19 @@ if(!file_exists(DATA . '/plugins.php')) {
 						<div id='terminal' width='100%' height='100%' style='height: 100%;'><? include "components/terminal/emulator/index.php"; ?></div>
 					</div>
 				</div>
-				
-                <a id="settings" class="ico-wrapper"><span class="icon-doc-text"></span>Settings</a>
-                <div id="terminal-open-button-divider" class="divider"></div>
-                <a id="terminal-open-button" class="ico-wrapper"><span class="icon-layout"></span>Terminal</a>
-                <div class="divider"></div>
-                <!--
-                <a id="split" class="ico-wrapper"><span class="icon-layout"></span>Split</a>
-                <div class="divider"></div>
-                -->
-                <a id="current-mode"><span class="icon-layout"></span>Text</a>
-                <div class="divider"></div>
-                <div id="current-file"></div>
+				<div style="position: absolute; bottom: 0; left: 0; padding: 5px; padding-left: 18px;">
+	                <a id="settings" class="ico-wrapper"><span class="icon-doc-text"></span>Settings</a>
+	                <div id="terminal-open-button-divider" class="divider"></div>
+	                <a id="terminal-open-button" class="ico-wrapper"><span class="icon-layout"></span>Terminal</a>
+	                <div class="divider"></div>
+	                <!--
+	                <a id="split" class="ico-wrapper"><span class="icon-layout"></span>Split</a>
+	                <div class="divider"></div>
+	                -->
+	                <a id="current-mode"><span class="icon-layout"></span>Text</a>
+	                <div class="divider"></div>
+	                <div id="current-file"></div>
+                </div>
             </div>
             <div id="changemode-menu" class="options-menu">
             </div>
