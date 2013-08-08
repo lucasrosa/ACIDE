@@ -186,7 +186,7 @@
 						}
 		            } else if(in_array('java',$command_parts)){            	
 						// Handle java command
-						error_log("Java executed!");
+						
 						$java_command_executed = TRUE;
 						
 						$filename = $command_parts[1] . ".java";
@@ -195,8 +195,11 @@
 						
 						$this->command = 'echo Executing file ' . $this->directory . "/" .$command_parts[1];
 						$this->command_exec = $this->command . ' 2>&1';
-						$indx = 0;
 						
+						/*
+						 * Get class name
+						 */
+						$indx = 0;
 						$class_name = "";
 						
 						foreach($file as $line) {
@@ -207,8 +210,14 @@
 								$class_name = trim($class_name_match[1]);
 							} 
 						}
-						
 						error_log("Class name = ". $class_name);
+						
+						/*
+						 * Create jar File
+						 */
+						 $exploded_directory = explode("/", $this->directory);
+						 $jar_name = $exploded_directory[count($exploded_directory)-1]. "-". date("Y-m-d--H:i:s") . ".jar";
+						 system("jar cf ". $jar_name . " *.class");
 					}
 		            
 					if (!$java_command_executed) {
