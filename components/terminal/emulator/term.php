@@ -188,8 +188,27 @@
 						// Handle java command
 						error_log("Java executed!");
 						$java_command_executed = TRUE;
-						$this->command = 'echo Java executed!!! :D :D :D';
+						
+						$filename = $command_parts[1] . ".java";
+						$file = file($filename);
+						$matchedLines = array();
+						
+						$this->command = 'echo Executing file ' . $this->directory . "/" .$command_parts[1];
 						$this->command_exec = $this->command . ' 2>&1';
+						$indx = 0;
+						
+						$class_name = "";
+						
+						foreach($file as $line) {
+							$indx++;
+							$class_string_position = strpos($line, "public class");
+							if ($class_string_position !== FALSE) {
+								preg_match('/public class (.*?){/', $line, $class_name_match);
+								$class_name = trim($class_name_match[1]);
+							} 
+						}
+						
+						error_log("Class name = ". $class_name);
 					}
 		            
 					if (!$java_command_executed) {
