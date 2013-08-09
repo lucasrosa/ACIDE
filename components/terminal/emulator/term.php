@@ -227,7 +227,7 @@
 						* Create jar File
 						*/
 						$exploded_directory = explode("/", $this->directory);
-						$jar_name = $exploded_directory[count($exploded_directory)-1]. "-". date("Y-m-d--H:i:s") . ".jar";
+						$jar_name = $exploded_directory[count($exploded_directory)-1]. ".jar";
 						$jar_path_and_name = WORKSPACE . "/../javaws_workspace/" . $jar_name;
 						system("jar cf ". $jar_path_and_name . " *.class");
 						 

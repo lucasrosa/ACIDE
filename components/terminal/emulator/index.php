@@ -103,7 +103,9 @@
 	                    break;
 	                default:
 	                    terminal.display_output(command,data);
-	                    $('#prompt_text').focus();
+	                    if (data.substr(0, 10) != "opnths::: ") {
+	                    	$('#prompt_text').focus();
+	                    }
 	            }
 	        });
 	    },
@@ -128,8 +130,26 @@
 	    		if (data.substr(0, 10) == "opnths::: ") {
 	    			var this_url = data.substr(10);
 	    			this_url = this_url.replace("&amp;","&");
-	    			window.open(this_url, '_blank');
+	    			//window.open(this_url);
+	    			//console.log(this_url);
 	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">File ready to execution. Open the ".jnlp" file after it\'s download is done.</pre>');
+	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">Click <a id="link_to_jnlp" href="'+this_url+'">here.</a> Or press enter to execute the file.</pre>');
+	    			//$('#link_to_jnlp:last').get(0).scrollIntoView(true);
+	    			$('a#link_to_jnlp').focus();
+	    			$( "#other" ).click(function() {
+						$('#prompt_text').focus();
+					});
+	    			// Eveant handler for keydown
+					//document.body.addEventListener('keydown', function(e){alert(e.keyCode);}, true);
+					
+					// Create new event
+					var e = document.createEvent('KeyboardEvent');
+					// Init key event
+					e.initKeyEvent('keydown', true, true, window, false, false, false, false, 13, 0);
+					// Dispatch event into document
+					document.body.dispatchEvent(e);
+					
+	    			console.log("after that");
 	    		} else {
 	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">'+data+'</pre>');
 	    		}
@@ -141,6 +161,7 @@
 	        terminal.screen.scrollTop(terminal.output.height());
 	        // LF
 	        document.getElementById('prompt_text').scrollIntoView(true);
+	        
 	    },
 	    
 	    clear : function(){

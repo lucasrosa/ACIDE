@@ -11,7 +11,7 @@
 		$arguments  = array();
 	}
 	
-	$filename = $class_name . "-". date("Y-m-d--H:i:s");	
+	$filename = $class_name;	
 	
 	header('Content-Disposition: inline; filename="'. $filename .'.jnlp"');
 	header('Content-type: application/x-java-jnlp-file');	 
