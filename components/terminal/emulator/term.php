@@ -267,7 +267,9 @@
 						
 						//header('Content-type: application/x-java-jnlp-file');
 						//header('Location: ' . $pageURL);
-						$this->command = 'echo Opens: "' . $pageURL . '"';
+						//exit;
+						//$javascript ="	<script  type=\"text/javascript\">window.open('". $pageURL ."','_blank');</script>";
+						$this->command = 'echo opnths:::' . $pageURL;
 						$this->command_exec = $this->command . ' 2>&1';
 					}
 		            

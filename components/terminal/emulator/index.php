@@ -125,7 +125,14 @@
 	    
 	    display_output : function(command,data){
 	    	if (data != null) {
-	    		terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">'+data+'</pre>');	
+	    		if (data.substr(0, 10) == "opnths::: ") {
+	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">'+data+'</pre>');
+	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">hello :)</pre>');
+	    		} else {
+	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">'+data+'</pre>');
+	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">How you doing?</pre>');	
+	    		}
+	    			
 	    	} else {
 	    		terminal.output.append('<pre class="command">'+command+'</pre>');
 	    	}
