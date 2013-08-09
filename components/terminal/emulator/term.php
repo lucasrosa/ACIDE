@@ -190,6 +190,17 @@
 						$java_command_executed = TRUE;
 						
 						$filename = $command_parts[1] . ".java";
+						
+						/*
+						 * Get the arguments
+						 */
+						$arguments = array();
+						$ai = 2;
+						while ($ai < count($command_parts) || $command_parts[$ai] == "&&") {
+							$arguments[] = $command_parts[$ai];	
+							$ai++;
+						}
+						
 						$file = file($filename);
 						$matchedLines = array();
 						
@@ -217,7 +228,11 @@
 						 */
 						 $exploded_directory = explode("/", $this->directory);
 						 $jar_name = $exploded_directory[count($exploded_directory)-1]. "-". date("Y-m-d--H:i:s") . ".jar";
-						 system("jar cf ". $jar_name . " *.class");
+						 $jar_path_and_name = WORKSPACE . "/../javaws_workspace/" . $jar_name;
+						 system("jar cf ". $jar_path_and_name . " *.class");
+						 
+						 // Sign the file
+						 //system("jarsigner -keystore /path/to/keystore/jaxb.keys -storepass '123456' " . $jar_name . " http://hci.csit.upei.ca/");
 					}
 		            
 					if (!$java_command_executed) {
