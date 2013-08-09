@@ -126,11 +126,11 @@
 	    display_output : function(command,data){
 	    	if (data != null) {
 	    		if (data.substr(0, 10) == "opnths::: ") {
-	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">'+data+'</pre>');
-	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">hello :)</pre>');
+	    			window.open(data.substr(10), '_blank');
+	    			console.log("url = " + data.substr(10));
+	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">'+data.substr(10)+'</pre>');
 	    		} else {
 	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">'+data+'</pre>');
-	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">How you doing?</pre>');	
 	    		}
 	    			
 	    	} else {

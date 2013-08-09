@@ -5,7 +5,12 @@
 		
 	$jar_name	= $_GET['jar_name'];
 	$class_name = $_GET['class_name'];
-	$arguments  = $_GET['arguments'];
+	if (isset($_GET['arguments'])) {
+		$arguments  = $_GET['arguments'];
+	} else {
+		$arguments  = array();
+	}
+	
 	
 	header('Content-type: application/x-java-jnlp-file');	 
 ?>
