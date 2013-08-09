@@ -130,24 +130,19 @@
 	    		if (data.substr(0, 10) == "opnths::: ") {
 	    			var this_url = data.substr(10);
 	    			this_url = this_url.replace("&amp;","&");
-	    			//window.open(this_url);
-	    			//console.log(this_url);
 	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">File ready to execution. Open the ".jnlp" file after it\'s download is done.</pre>');
 	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">Click <a id="link_to_jnlp" href="'+this_url+'">here.</a> Or press enter to execute the file.</pre>');
-	    			//$('#link_to_jnlp:last').get(0).scrollIntoView(true);
+	    			
+	    			
+	    			// create a new keyup event
+					//var press =jQuery.Event("keydown", true);
+					//press.ctrlKey = false;
+					//press.which = 13;
+	    			
 	    			$('a#link_to_jnlp').focus();
 	    			$("a#link_to_jnlp").click(function() {
 						$('#prompt_text').focus();
 					});
-	    			// Eveant handler for keydown
-					//document.body.addEventListener('keydown', function(e){alert(e.keyCode);}, true);
-					
-					// Create new event
-					var e = document.createEvent('KeyboardEvent');
-					// Init key event
-					e.initKeyEvent('keydown', true, true, window, false, false, false, false, 13, 0);
-					// Dispatch event into document
-					document.body.dispatchEvent(e);
 					
 	    			console.log("after that");
 	    		} else {
