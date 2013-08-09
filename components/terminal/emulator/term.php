@@ -196,7 +196,7 @@
 						 */
 						$arguments = array();
 						$ai = 2;
-						while ($ai < count($command_parts) || $command_parts[$ai] == "&&") {
+						while ($ai < count($command_parts) && $command_parts[$ai] != "&&") {
 							$arguments[] = $command_parts[$ai];	
 							$ai++;
 						}
@@ -204,8 +204,8 @@
 						$file = file($filename);
 						$matchedLines = array();
 						
-						$this->command = 'echo Executing file ' . $this->directory . "/" .$command_parts[1];
-						$this->command_exec = $this->command . ' 2>&1';
+						// $this->command = 'echo Executing file ' . $this->directory . "/" .$command_parts[1];
+						// $this->command_exec = $this->command . ' 2>&1';
 						
 						/*
 						 * Get class name
@@ -232,7 +232,7 @@
 						system("jar cf ". $jar_path_and_name . " *.class");
 						 
 						// Sign the file
-						//system("jarsigner -keystore /path/to/keystore/jaxb.keys -storepass '123456' " . $jar_name . " http://hci.csit.upei.ca/");
+						system("jarsigner -keystore /var/codiad_files/jaxb.keys -storepass 'keystore password' " . $jar_path_and_name . " http://hci.csit.upei.ca/");
 						 
 						/* 
 						 * Download the file
@@ -241,7 +241,7 @@
 						// Organize the arguments
  						$url_arguments = "";
 						for ($i = 0; $i < count($arguments); $i++) {
-							$url_arguments = "&arguments[]=" . $arguments[$i];
+							$url_arguments .= "&arguments[]=" . $arguments[$i];
 						}
 						
 						// Get page URL
@@ -265,8 +265,10 @@
 						$pageURL .= "&class_name=" . $class_name;
 						$pageURL .= $url_arguments;
 						
-						header('Content-type: application/x-java-jnlp-file');
-						header('Location: ' . $pageURL);
+						//header('Content-type: application/x-java-jnlp-file');
+						//header('Location: ' . $pageURL);
+						$this->command = 'echo Opens: "' . $pageURL . '"';
+						$this->command_exec = $this->command . ' 2>&1';
 					}
 		            
 					if (!$java_command_executed) {
