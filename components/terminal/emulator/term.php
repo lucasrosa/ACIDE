@@ -224,15 +224,49 @@
 						error_log("Class name = ". $class_name);
 						
 						/*
-						 * Create jar File
-						 */
-						 $exploded_directory = explode("/", $this->directory);
-						 $jar_name = $exploded_directory[count($exploded_directory)-1]. "-". date("Y-m-d--H:i:s") . ".jar";
-						 $jar_path_and_name = WORKSPACE . "/../javaws_workspace/" . $jar_name;
-						 system("jar cf ". $jar_path_and_name . " *.class");
+						* Create jar File
+						*/
+						$exploded_directory = explode("/", $this->directory);
+						$jar_name = $exploded_directory[count($exploded_directory)-1]. "-". date("Y-m-d--H:i:s") . ".jar";
+						$jar_path_and_name = WORKSPACE . "/../javaws_workspace/" . $jar_name;
+						system("jar cf ". $jar_path_and_name . " *.class");
 						 
-						 // Sign the file
-						 //system("jarsigner -keystore /path/to/keystore/jaxb.keys -storepass '123456' " . $jar_name . " http://hci.csit.upei.ca/");
+						// Sign the file
+						//system("jarsigner -keystore /path/to/keystore/jaxb.keys -storepass '123456' " . $jar_name . " http://hci.csit.upei.ca/");
+						 
+						/* 
+						 * Download the file
+						 */
+						 
+						// Organize the arguments
+ 						$url_arguments = "";
+						for ($i = 0; $i < count($arguments); $i++) {
+							$url_arguments = "&arguments[]=" . $arguments[$i];
+						}
+						
+						// Get page URL
+						$pageURL = 'http';
+						if (@$_SERVER["HTTPS"] == "on") {
+							$pageURL .= "s";
+						}
+						$pageURL .= "://";
+						$first_path = explode("/", $_SERVER["REQUEST_URI"]);
+						$first_path = "/" .$first_path[1];
+						
+						if ($_SERVER["SERVER_PORT"] != "80") {
+							$pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$first_path;
+						} else {
+							$pageURL .= $_SERVER["SERVER_NAME"].$first_path;
+						}
+						
+						// Set the GET arguments
+						$pageURL .= "/javaws_workspace/jnlp_xml/jnlp_xml_generator.php";
+						$pageURL .= "?jar_name=" . $jar_name;
+						$pageURL .= "&class_name=" . $class_name;
+						$pageURL .= $url_arguments;
+						
+						header('Content-type: application/x-java-jnlp-file');
+						header('Location: ' . $pageURL);
 					}
 		            
 					if (!$java_command_executed) {
