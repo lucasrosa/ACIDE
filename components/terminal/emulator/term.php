@@ -221,7 +221,7 @@
 								$class_name = trim($class_name_match[1]);
 							} 
 						}
-						error_log("Class name = ". $class_name);
+						
 						
 						/*
 						* Create jar File
@@ -261,17 +261,18 @@
 						
 						// Set the GET arguments
 						$pageURL .= "/javaws_workspace/jnlp_xml/jnlp_xml_generator.php";
-						$pageURL .= "?class_name=" . $class_name;
-						$pageURL .= "&jar_name=" . $jar_name;
+						$pageURL .= "?jar_name=" . $jar_name;
+						$pageURL .= "\&class_name=" . $class_name;
+						
 						$pageURL .= $url_arguments;
 						
 						//header('Content-type: application/x-java-jnlp-file');
 						//header('Location: ' . $pageURL);
 						//exit;
 						//$javascript ="	<script  type=\"text/javascript\">window.open('". $pageURL ."','_blank');</script>";
-						
+						urlencode($pageURL);
 						$this->command = 'echo opnths::: ' . $pageURL;
-						error_log("pageURL = " . $this->command);
+						
 						$this->command_exec = $this->command. ' 2>&1';
 					}
 		            

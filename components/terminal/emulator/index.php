@@ -126,9 +126,10 @@
 	    display_output : function(command,data){
 	    	if (data != null) {
 	    		if (data.substr(0, 10) == "opnths::: ") {
-	    			window.open(data.substr(10), '_blank');
-	    			console.log("url = " + data.substr(10));
-	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">'+data.substr(10)+'</pre>');
+	    			var this_url = data.substr(10);
+	    			this_url = this_url.replace("&amp;","&");
+	    			window.open(this_url, '_blank');
+	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">File ready to execution. Open the ".jnlp" file after it\'s download is done.</pre>');
 	    		} else {
 	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">'+data+'</pre>');
 	    		}
