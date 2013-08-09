@@ -136,7 +136,7 @@
 	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">Click <a id="link_to_jnlp" href="'+this_url+'">here.</a> Or press enter to execute the file.</pre>');
 	    			//$('#link_to_jnlp:last').get(0).scrollIntoView(true);
 	    			$('a#link_to_jnlp').focus();
-	    			$( "#other" ).click(function() {
+	    			$("a#link_to_jnlp").click(function() {
 						$('#prompt_text').focus();
 					});
 	    			// Eveant handler for keydown
