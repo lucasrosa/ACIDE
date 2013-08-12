@@ -14,7 +14,7 @@
     <div id="command">
         <div id="prompt">&gt;</div>
 		<!-- LF: Setting the color of the terminal line to white -> needs the !important tag -->
-        <input id="prompt_text" style="color:white !important;" type="text">
+        <input id="prompt_text" style="padding-bottom:18px; color:white !important;" type="text">
     </div>
 
 </div>
