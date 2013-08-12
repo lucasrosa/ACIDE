@@ -5,6 +5,9 @@
     
 	require_once('../../common.php');
 	require_once('../permission/class.permission.php');
+	require_once('../user/class.user.php');
+	require_once('../course/class.course.php');
+	
 	//////////////////////////////////////////////////////////////////
     // This page offers an interface to manage assignments
     //////////////////////////////////////////////////////////////////
@@ -41,6 +44,14 @@
 		$pageURL .= "/" . $dirs[1];
 		
 		
+		
+		/*
+		 * Set the user
+		 */
+		$User = new User();
+		$User->username = $_SESSION['user'];
+		$user_courses = $User->GetUserCourses();
+		
 	?>
 	<!doctype html>
 	
@@ -62,28 +73,47 @@
 		<form method="post" action="<?=$pageURL?>">
 			<button>Open IDE</button>
 		</form>
-		<h1 align="center">Assignments</h1>	
+		<h1 align="center">Reports</h1>	
 		
 		<div id="modal" style="display: block; width: 1000px; margin:0 auto;" >
 			<div id="modal-content">
-				<label>Assignment List</label>
+				<!-- <label>Assignment List</label> -->
 				<div id="project-list">
 					<table width="100%">
 						<tbody>
 							<tr>
-								<th>Name</th>
-								<th>Created by</th>
 								<th>Course</th>
-								<th>Due Date</th>
+								<th>Report</th>
 							</tr>
 							<tr>
-								<td>1</td>
-								<td>2</td>
-								<td>3</td>
-								<td>4</td>
+								<td>
+									<select>
+										<?
+											$Course = new Course();
+											for ($i = 0; $i < count($user_courses); $i++) {
+												$Course->id = $user_courses[$i];
+												$Course->Load();
+										?>
+									  		<option value="<?=$Course->id?>"><?=$Course->name?></option>
+									  	<?
+											}
+									  	?>
+									</select>
+								</td>
+								<td>
+									<select>
+									  <option value="volvo">Volvo</option>
+									  <option value="saab">Saab</option>
+									  <option value="mercedes">Mercedes</option>
+									  <option value="audi">Audi</option>
+									</select>
+								</td>
 							</tr>
 						</tbody>
 					</table>
+					<div align="center">
+						<button>Generate Chart</button>
+					</div>
 				</div>
 			</div>
 		</div>
