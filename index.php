@@ -304,7 +304,7 @@ if(!file_exists(DATA . '/plugins.php')) {
 						<a id='terminal-close-button' class='icon-cancel-circled bigger-icon' style='padding-top:2px;'></a>
 						<span style='padding-left:10px;'>Terminal</span>
 					</div>
-					<div style='width:100%; height:87%;'>
+					<div id="terminal-wrapper" style='width:100%; height:100%;'>
 						<!-- <iframe id='terminal' width='100%' height='100%' src='components/terminal/emulator/index.php?id=kd9kdi8nundj' style='height: 100%;'></iframe> -->
 						<div id='terminal' width='100%' height='100%' style='height: 100%;'><? include "components/terminal/emulator/index.php"; ?></div>
 					</div>
@@ -441,6 +441,8 @@ if(!file_exists(DATA . '/plugins.php')) {
     
     <script src="components/userlog/log_script.js"></script>
     <script>
+    	$("#terminal-wrapper").height($("#terminal-wrapper").height()-15);
+    	
 		var originY = 0;
 		var lastY = 0;
     	$(document).ready(function() {
