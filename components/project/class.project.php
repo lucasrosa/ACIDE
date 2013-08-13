@@ -703,7 +703,7 @@ class Project extends Common {
     // LF: Returns all the assignments for a certain user
     //////////////////////////////////////////////////////////////////
 	
-	public function GetAssignmentsInTheSameCoursesOfUser($current_user) {
+	public function GetAssignmentsInTheSameCoursesOfUser($current_user, $course_id = '') {
 		
 		// Load this user
 		$CurrentUser = new User();
@@ -721,6 +721,14 @@ class Project extends Common {
 					if (isset($user["projects"][$i]) && isset($user["projects"][$i]["assignment"]["owner"])) {	
 						$assignment_added = FALSE;
 						if (in_array($user["projects"][$i]['course'], $CurrentUser->courses)) {
+								
+							// Verifies if it's in the same course, if not, go to next iterarion
+							if ($course_id != '') {
+								if ($user["projects"][$i]['course'] != $course_id) {
+									continue;
+								}
+							}
+							
 							for ($k = 0; $k < count($assignments); $k++) {
 								if ($user["projects"][$i]["assignment"]["id"] == $assignments[$k]["id"]) {
 									$assignment_added = TRUE;

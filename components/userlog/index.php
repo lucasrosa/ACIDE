@@ -56,28 +56,30 @@
 		if (isset($_POST['action']) && $_POST['action'] ==  'generate_chart') {
 			$report = $_POST['report'];
 			$direct_page = $pageURL . "/components/userlog/report";
+			
+			$course = $_POST['course'];
+			
 			switch ($report) {
 				case 'compilation-errors':
-						header("Location: ". $direct_page . "/compilation_errors/compilation_errors.php");
+						header("Location: ". $direct_page . "/compilation_errors/compilation_errors.php?id=".$course);
 					break;
 				case 'compilation-errors-assignment':
-						header("Location: ". $direct_page . "/compilation_errors_assignment/compilation_errors_assignment.php");
+						header("Location: ". $direct_page . "/compilation_errors_assignment/compilation_errors_assignment.php?id=".$course);
 					break;
 				case 'compilation-errors-ratio':
-						header("Location: ". $direct_page . "/compilation_errors_ratio/compilation_errors_ratio.php");
+						header("Location: ". $direct_page . "/compilation_errors_ratio/compilation_errors_ratio.php?id=".$course);
 					break;
 				case 'sessions': 
-						header("Location: ". $direct_page . "/session/log_session_report.php");
+						header("Location: ". $direct_page . "/session/log_session_report.php?id=".$course);
 					break;
 				case 'time-project':
-						header("Location: ". $direct_page . "/time_project/time_project_report.php");
+						header("Location: ". $direct_page . "/time_project/time_project_report.php?id=".$course);
 					break;
 				case 'time-system':
-						header("Location: ". $direct_page . "/time_system/time_system_report.php");
+						header("Location: ". $direct_page . "/time_system/time_system_report.php?id=".$course);
 					break;
 				  
 				default:
-						echo "nah!";
 					break;
 			}
 		}
