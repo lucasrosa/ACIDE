@@ -201,11 +201,16 @@ class Project extends Common {
 
     public function CreateProjectsOnDatabaseWithAssignments() {
     	$collection = $this->database->users;
-    	$users = $collection->find();
+		$Course = new Course();
+		$Course->id = $this->course;
+		
+		$users = $collection->find();
+		
+    	$these_users = $Course->GetUsersInCourse(); //
 		
 		// Must check if there is no assignment with the same ID
 		foreach ($users as $user) {
-			if (isset($user["projects"][0])) {
+			if (isset($user["projects"][0]) && in_array($user['username'], $these_users)) {
 				for ($i = 0; $i < count($user["projects"]); $i++) {
 					if (isset($user["projects"][$i]["assignment"]['id'])) {
 						if ($user["projects"][$i]["assignment"]['id'] == $this->assignment['id']) {
@@ -221,10 +226,12 @@ class Project extends Common {
 		$users = $collection->find();
 		$user = '';
 		foreach ($users as $user) {
-			$this->path = "AS_" . $user['username'] ."_" . $this->assignment["id"];
-			$result = $this->Create($user['username']);
-			if ($result != 'success') {
-				$return = $result;
+			if (in_array($user['username'], $these_users)) {
+				$this->path = "AS_" . $user['username'] ."_" . $this->assignment["id"];
+				$result = $this->Create($user['username']);
+				if ($result != 'success') {
+					$return = $result;
+				}
 			}
 		}
 		
@@ -232,9 +239,11 @@ class Project extends Common {
 			$users = $collection->find();
 			$user = '';
 			foreach ($users as $user) {
-				$this->path = "AS_" . $user['username'] ."_" . $this->assignment["id"];
-				$delete_as_an_assignment = TRUE;
-				$result = $this->Delete($delete_as_an_assignment);
+				if (in_array($user['username'], $these_users)) {
+					$this->path = "AS_" . $user['username'] ."_" . $this->assignment["id"];
+					$delete_as_an_assignment = TRUE;
+					$result = $this->Delete($delete_as_an_assignment);
+				}
 			}	
 		}
 			
