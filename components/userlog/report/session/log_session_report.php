@@ -44,7 +44,8 @@
 		// Select the collection
 		$collection = $database -> users;
 		
-		$users = $User -> GetUsersInTheSameCoursesOfUser($_SESSION['user']);
+		$course_id = $_GET['id'];
+		$users = $User -> GetUsersInCourse($course_id);
 		
 		$user_types = $User -> GetUsersTypes();
 		$student_user_type = $user_types[0];
@@ -123,6 +124,8 @@
 				//data_array[1] = assignments;
 				// [2] => group_by
 				data_array[2] = group_by;
+				// [3] => course_id
+				data_array[3] = "<?=$course_id?>";
 
 				$.ajax({
 					type : "POST",
