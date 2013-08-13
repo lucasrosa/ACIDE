@@ -91,8 +91,10 @@ class Course {
 		
 		$users = $collection->find();
 		foreach ($users as $user) {
+			//error_log("user = " . $user['username']);
 			if (isset($user["courses"][0])) {		
 				for ($i = 0; $i < count($user["courses"]); $i++) {
+					//error_log("course = " . $user["courses"][$i]);
 					if ($user["courses"][$i] == $this->id) {
 						$users_in_course[] =  $user["username"];
 					}

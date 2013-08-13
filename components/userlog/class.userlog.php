@@ -98,6 +98,23 @@ class Userlog {
     }
 	
 	//////////////////////////////////////////////////////////////////
+    // Save user last action
+    //////////////////////////////////////////////////////////////////
+
+    public function SaveAsUserLastAction(){
+		$collection = $this->GetCollection();
+			
+		$new_log = array( 	
+							"username" => $this->username,
+							"type" => "user_last_action",
+							"last_update_timestamp" => date("Y-m-d H:i:s")
+						 );
+		
+		// Insert the log in the database:
+		return $collection->insert($new_log);
+    }
+	
+	//////////////////////////////////////////////////////////////////
     // Save Session
     //////////////////////////////////////////////////////////////////
 
@@ -257,6 +274,23 @@ class Userlog {
 		
 		// Insert the log in the database:
 		return $collection->insert($new_log);
+    }
+
+	//////////////////////////////////////////////////////////////////
+    // Update user last action
+    //////////////////////////////////////////////////////////////////
+    
+	public function UpdateUserLastAction(){
+		$collection = $this->GetCollection();
+			
+		$log = $collection->findOne(array("username" => $this->username, "type" =>"user_last_action"));
+		if (isset($log['username'])) {
+			$log['last_update_timestamp'] = date("Y-m-d H:i:s");
+			// Overwrite the log in the database:
+			return $collection->update(array("username" => $this->username, "type" =>"user_last_action"), $log);	
+		} else {
+			$this->SaveAsUserLastAction();
+		}
     }
 	
 	//////////////////////////////////////////////////////////////////

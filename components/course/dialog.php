@@ -193,19 +193,28 @@
             
             $Course = new Course();
 			$courses = $Course->GetAllCourses();
-            
+            $User = new User();
+			$User->username = $_SESSION['user'];
+			$User->Load();
+			$courses = $User->GetUserCourses();
             //sort($courses);
-            foreach($courses as $course){
-                ?>
-                <tr>
-                    <td><?php echo($course['code']); ?></td>
-                    <td><?php echo($course['name']); ?></td>
-                    <td><a onclick="codiad.course.manage_users('<?=$course['_id']?>', 'student');" class="icon-users bigger-icon"></a></td>
-                    <td><a onclick="codiad.course.manage_users('<?=$course['_id']?>', 'marker');" class="icon-users bigger-icon"></a></td>
-                    <td><a onclick="codiad.course.manage_users('<?=$course['_id']?>', 'professor');" class="icon-users bigger-icon"></a></td>
-                    <td><a onclick="codiad.course.delete('<?=($course['_id']); ?>');" class="icon-cancel-circled bigger-icon"></a></td>
-                </tr>
-                <?php
+            
+            for ($a = 0; $a < count($courses); $a++){
+                $Course->id = $courses[$a];
+				$Course->Load();
+				
+            ?>
+	                <tr>
+	                    <td><?php echo($Course->code); ?></td>
+	                    <td><?php echo($Course->name); ?></td>
+	                    <td><a onclick="codiad.course.manage_users('<?=$Course->id?>', 'student');" class="icon-users bigger-icon"></a></td>
+	                    <td><a onclick="codiad.course.manage_users('<?=$Course->id?>', 'marker');" class="icon-users bigger-icon"></a></td>
+	                    <td><a onclick="codiad.course.manage_users('<?=$Course->id?>', 'professor');" class="icon-users bigger-icon"></a></td>
+	                    <td><a onclick="codiad.course.delete('<?=$Course->id?>');" class="icon-cancel-circled bigger-icon"></a></td>
+	                </tr>
+            <?php
+				
+            
             }
             ?>
             </table>

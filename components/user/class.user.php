@@ -6,6 +6,8 @@
 *  [root]/license.txt for more. This information must remain intact.
 */
 
+require_once("../course/class.course.php");
+
 class User {
 
     //////////////////////////////////////////////////////////////////
@@ -333,6 +335,19 @@ class User {
 	
 	public function GetUserCourses () {
 		$users = $this->users;
+		
+		$this->Load();
+		if ($this->type == "admin") {
+			$Course = new Course();
+			$Courses = $Course->GetAllCourses();
+			$courses = array();
+			foreach ($Courses as $course) {
+				$courses[]  = $course['_id'];	
+			}
+			
+			return $courses;
+		}
+		
 		foreach ($users as $user) {
 			if($user['username'] == $this->username) {
 				if (isset($user['courses'][0])) {
@@ -394,7 +409,7 @@ class User {
 		
 		$this->type 	= $user['type'];
 		$this->email 	= $user['email'];
-		$this->courses 	= $user['courses'];
+		@$this->courses 	= $user['courses'];
 		$this->project 	= $user['project'];
 		$this->projects = $user['projects'];
 		
@@ -417,7 +432,7 @@ class User {
 		
 		foreach ($users as $user) {
 			if (isset($user['courses'])) {
-				if (count(array_intersect($user['courses'], $CurrentUser->courses)) > 0) {
+				if ($CurrentUser->type == "admin" || count(array_intersect($user['courses'], $CurrentUser->courses)) > 0) {
 					$returning_users[] = $user;
 				}
 			}

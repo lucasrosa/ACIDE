@@ -6,6 +6,24 @@ var checkFocusForFileInterval 	= 0.5; // seconds
 
 $(document).ready(function() {
 	$('.ace_line').attr('id', 'file_input');
+	
+	$("body").keydown(function() {
+  		console.log("Handler for .keypress() called.");
+	});
+	
+	var mouseChangedPixelNumber = 0;
+	
+	$("body").mousemove(function(event) {
+	  var msg = "Handler for .mousemove() called at ";
+	  msg += event.pageX + ", " + event.pageY;
+	  if (mouseChangedPixelNumber > 50) {
+	  	console.log(msg);	
+	  	mouseChangedPixelNumber = 0;
+	  }
+	  
+	  
+	  mouseChangedPixelNumber++;
+	});
 });
 	
 (function(global, $){
