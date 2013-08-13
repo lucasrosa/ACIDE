@@ -42,6 +42,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 	}
 	
 	$course_id = $data_array[3];
+	
 	// Get data <--
 	$compilation_errors = array();
 

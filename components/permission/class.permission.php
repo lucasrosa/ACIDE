@@ -91,6 +91,14 @@ class Permission {
 		);
     }
 	
+	public function GetPermissionToSeeReports () {
+    	return 
+    	(
+    		$this->user_type == $this->user_types[0]
+    		|| $this->user_type == $this->user_types[1]
+		);
+    }
+	
 	public function GetPermissionToCreateAndEditAssignments () {
     	return 
     	(

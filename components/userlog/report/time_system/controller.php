@@ -31,6 +31,8 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		$students = $data_array[0];	
 	}
 	
+	$course_id = $data_array[3];
+	
 	// Check if there are no students, then load all of them
 	if (!isset($students[0]) || count($students[0]) == 0) {
 		$User = new User();
@@ -42,7 +44,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		// Select the collection
 		$collection = $database -> users;
 		
-		$users = $User -> GetUsersInTheSameCoursesOfUser($_SESSION['user']);
+		$users = $User -> GetUsersInCourse($course_id);
 		
 		$user_types = $User -> GetUsersTypes();
 		$student_user_type = $user_types[0];
