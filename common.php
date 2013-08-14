@@ -343,6 +343,14 @@
 			$collection = $mongo_client->codiad_database->users;
 			
 			$projects = array();
+			
+			/*
+			 * Create a new user to verify the user type
+			 */
+			$This_user = new User();
+			$This_user->username = $username;
+			$This_user->Load();
+			
 			// Get the projects from other users that are being shared with this user
 			$users = $collection->find();
 			$user = '';
@@ -350,13 +358,27 @@
 				if (isset($user["projects"][0])) {
 					for ($i = 0; $i < count($user["projects"]); $i++) {
 						for ($j = 0; $j < count($user["projects"][$i]["group_members"]); $j++) {
-							if (($user["projects"][$i]["group_members"][$j]['username'] == $username) || $user["projects"][$i]['privacy'] == 'public') {
+							if ((($user["projects"][$i]["group_members"][$j]['username'] == $username) 
+								|| $user["projects"][$i]['privacy'] == 'public')
+								&& $This_user->type == "student" #get if the user is a student
+								) {
 									
 								if ($user["projects"][$i]['privacy'] == 'shared' && count($user['projects'][$i]["group_members"]) > 1) {
 									$user['projects'][$i]['name'] .= " (". $user['username'] . ")";
 								}
 								
 								array_push($projects, $user["projects"][$i]);
+							} else if ($This_user->type == "admin") {
+								$user['projects'][$i]['name'] .= " (". $user['username'] . ")";
+								array_push($projects, $user["projects"][$i]);
+							} else if ($This_user->type == "professor") {
+								if (array_intersect($This_user->courses, $user['courses'])) {
+									//if (isset($user["projects"][$i]['privacy']['assignment'])) {
+									$user['projects'][$i]['name'] .= " (". $user['username'] . ")";
+									//}
+									
+									array_push($projects, $user["projects"][$i]);
+								}
 							}
 						}
 					}
