@@ -729,7 +729,7 @@ class Project extends Common {
 				for ($i = 0; $i < count($user["projects"]); $i++) {
 					if (isset($user["projects"][$i]) && isset($user["projects"][$i]["assignment"]["owner"])) {	
 						$assignment_added = FALSE;
-						if (in_array($user["projects"][$i]['course'], $CurrentUser->courses)) {
+						if ($CurrentUser->type == "admin" || in_array($user["projects"][$i]['course'], $CurrentUser->courses)) {
 								
 							// Verifies if it's in the same course, if not, go to next iterarion
 							if ($course_id != '') {
