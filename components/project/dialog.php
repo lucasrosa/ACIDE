@@ -450,7 +450,7 @@
 						$users = $User->GetUsersInCourse($Project->course);
 						
 						foreach($users as $user) {
-							if($user['username'] != $_SESSION['user']) {
+							if($user['username'] != $_SESSION['user'] && $user['type'] == "student") {
 								$username = $user['username'];
 								?>
 								<tr>
