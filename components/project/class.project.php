@@ -731,7 +731,7 @@ class Project extends Common {
 						$assignment_added = FALSE;
 						if ($CurrentUser->type == "admin" || in_array($user["projects"][$i]['course'], $CurrentUser->courses)) {
 								
-							// Verifies if it's in the same course, if not, go to next iterarion
+							// Verifies if it's in the same course, if not, go to next iteration
 							if ($course_id != '') {
 								if ($user["projects"][$i]['course'] != $course_id) {
 									continue;

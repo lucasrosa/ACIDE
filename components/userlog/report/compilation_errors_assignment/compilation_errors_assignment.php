@@ -250,7 +250,7 @@
 										//$Course->id = $assignments[$k]['course'];
 
 										?>
-										<li id="<?=$assignments[$k]['name'] ?>" class="ui-widget-content">
+										<li id="<?=$assignments[$k]['id'] ?>" class="ui-widget-content">
 											<?=$assignments[$k]['name'] ?>
 										</li>
 										<? } ?>
