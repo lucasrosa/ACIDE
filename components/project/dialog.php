@@ -44,43 +44,59 @@
 	            // Get projects JSON data
 				$projects = getProjectsForUser($_SESSION['user']);
 	            sort($projects);
-	            foreach($projects as $project=>$data){
-	                $show = true;
-	                if($projects_assigned && !in_array($data['path'],$projects_assigned)) {
-	                	$show=false; 
-					}
-					$user_in_course = TRUE;
-					if (isset($data['course'])) {
-						if (!in_array($data['course'], $courses)) {
-							$user_in_course = FALSE;		
+	            
+				for ($l = 0; $l < count($courses); $l++) {
+					$course_title_added = FALSE;
+					 
+		            foreach($projects as $project=>$data){
+		                $show = true;
+		                if($projects_assigned && !in_array($data['path'],$projects_assigned)) {
+		                	$show=false; 
 						}
-					}
-					
-	                if($show && $data['privacy'] == 'public' && $data['visibility'] == 'true' && $user_in_course){
-	                ?>
-	                <li>
-						<div>
-							<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
-								<div class="icon-archive icon"></div>
-								<?php echo($data['name']); ?>
-							</span>
-							
-							<!-- Adding a button to Submit the project as an assignment, only if it has an assignment attached to it -->
-							<?php
-							if ($data['assignment'] != '') {
-							?>
-							<span  onclick="codiad.project.submit('<?php echo($data['path']); ?>');">
-								<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
-							</span>
-							<?php 
-							}
-							?>
-						</div>
-					</li>
-                
-	                <?php
-	                }
-	            } 
+						$user_in_course = TRUE;
+						//if (isset($data['course'])) {
+						//	if (!in_array($data['course'], $courses)) {
+						//		$user_in_course = FALSE;		
+						//	}
+						//}
+						
+						
+		                if($show && $data['privacy'] == 'public' && $data['visibility'] == 'true' && $data['course'] == $courses[$l]) {// && $user_in_course){
+		                	if (!$course_title_added) {
+		                		$This_course = new Course();
+								$This_course->id = $courses[$l];
+								$This_course->Load();
+								$course_title_added = TRUE;
+		               		?>
+		                		<li style="font-size:13px; font-style:italic;"><i><?=$This_course->code?></i></li>
+		                	<?		
+		                	}
+		                ?>
+		                
+		                <li style="padding-left:20px;">
+							<div>
+								<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
+									<div class="icon-archive icon"></div>
+									<?php echo($data['name']); ?>
+								</span>
+								
+								<!-- Adding a button to Submit the project as an assignment, only if it has an assignment attached to it -->
+								<?php
+								if ($data['assignment'] != '') {
+								?>
+								<span  onclick="codiad.project.submit('<?php echo($data['path']); ?>');">
+									<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
+								</span>
+								<?php 
+								}
+								?>
+							</div>
+						</li>
+	                
+		                <?php
+		                }
+		            }
+		        }
 	            ?>
             
 	            </ul>
