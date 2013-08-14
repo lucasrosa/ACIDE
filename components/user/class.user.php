@@ -5,8 +5,12 @@
 *  as-is and without warranty under the MIT License. See
 *  [root]/license.txt for more. This information must remain intact.
 */
-
-require_once("../course/class.course.php");
+// Gets the root folder
+$root_folder = substr(substr($_SERVER["REQUEST_URI"],1), 0, strpos(substr($_SERVER["REQUEST_URI"],1), "/"));
+// Sets the include path
+set_include_path("/var/www/");
+	
+require_once($root_folder . '/components/course/class.course.php');
 
 class User {
 

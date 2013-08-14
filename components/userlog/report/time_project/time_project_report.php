@@ -29,7 +29,7 @@
     //////////////////////////////////////////////////////////////////
 	$Permission = new Permission($_SESSION['user']);
 	
-	if (FALSE) {//!($Permission->GetPermissionToSeeAssignments())) {
+	if (!($Permission->GetPermissionToSeeReports())) {
 		echo "Permission Denied";
 	} else {
 		
