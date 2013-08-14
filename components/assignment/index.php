@@ -480,10 +480,16 @@
 												$Course = new Course();
 												$courses = $Course->GetAllCourses();
 												
+												$User_course = new User();
+												$User_course->username = $_SESSION['user'];
+												$courses_id = $User_course->GetUserCourses();
+												
 												foreach($courses as $course){
-												?>
-											 		<option value="<?=$course['_id']?>" <? if ($course['_id'] == $Assignment['course']) echo "selected='selected'"; ?>><?=$course['code'] . " - " . $course['name']?></option>
-											  	<?
+													if (in_array($course['_id'], $courses_id)) {
+													?>
+												 		<option value="<?=$course['_id']?>" <? if ($course['_id'] == $Assignment['course']) echo "selected='selected'"; ?>><?=$course['code'] . " - " . $course['name']?></option>
+												  	<?
+													}
 											  	}
 											  	?>
 											</select>
