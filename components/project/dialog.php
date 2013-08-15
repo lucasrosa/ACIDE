@@ -126,6 +126,7 @@
 					$Project = new Project();
 					$assignments  = $Project->GetAssignmentsInTheSameCoursesOfUser($_SESSION['user'], $courses[$l]);
 					array_unshift($assignments, "User");
+					//error_log(print_r($assignments, TRUE));
 					
 					for ($a = 0; $a < count($assignments); $a++) {
 						$assignment_title_added = FALSE;
@@ -140,7 +141,7 @@
 								&& (
 									($data["assignment"] == '' && $a == 0)
 									||
-									($data["assignment"]['id'] == $assignments[$a]['id'])
+									(@$data["assignment"]['id'] == $assignments[$a]['id'])
 							       )
 								  ){ //: needed when not using getUserProjects && $data['user'] == $_SESSION['user']){
 			                	if (!$course_title_added) {
