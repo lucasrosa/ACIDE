@@ -372,7 +372,7 @@
 								$user['projects'][$i]['name'] .= " (". $user['username'] . ")";
 								array_push($projects, $user["projects"][$i]);
 							} else if ($This_user->type == "professor") {
-								if (array_intersect($This_user->courses, $user['courses'])) {
+								if ($user["type"] != "admin" && array_intersect($This_user->courses, $user['courses'])) {
 									//if (isset($user["projects"][$i]['privacy']['assignment'])) {
 									$user['projects'][$i]['name'] .= " (". $user['username'] . ")";
 									//}
