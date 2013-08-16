@@ -168,7 +168,6 @@
 			                			$('#div_<?=$assignments[$a]['id']?>').hide();
 			                			$('#span_down_<?=$assignments[$a]['id']?>').hide();
 			                			$("#li_<?=$assignments[$a]['id']?>").on('click', function () {
-			                				console.log("hi");
 			                				$('#div_<?=$assignments[$a]['id']?>').slideToggle();
 			                				$('#span_right_<?=$assignments[$a]['id']?>').toggle();
 			                				$('#span_down_<?=$assignments[$a]['id']?>').toggle();
@@ -253,7 +252,8 @@
 					
 					for ($a = 0; $a < count($assignments); $a++) {
 						$assignment_title_added = FALSE;
-					
+						$assignment_div_added = FALSE;
+						
 			            foreach($projects as $project=>$data){
 			                $show = true;
 			                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
@@ -281,7 +281,25 @@
 			                	if (!$assignment_title_added && $a > 0 && $User->type != "student") {
 										$assignment_title_added = TRUE;
 			               		?>
-			                		<li style="font-size:12px; text-decoration:underline;"><i><?=$assignments[$a]['name']?></i></li>
+			                		<li id="shared_li_<?=$assignments[$a]['id']?>" style="font-size:12px; text-decoration:underline; cursor: pointer;">
+			                			<span id="shared_span_right_<?=$assignments[$a]['id']?>" class="icon-right-dir icon" alt="Collapse" title="Collapse"></span>
+			                			<span id="shared_span_down_<?=$assignments[$a]['id']?>" class="icon-down-dir icon" alt="Collapse" title="Collapse"></span>
+			                			<i><?=$assignments[$a]['name']?></i>
+			                		</li>
+			                		
+			                		<script>
+			                			$('#shared_div_<?=$assignments[$a]['id']?>').hide();
+			                			$('#shared_span_down_<?=$assignments[$a]['id']?>').hide();
+			                			$("#shared_li_<?=$assignments[$a]['id']?>").on('click', function () {
+			                				$('#shared_div_<?=$assignments[$a]['id']?>').slideToggle();
+			                				$('#shared_span_right_<?=$assignments[$a]['id']?>').toggle();
+			                				$('#shared_span_down_<?=$assignments[$a]['id']?>').toggle();
+			                				
+			                			});
+			                		</script>
+			                		
+			                		<div id="shared_div_<?=$assignments[$a]['id']?>" >
+			                			
 			                	<?		
 			                	}
 			                	?>
@@ -322,6 +340,13 @@
 			                <?php
 			                }
 			            }
+
+									if ($assignment_title_added && !$assignment_div_added) {
+					                	$assignment_div_added = TRUE;
+					                ?>
+					                </div>
+					                <?		
+					                }
 			    	}
 				} 
 	            ?>
