@@ -122,7 +122,7 @@
 	            for ($l = 0; $l < count($courses); $l++) {
 					$course_title_added = FALSE;
 	            
-				# Assignments
+					# Assignments
 					$Project = new Project();
 					$assignments  = $Project->GetAssignmentsInTheSameCoursesOfUser($_SESSION['user'], $courses[$l]);
 					array_unshift($assignments, "User");
@@ -165,7 +165,13 @@
 								<div>
 									<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
 										<div class="icon-archive icon"></div>
-										<?php echo($data['name']); ?>
+										<?
+										if ($a == 0) {
+											echo $data['name'];	
+										} else {
+											echo $data['group_members'][0]['username'];
+										}
+										?>
 									</span>
 									<!-- Adding a button to Submit the project as an assignment, only if it has an assignment attached to it -->
 									<?php
@@ -211,51 +217,78 @@
 	            
 	            for ($l = 0; $l < count($courses); $l++) {
 					$course_title_added = FALSE;
-		            foreach($projects as $project=>$data){
-		                $show = true;
-		                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
-		                if($show && $data['privacy'] == 'shared'  && $data['visibility'] == 'true' && $data['course'] == $courses[$l]){ //: needed when not using getUserProjects && $data['user'] == $_SESSION['user']){
-		                	if (!$course_title_added) {
-		                		$This_course = new Course();
-								$This_course->id = $courses[$l];
-								$This_course->Load();
-								$course_title_added = TRUE;
-		               		?>
-		                		<li style="font-size:13px; font-style:italic;"><i><?=$This_course->code?></i></li>
-		                	<?		
-		                	}
-		                	?>
-		                <li style="padding-left:20px;">
-							<div>
-								<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
-									<div class="icon-archive icon"></div>
-									<?php echo($data['name']); ?>
-								</span>
+					
+					# Assignments
+					$Project = new Project();
+					$assignments  = $Project->GetAssignmentsInTheSameCoursesOfUser($_SESSION['user'], $courses[$l]);
+					array_unshift($assignments, "User");
+					
+					for ($a = 0; $a < count($assignments); $a++) {
+						$assignment_title_added = FALSE;
+					
+			            foreach($projects as $project=>$data){
+			                $show = true;
+			                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
+			                if($show 
+			                	&& $data['privacy'] == 'shared'  
+			                	&& $data['visibility'] == 'true' 
+			                	&& $data['course'] == $courses[$l]
+								&& (
+									($data["assignment"] == '' && $a == 0)
+									||
+									(@$data["assignment"]['id'] == $assignments[$a]['id'])
+							       )
+			                	
+							  ){ //: needed when not using getUserProjects && $data['user'] == $_SESSION['user']){
+			                	if (!$course_title_added) {
+			                		$This_course = new Course();
+									$This_course->id = $courses[$l];
+									$This_course->Load();
+									$course_title_added = TRUE;
+			               		?>
+			                		<li style="font-size:13px; font-style:italic;"><i><?=$This_course->code?></i></li>
+			                	<?		
+			                	}
 								
-								<!-- Adding a button to Submit the project as an assignment -->
-								<!-- Only if it has an assignment attached to it and if this user is the owner (the first one in the group_members array) -->
-								<?php
-								if ($data['assignment'] != '' && $data['group_members'][0]["username"] == $_SESSION['user'] && !isset($data['assignment']['submitted_date'])) {
-								?>
-								<span  onclick="codiad.project.submit('<?=($data['path']); ?>');">
-									<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
-								</span>
-								<?php 
-								} else if (isset($data['assignment']['submitted_date'])) {
-								?>
-								<span style="cursor: auto;">
-									<div title="The changes made in this assignment will not be submitted to evaluation anymore." class="icon-lock icon" style="position:absolute; right:25px;"></div>
-								</span>
-								<?
-								}
-								?>
-								
-							</div>
-						</li>
-	                
-		                <?php
-		                }
-		            }
+			                	if (!$assignment_title_added && $a > 0) {
+										$assignment_title_added = TRUE;
+			               		?>
+			                		<li style="font-size:12px; text-decoration:underline;"><i><?=$assignments[$a]['name']?></i></li>
+			                	<?		
+			                	}
+			                	?>
+			                <li style="padding-left:20px;">
+								<div>
+									<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
+										<div class="icon-archive icon"></div>
+										<?php echo($data['name']); ?>
+									</span>
+									
+									<!-- Adding a button to Submit the project as an assignment -->
+									<!-- Only if it has an assignment attached to it and if this user is the owner (the first one in the group_members array) -->
+									<?php
+									if ($data['assignment'] != '' && $data['group_members'][0]["username"] == $_SESSION['user'] && !isset($data['assignment']['submitted_date'])) {
+									?>
+									<span  onclick="codiad.project.submit('<?=($data['path']); ?>');">
+										<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
+									</span>
+									<?php 
+									} else if (isset($data['assignment']['submitted_date'])) {
+									?>
+									<span style="cursor: auto;">
+										<div title="The changes made in this assignment will not be submitted to evaluation anymore." class="icon-lock icon" style="position:absolute; right:25px;"></div>
+									</span>
+									<?
+									}
+									?>
+									
+								</div>
+							</li>
+		                
+			                <?php
+			                }
+			            }
+			    	}
 				} 
 	            ?>
             
