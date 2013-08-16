@@ -267,7 +267,6 @@
 										if ($a == 0 || $User->type == "student") {
 											echo $data['name'];	
 										} else {
-											echo $data['path'] . " - ";
 											echo $data['group_members'][0]['username'];
 										}
 										?>

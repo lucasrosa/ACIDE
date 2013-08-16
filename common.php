@@ -385,7 +385,15 @@
 									$user['projects'][$i]['name'] .= " (". $user['username'] . ")";
 									//}
 									
-									array_push($projects, $user["projects"][$i]);
+									$project_already_inserted = FALSE;
+									foreach ($projects as $this_project) {
+										if ($this_project['path'] == $user["projects"][$i]['path']) {
+											$project_already_inserted = TRUE;
+										}
+									}
+	 								if (!$project_already_inserted) {
+	 									array_push($projects, $user["projects"][$i]);	
+	 								}
 								}
 							}
 						}
