@@ -155,7 +155,7 @@
 			                	<?		
 			                	}
 			                	
-			                	if (!$assignment_title_added && $a > 0) {
+			                	if (!$assignment_title_added && $a > 0 && $User->type != "student") {
 										$assignment_title_added = TRUE;
 			               		?>
 			                		<li style="font-size:12px; text-decoration:underline;"><i><?=$assignments[$a]['name']?></i></li>
