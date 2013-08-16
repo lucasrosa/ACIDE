@@ -211,6 +211,7 @@
             	$User = new User();
 				$User->username = $_SESSION['user'];
 				$courses = $User->GetUserCourses();
+				$User->Load();
 				
 	            // Get projects JSON data
 				$projects = getProjectsForUser($_SESSION['user']);
@@ -262,7 +263,14 @@
 								<div>
 									<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
 										<div class="icon-archive icon"></div>
-										<?php echo($data['name']); ?>
+										<?
+										if ($a == 0 || $User->type == "student") {
+											echo $data['name'];	
+										} else {
+											echo $data['path'] . " - ";
+											echo $data['group_members'][0]['username'];
+										}
+										?>
 									</span>
 									
 									<!-- Adding a button to Submit the project as an assignment -->
