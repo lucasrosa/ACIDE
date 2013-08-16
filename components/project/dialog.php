@@ -114,6 +114,7 @@
             	$User = new User();
 				$User->username = $_SESSION['user'];
 				$courses = $User->GetUserCourses();
+				$User->Load();
 				
 	            // Get projects JSON data
 				$projects = getProjectsForUser($_SESSION['user']);
@@ -166,7 +167,7 @@
 									<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
 										<div class="icon-archive icon"></div>
 										<?
-										if ($a == 0) {
+										if ($a == 0 || $User->type == "student") {
 											echo $data['name'];	
 										} else {
 											echo $data['group_members'][0]['username'];
