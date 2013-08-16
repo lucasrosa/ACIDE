@@ -47,6 +47,7 @@
 	            
 				for ($l = 0; $l < count($courses); $l++) {
 					$course_title_added = FALSE;
+					$course_div_added = FALSE;
 						
 			        foreach($projects as $project=>$data){
 		                $show = true;
@@ -71,7 +72,24 @@
 								$This_course->Load();
 								$course_title_added = TRUE;
 		               		?>
-		                		<li style="font-size:13px; font-style:italic;"><i><?=$This_course->code?></i></li>
+		                		<li id="public_li_<?=$This_course->id?>" style="font-size:13px; font-style:italic;  cursor: pointer;">
+			                			<span id="public_span_right_<?=$This_course->id?>" class="icon-right-dir icon" alt="Collapse" title="Collapse"></span>
+			                			<span id="public_span_down_<?=$This_course->id?>" class="icon-down-dir icon" alt="Collapse" title="Collapse"></span>
+			                			<i><?=$This_course->code?></i>
+			                		</li>
+			                		
+			                		<script>
+			                			$('#public_div_<?=$This_course->id?>').hide();
+			                			$('#public_span_down_<?=$This_course->id?>').hide();
+			                			$("#public_li_<?=$This_course->id?>").on('click', function () {
+			                				$('#public_div_<?=$This_course->id?>').slideToggle();
+			                				$('#public_span_right_<?=$This_course->id?>').toggle();
+			                				$('#public_span_down_<?=$This_course->id?>').toggle();
+			                				
+			                			});
+			                		</script>
+			                		
+			                		<div id="public_div_<?=$This_course->id?>" >
 		                	<?		
 		                	}
 		                	?>
@@ -99,6 +117,13 @@
 		                <?php
 		                }
 		            }
+
+								if ($course_title_added && !$course_div_added) {
+					               	$course_div_added = TRUE;
+					            ?>
+					            </div>
+					            <?		
+					            }
 					
 		        }
 	            ?>
