@@ -122,7 +122,8 @@
 	            
 	            for ($l = 0; $l < count($courses); $l++) {
 					$course_title_added = FALSE;
-	            
+	            	$course_div_added = FALSE;
+					
 					# Assignments
 					$Project = new Project();
 					$assignments  = $Project->GetAssignmentsInTheSameCoursesOfUser($_SESSION['user'], $courses[$l]);
@@ -151,7 +152,24 @@
 									$This_course->Load();
 									$course_title_added = TRUE;
 			               		?>
-			                		<li style="font-size:13px; font-style:italic;"><i><?=$This_course->code?></i></li>
+			                		<li id="li_<?=$This_course->id?>" style="font-size:13px; font-style:italic;  cursor: pointer;">
+			                			<span id="span_right_<?=$This_course->id?>" class="icon-right-dir icon" alt="Collapse" title="Collapse"></span>
+			                			<span id="span_down_<?=$This_course->id?>" class="icon-down-dir icon" alt="Collapse" title="Collapse"></span>
+			                			<i><?=$This_course->code?></i>
+			                		</li>
+			                		
+			                		<script>
+			                			$('#div_<?=$This_course->id?>').hide();
+			                			$('#span_down_<?=$This_course->id?>').hide();
+			                			$("#li_<?=$This_course->id?>").on('click', function () {
+			                				$('#div_<?=$This_course->id?>').slideToggle();
+			                				$('#span_right_<?=$This_course->id?>').toggle();
+			                				$('#span_down_<?=$This_course->id?>').toggle();
+			                				
+			                			});
+			                		</script>
+			                		
+			                		<div id="div_<?=$This_course->id?>" >
 			                	<?		
 			                	}
 			                	
@@ -176,8 +194,6 @@
 			                		</script>
 			                		
 			                		<div id="div_<?=$assignments[$a]['id']?>" >
-			                			
-			                		
 			                	<?		
 			                	}
 			                	?>
@@ -222,6 +238,12 @@
 					                <?		
 					                }
 					}
+								if ($course_title_added && !$course_div_added) {
+					               	$course_div_added = TRUE;
+					            ?>
+					            </div>
+					            <?		
+					            }
 		        } 
 	            ?>
             
