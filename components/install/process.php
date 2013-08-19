@@ -16,12 +16,12 @@
     $rel = str_replace('/components/install/process.php', '', $_SERVER['REQUEST_URI']);
 
     $workspace = $path . "/workspace";
-    $users = $path . "/data/users.php";
-    $projects = $path . "/data/projects.php";
+    //$users = $path . "/data/users.php";
+    //$projects = $path . "/data/projects.php";
 	//$private_projects = $path . "/data/private_projects.php";
     $active = $path . "/data/active.php";
-    $pluginpath = $path . "/plugins";
-    $plugins = $path . "/data/plugins.php";
+    //$pluginpath = $path . "/plugins";
+    //$plugins = $path . "/data/plugins.php";
     $config = $path . "/config.php";
 
 //////////////////////////////////////////////////////////////////////
@@ -67,8 +67,8 @@
 // Verify no overwrites
 //////////////////////////////////////////////////////////////////////
 
-if(!file_exists($users) && !file_exists($projects) && !file_exists($active)){
-
+//if(!file_exists($users) && !file_exists($projects) && !file_exists($active)){
+if(!file_exists($active)){
     //////////////////////////////////////////////////////////////////
     // Get POST responses
     //////////////////////////////////////////////////////////////////

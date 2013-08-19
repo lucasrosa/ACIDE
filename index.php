@@ -134,12 +134,13 @@ if(!file_exists(DATA . '/plugins.php')) {
 
         $path = rtrim(str_replace("index.php", "", $_SERVER['SCRIPT_FILENAME']),"/");
 
-        $users = file_exists($path . "/data/users.php");
-        $projects = file_exists($path . "/data/projects.php");
+        //$users = file_exists($path . "/data/users.php");
+        //$projects = file_exists($path . "/data/projects.php");
 		//$private_projects = file_exists($path . "/data/private_projects.php");
         $active = file_exists($path . "/data/active.php");
 
-        if(!$users && !$projects && !$active){
+        //if(!$users && !$projects && !$active){
+        if(!$active){
             // Installer
             require_once('components/install/view.php');
         }else{
