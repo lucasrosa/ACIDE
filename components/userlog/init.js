@@ -75,9 +75,13 @@
         	// Run controller to register the focus in a project
         	$.get(this.controller + '?action=log_user_has_focus_on_terminal&path=' + active_project_path);
         },
-        logUserLastAction: function(active_project_path) {
+        logUserLastAction: function() {
         	// Run controller to register the user's last action
         	$.get(this.controller + '?action=log_user_last_action');
+        },
+        closeAllOpenSectionsThatReachedTimeoutOfUserLastAction: function() {
+        	// Run controller to close expired open sections
+        	$.get(this.controller + '?action=close_all_open_sections_that_reached_timeout_of_user_last_action');
         }
         
         

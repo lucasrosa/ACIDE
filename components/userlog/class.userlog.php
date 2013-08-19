@@ -30,13 +30,15 @@ class Userlog {
 	// Path of the subject: can be a file path or a project name (path)
 	public $path					= '';
 	// Session timeout
-	private $session_timeout		= 2;//10; // minutes
+	private $session_timeout		= 10; // minutes
 	// File timeout
-	private $file_timeout			= 5; // seconds
+	private $file_timeout			=  5; // seconds
 	// Project timeout
-	private $project_timeout		= 5; // seconds
+	private $project_timeout		=  5; // seconds
 	// Terminal timeout
-	private $terminal_timeout		= 5; // seconds
+	private $terminal_timeout		=  5; // seconds
+	// Session timeout
+	private $last_action_timeout   	= 10; // minutes
 	// The session ID to be saved in the file
 	public  $session_id				= '';
 	// The output of a compilation attempt
@@ -74,10 +76,10 @@ class Userlog {
 		$this->types[3] = 'terminal';
 		//$this->types[4] = 'compilation_attempt';
 		
-		$this->timeouts[$this->types[0]] 	= 2; // Minutes
-		$this->timeouts[$this->types[1]] 	= 5; // seconds 
-		$this->timeouts[$this->types[2]] 	= 5; // seconds
-		$this->timeouts[$this->types[3]] 	= 5; // seconds
+		$this->timeouts[$this->types[0]] 	= $session_timeout;  // Minutes
+		$this->timeouts[$this->types[1]] 	= $project_timeout;  // seconds 
+		$this->timeouts[$this->types[2]] 	= $file_timeout;     // seconds
+		$this->timeouts[$this->types[3]] 	= $terminal_timeout; // seconds
 	}
 	
     //////////////////////////////////////////////////////////////////
@@ -595,6 +597,27 @@ class Userlog {
 				}
 			}
 		}
+	}
+	
+	public function CloseAllOpenSectionsThatReachedTimeoutOfUserLastAction() {
+		
+		$collection = $this->GetCollection();
+		
+	
+		$log = $collection->findOne(array("username" => $this->username, "type" =>"user_last_action"));
+		
+		$now = strtotime(date("Y-m-d H:i:s"));
+		$last_update_timestamp = strtotime($log['last_update_timestamp']);
+		$time_difference =  $this->DateMinuteDifference ($now, $last_update_timestamp);
+		
+		
+		if ($time_difference >= $this->last_action_timeout) {
+			$collection->update(
+			    array("username" => $this->username, "is_open" => 'TRUE'),
+			    array('$set' => array('is_open' => "FALSE")),
+			    array("multiple" => true)
+			);
+		}	
 	}
 	
 }

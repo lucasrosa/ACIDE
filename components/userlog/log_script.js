@@ -1,7 +1,8 @@
-var hasFocus 					= true;
-var projectHasFocus 			= true;
-var checkFocusInterval 			= 0.5; // seconds
-var checkFocusForFileInterval 	= 0.5; // seconds
+var hasFocus 						= true;
+var projectHasFocus 				= true;
+var checkFocusInterval 				=  0.5; // seconds
+var checkFocusForFileInterval 		=  0.5; // seconds
+var checkExpirationForLastAction	=   10; // seconds
 
 	window.onload = function() {
 	    //adding the event listerner for Mozilla
@@ -13,7 +14,6 @@ var checkFocusForFileInterval 	= 0.5; // seconds
 	}
 	
 	function scrollIdentified(event) {
-		console.log('Handler for .scroll() called.');
 		codiad.userlog.logUserLastAction();
 	}	
 
@@ -84,6 +84,7 @@ $(document).ready(function() {
 	
 	setInterval ("CheckFocus()", (checkFocusInterval * 1000));
 	setInterval ("CheckFocusForFile()", (checkFocusForFileInterval * 1000));
+	setInterval ("CheckExpirationForLastAction()", (checkExpirationForLastAction * 1000));
 	
 	window.onfocus = function() {
     	hasFocus = true;
@@ -94,6 +95,10 @@ $(document).ready(function() {
 	};
 	
 })(this, jQuery);
+
+function CheckExpirationForLastAction () {
+	
+}
 
 function CheckFocus () {
 	
