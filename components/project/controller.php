@@ -135,7 +135,9 @@
         if(isset($_SESSION['project'])){
             echo formatJSEND("success",$_SESSION['project']);
         }else{
-            echo formatJSEND("error","No Project Returned");
+            //echo formatJSEND("error","No Project Returned");
+            error_log("No Project Returned");
+			echo formatJSEND("success","");
         }
     }
 	
