@@ -60,6 +60,10 @@
             if(!defined('THEMES')){
                 define("THEMES", BASE_PATH . "/themes");
             }
+			
+			if(!defined('DATABASE_NAME')){
+                define("DATABASE_NAME", "codiad_database");
+            }
             
             if(!defined('THEME')){
                 define("THEME", "default");
@@ -335,12 +339,12 @@
 			// connect
 			$mongo_client = new MongoClient();
 			// select a database
-			return $mongo_client->codiad_database;
+			return $mongo_client->selectDB(DATABASE_NAME);
 		}
 		
         public function getProjectsForUser($username) {
         	$mongo_client = new MongoClient();
-			$collection = $mongo_client->codiad_database->users;
+			$collection = $mongo_client->selectDB(DATABASE_NAME)->users;
 			
 			$projects = array();
 			

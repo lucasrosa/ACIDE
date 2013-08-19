@@ -59,7 +59,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		// Connect
 		$mongo_client = new MongoClient();
 		// select the database
-		$database = $mongo_client -> codiad_database;
+		$database = $mongo_client -> selectDB(DATABASE_NAME);
 		// Select the collection
 		$collection = $database -> users;
 		
