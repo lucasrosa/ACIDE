@@ -97,7 +97,8 @@ $(document).ready(function() {
 })(this, jQuery);
 
 function CheckExpirationForLastAction () {
-	
+	console.log("CheckExpirationForLastAction");
+	codiad.userlog.closeAllOpenSectionsThatReachedTimeoutOfUserLastAction();
 }
 
 function CheckFocus () {

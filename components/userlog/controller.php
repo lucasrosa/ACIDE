@@ -62,4 +62,10 @@
 		$Userlog->username 	= $_SESSION['user'];
         $Userlog->UpdateUserLastAction();
     }
+	
+	else if ($_GET['action'] == 'close_all_open_sections_that_reached_timeout_of_user_last_action'){
+		error_log("close_all_open_sections_that_reached_timeout_of_user_last_action called");
+		$Userlog->username 	= $_SESSION['user'];
+        $Userlog->CloseAllOpenSectionsThatReachedTimeoutOfUserLastAction();
+    }
 ?>
