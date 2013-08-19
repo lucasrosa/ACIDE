@@ -22,59 +22,12 @@ $(document).ready(function() {
 	$('.ace_line').attr('id', 'file_input');
 	
 	$("body").keydown(function() {
-  		//console.log("Handler for .keypress() called.");
   		codiad.userlog.logUserLastAction();
 	});
 	
 	$( "body" ).click(function() {
-  		//console.log("Handler for .click() called." );
   		codiad.userlog.logUserLastAction();
 	});
-	
-	//$(".ace_text-input").scroll(function() {
-  	//		console.log('Handler for .scroll() called.');
-	//});
-	
-	//$(".ace_content").scroll(function() {
-  	//	console.log('Handler for .scroll() called.');
-	//});
-	
-	//$('.editor').attr('id', 'editor');
-	//var aceEditor = ace.edit("editor");
-	//var Editor = require('ace/editor').Editor;
-	//Editor.getSession.on('change', function(e) {
-	//	console.log("change called");	
-	//});
-	
-	//var tEditor = $("#root-editor-wrapper").children()[0]
-	//tEditor.attr('id', 'editor');
-	//$("#root-editor-wrapper").children("div").attr("id","editor");
-    	
-	//var aceEditor = ace.edit("editor");
-	//aceEditor.resize();
-			
-	//	var codiad = global.codiad;
-	//	codiad.editor.getSession().removeAllListeners('change');
-		
-	//window.onscroll = function (e) {  
-		// called when the window is scrolled.
-		//console.log('Handler for .scroll() called.');  
-	//} 
-	/*
-	var mouseChangedPixelNumber = 0;
-	
-	$("body").mousemove(function(event) {
-	  var msg = "Handler for .mousemove() called at ";
-	  msg += event.pageX + ", " + event.pageY;
-	  if (mouseChangedPixelNumber > 50) {
-	  	console.log(msg);	
-	  	mouseChangedPixelNumber = 0;
-	  }
-	  
-	  
-	  mouseChangedPixelNumber++;
-	});
-	*/
 });
 	
 (function(global, $){

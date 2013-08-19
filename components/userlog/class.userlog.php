@@ -600,7 +600,6 @@ class Userlog {
 	}
 	
 	public function CloseAllOpenSectionsThatReachedTimeoutOfUserLastAction() {
-		error_log("Called:    CloseAllOpenSectionsThatReachedTimeoutOfUserLastAction");
 		$collection = $this->GetCollection();
 		
 	
@@ -612,7 +611,6 @@ class Userlog {
 		
 		
 		if ($time_difference >= $this->last_action_timeout) {
-			error_log("Called:    expired updated.");
 			$collection->update(
 			    array("username" => $this->username, "is_open" => 'TRUE'),
 			    array('$set' => array('is_open' => "FALSE")),
