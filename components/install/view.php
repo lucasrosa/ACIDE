@@ -57,7 +57,7 @@ if(!$workspace || !$data || !$config || $register){
     
     <input type="hidden" name="path" value="<?php echo($path); ?>">
     
-    <label>New Username</label>
+    <label>Admin Username</label>
     <input type="text" name="username" autofocus="autofocus">
     
     <div style="float:left; width: 48%; margin-right: 4%;"> 
@@ -76,13 +76,28 @@ if(!$workspace || !$data || !$config || $register){
     
     <div style="clear:both;"></div>
     
+    <div style="float:left; width: 48%;"> 
+    
+        <label>E-mail</label>
+        <input type="text" name="email">
+    
+    </div>
+    
     <hr>
     
+    <div style="float:left; width: 48%;"> 
+    
+        <label>Database Name</label>
+        <input type="text" name="database_name">
+    
+    </div>
+    <!--
     <label>New Project Name</label>
     <input type="text" name="project_name">
     <?php if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') { ?>
     <label>Folder Name or Absolute Path</label>
     <input type="text" name="project_path">
+    -->
     <?php }  ?>
     <hr>
     
@@ -210,7 +225,7 @@ if(!$workspace || !$data || !$config || $register){
             if($('input[name="password"]').val()!=$('input[name="password_confirm"]').val()){
                 password_match = false;
             }
-            
+            /*
             // Check Path
             check_path = true;
             projectPath = '';
@@ -221,7 +236,7 @@ if(!$workspace || !$data || !$config || $register){
             if ( projectPath.indexOf("/") == 0 ) {
                 check_path = confirm('Do you really want to create project with absolute path "' + projectPath + '"?');
             } 
-            
+            */
             if(!password_match){ alert('The passwords entered do not match'); }
             
             if(!empty_fields && password_match && check_path){

@@ -6,6 +6,7 @@
 *  [root]/license.txt for more. This information must remain intact.
 */
 
+	require_once('../user/class.user.php');
 //////////////////////////////////////////////////////////////////////
 // Paths
 //////////////////////////////////////////////////////////////////////
@@ -73,14 +74,17 @@ if(!file_exists($users) && !file_exists($projects) && !file_exists($active)){
     //////////////////////////////////////////////////////////////////
 
     $username = cleanUsername($_POST['username']);
-    $password = encryptPassword($_POST['password']);
-    $project_name = $_POST['project_name'];
-    if(isset($_POST['project_path'])) {
-        $project_path = $_POST['project_path'];
-    } else {
-        $project_path = $project_name;
-    }
+    //$password = encryptPassword($_POST['password']);
+    $password = $_POST['password'];
 	
+    //$project_name = $_POST['project_name'];
+    //if(isset($_POST['project_path'])) {
+    //    $project_path = $_POST['project_path'];
+    //} else {
+    //    $project_path = $project_name;
+    //}
+	$database_name = $_POST['database_name'];
+	$email		   = $_POST['email'];
 	
     $timezone = $_POST['timezone'];
 
@@ -88,8 +92,8 @@ if(!file_exists($users) && !file_exists($projects) && !file_exists($active)){
     // Create Projects files
     //////////////////////////////////////////////////////////////////
 
-    $project_path = cleanPath($project_path);
-
+    //$project_path = cleanPath($project_path);
+	/*
     if(!isAbsPath($project_path)) {
         $project_path = str_replace(" ","_",preg_replace('/[^\w-]/', '', $project_path));
         mkdir($workspace . "/" . $project_path);
@@ -111,16 +115,38 @@ if(!file_exists($users) && !file_exists($projects) && !file_exists($active)){
     $project_data = array("name"=>$project_name,"path"=>$project_path);
 
     saveJSON($projects,array($project_data));
-	
+	*/
     
     //////////////////////////////////////////////////////////////////
     // Create Users file
     //////////////////////////////////////////////////////////////////
 
-    $user_data = array("username"=>$username,"password"=>$password,"project"=>$project_path);
+    //$user_data = array("username"=>$username,"password"=>$password,"project"=>$project_path);
 
-    saveJSON($users,array($user_data));
+    //saveJSON($users,array($user_data));
     
+    /*
+	 * Save the user
+	 */
+	$User = new User();
+	$User->username = $username;
+	$User->password = $password;
+    $User->type		= "admin";
+	$User->email	= $email;
+	$User->courses	= array();
+    
+	$return_a_string = TRUE;
+	
+	$User->Create($return_a_string);
+	
+	//////////////////////////////////////////////////////////////////
+    // Define the database name
+    //////////////////////////////////////////////////////////////////
+    
+	if(!defined('DATABASE_NAME')){
+        define("DATABASE_NAME", $database_name);
+    }
+			
     //////////////////////////////////////////////////////////////////
     // Create Active file
     //////////////////////////////////////////////////////////////////
@@ -129,7 +155,8 @@ if(!file_exists($users) && !file_exists($projects) && !file_exists($active)){
     //////////////////////////////////////////////////////////////////
     // Create Plugin file
     //////////////////////////////////////////////////////////////////
-
+	
+	/*
     //read all directories from plugins
     $pluginlist = array();
     $allFiles = scandir($pluginpath);
@@ -143,7 +170,7 @@ if(!file_exists($users) && !file_exists($projects) && !file_exists($active)){
     }
 
     saveJSON($plugins,$pluginlist);
-
+	*/
     //////////////////////////////////////////////////////////////////
     // Create Config
     //////////////////////////////////////////////////////////////////
