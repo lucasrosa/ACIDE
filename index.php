@@ -410,7 +410,7 @@ if(!file_exists(DATA . '/plugins.php')) {
     <div id="autocomplete"><ul id="suggestions"></ul></div>
 
     <!-- ACE Editor -->
-    <script src="components/editor/ace-editor/ace.js"></script>
+    <script src="components/editor/ace-editor/ace.js"></script>    
 	<!-- Terminal -->
 	<script src="components/terminal/interface_insertion.js"></script>
     <!-- COMPONENTS -->

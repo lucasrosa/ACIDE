@@ -57,4 +57,9 @@
 		$Userlog->path		= $_GET['path'];
         $Userlog->UpdateCurrentTerminal();
     }
+	
+	else if ($_GET['action'] == 'log_user_last_action'){
+		$Userlog->username 	= $_SESSION['user'];
+        $Userlog->UpdateUserLastAction();
+    }
 ?>

@@ -74,6 +74,10 @@
         	var active_project_path = codiad.project.getCurrent();
         	// Run controller to register the focus in a project
         	$.get(this.controller + '?action=log_user_has_focus_on_terminal&path=' + active_project_path);
+        },
+        logUserLastAction: function(active_project_path) {
+        	// Run controller to register the user's last action
+        	$.get(this.controller + '?action=log_user_last_action');
         }
         
         
