@@ -220,7 +220,7 @@ if(!$workspace || !$data || !$config || $register){
             */
             if(!password_match){ alert('The passwords entered do not match'); }
             
-            if(!empty_fields && password_match && check_path){
+            if(!empty_fields && password_match /*&& check_path */){
                 $.post('components/install/process.php',$('#install').serialize(),function(data){
                     if(data=='success'){
                         window.location.reload();

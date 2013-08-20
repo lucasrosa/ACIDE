@@ -11,6 +11,7 @@ $root_folder = substr(substr($_SERVER["REQUEST_URI"],1), 0, strpos(substr($_SERV
 set_include_path("/var/www/");
 	
 require_once($root_folder . '/components/course/class.course.php');
+//require_once($root_folder . '/common.php');
 
 class User {
 
@@ -52,13 +53,16 @@ class User {
     // Construct
     //////////////////////////////////////////////////////////////////
 
-    public function __construct(){
-        // Load the users from the database
+    public function __construct($installing_system = FALSE){
+    	// Load the users from the database
 		$this->collection = $this->GetCollection();
 		// Get all the users in the database and set it as the users of this instance
 		$this->users = $this->collection->find(); //$this->users = getJSON('users.php');
 		
-        $this->actives = getJSON('active.php');
+		if (!$installing_system) {
+			$this->actives = getJSON('active.php');	
+		}
+		
     }
 
     //////////////////////////////////////////////////////////////////

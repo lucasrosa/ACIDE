@@ -87,7 +87,6 @@ if(!file_exists($active)){
 	$email		   = $_POST['email'];
 	
     $timezone = $_POST['timezone'];
-
     //////////////////////////////////////////////////////////////////
     // Create Projects files
     //////////////////////////////////////////////////////////////////
@@ -125,10 +124,19 @@ if(!file_exists($active)){
 
     //saveJSON($users,array($user_data));
     
+    //////////////////////////////////////////////////////////////////
+    // Define the database name
+    //////////////////////////////////////////////////////////////////
+    
+	define("DATABASE_NAME", $database_name);
+	
     /*
 	 * Save the user
 	 */
-	$User = new User();
+	error_log(" --- 5 " . DATABASE_NAME);
+	$installing_system = TRUE;
+	$User = new User($installing_system);
+	error_log(" --- 6 " . DATABASE_NAME);
 	$User->username = $username;
 	$User->password = $password;
     $User->type		= "admin";
@@ -137,15 +145,8 @@ if(!file_exists($active)){
     
 	$return_a_string = TRUE;
 	
-	$User->Create($return_a_string);
-	
-	//////////////////////////////////////////////////////////////////
-    // Define the database name
-    //////////////////////////////////////////////////////////////////
-    
-	if(!defined('DATABASE_NAME')){
-        define("DATABASE_NAME", $database_name);
-    }
+	$user_creation_return = $User->Create($return_a_string);
+	error_log("Admin creation result: ". $user_creation_return);
 			
     //////////////////////////////////////////////////////////////////
     // Create Active file
