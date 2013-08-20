@@ -146,6 +146,7 @@ class Project extends Common {
     public function CreateProjectOnDatabase($user = ''){
     	if ($user == '') {
     		$this->user = $_SESSION['user'];
+			error_log("USER TO PROJECT: ". $this->user);
 			// LF: The assignment is defined as nothing here because when the user is not defined it means it's not an assignment
 			$this->assignment = ''; 
 		} else {
@@ -165,9 +166,9 @@ class Project extends Common {
 												),
 						"assignment" => $this->assignment
 					 );
-					 
+		//error_log("USER TO PROJECT: ". $this->user);					 
 		$collection = $this->database->users;
-		if ($this->privacy == 'private') {
+		//if ($this->privacy == 'private') {
 			// LF: Find the current user
 			$user = $collection->findOne(array("username" => $this->user));
 			// LF: Push the new project in the end of the project's array
@@ -178,6 +179,7 @@ class Project extends Common {
 			array_push($user["projects"], $project);
 			// LF: Saves the new array in the database by overwriting the previous user
 			return $collection->update(array("username" => $this->user), $user);
+		/*
 		} else { // public project
 			$users = $collection->find();
 			foreach ($users as $user) {
@@ -191,7 +193,7 @@ class Project extends Common {
 				return $collection->update(array("username" => $user["username"]), $user);
 			}
 		}
-		
+		*/
 		
     }
 	
