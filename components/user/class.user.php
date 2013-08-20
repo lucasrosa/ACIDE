@@ -79,6 +79,7 @@ class User {
 		// Get all the users in the database
 		$users = $collection->find();
 		foreach ($users as $user) {
+			error_log($user['username'] ." == ".$this->username ." && " . $user['password'] . "==" . $this->password);
 			if($user['username']==$this->username && $user['password']==$this->password){
                 $pass = true;
                 $_SESSION['user'] = $this->username;

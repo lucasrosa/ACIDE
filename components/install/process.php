@@ -195,6 +195,7 @@ define("PLUGINS",BASE_PATH . "/plugins");
 define("THEMES",BASE_PATH . "/themes");
 define("DATA",BASE_PATH . "/data");
 define("WORKSPACE",BASE_PATH . "/workspace");
+define("DATABASE_NAME",'.$database_name.');
 define("WSURL",$_SERVER["HTTP_HOST"] . "' . $rel . '/workspace");
 
 //////////////////////////////////////////////////////////////////

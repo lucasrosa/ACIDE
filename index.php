@@ -437,10 +437,9 @@ if(!file_exists(DATA . '/plugins.php')) {
 		// LF: PHP
 		require_once('components/assignment/interface_insertion.php');
 		require_once('components/userlog/interface_insertion.php');
-    }
+    
 	
     ?>
-    
     <script src="components/userlog/log_script.js"></script>
     <script>
     	
@@ -496,5 +495,8 @@ if(!file_exists(DATA . '/plugins.php')) {
 			});
 		});
     </script>
+    <?
+    }
+    ?>
 </body>
 </html>
