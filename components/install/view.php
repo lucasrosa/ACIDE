@@ -60,37 +60,19 @@ if(!$workspace || !$data || !$config || $register){
     <label>Admin Username</label>
     <input type="text" name="username" autofocus="autofocus">
     
-    <div style="float:left; width: 48%; margin-right: 4%;"> 
+    <label>Password</label>
+    <input type="password" name="password">
     
-        <label>Password</label>
-        <input type="password" name="password">
+    <label>Confirm Password</label>
+    <input type="password" name="password_confirm">
     
-    </div>
+    <label>E-mail</label>
+    <input type="text" name="email">
+   
+    <label>Database Name</label>
+    <input type="text" name="database_name">
     
-    <div style="float:left; width: 48%;"> 
     
-        <label>Confirm Password</label>
-        <input type="password" name="password_confirm">
-    
-    </div>
-    
-    <div style="clear:both;"></div>
-    
-    <div style="float:left; width: 48%;"> 
-    
-        <label>E-mail</label>
-        <input type="text" name="email">
-    
-    </div>
-    
-    <hr>
-    
-    <div style="float:left; width: 48%;"> 
-    
-        <label>Database Name</label>
-        <input type="text" name="database_name">
-    
-    </div>
     <!--
     <label>New Project Name</label>
     <input type="text" name="project_name">
@@ -99,7 +81,6 @@ if(!$workspace || !$data || !$config || $register){
     <input type="text" name="project_path">
     -->
     <?php }  ?>
-    <hr>
     
     <label>Timezone</label>
     <select name="timezone">

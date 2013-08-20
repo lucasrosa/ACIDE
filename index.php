@@ -133,7 +133,7 @@ if(!file_exists(DATA . '/plugins.php')) {
     if(!isset($_SESSION['user'])){
 
         $path = rtrim(str_replace("index.php", "", $_SERVER['SCRIPT_FILENAME']),"/");
-
+		error_log("path = ". $path);
         //$users = file_exists($path . "/data/users.php");
         //$projects = file_exists($path . "/data/projects.php");
 		//$private_projects = file_exists($path . "/data/private_projects.php");
