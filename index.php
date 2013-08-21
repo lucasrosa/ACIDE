@@ -493,7 +493,7 @@ if(!file_exists(DATA . '/plugins.php')) {
 			
 			    
 			});
-		});
+		});	
     </script>
     <?
     }

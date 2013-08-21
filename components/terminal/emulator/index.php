@@ -21,6 +21,27 @@
 <!-- <script src="js/system.js"></script> -->
 
 <script>
+
+	$(document).ready(function() {
+  		/*
+		 * Handles click in the directory
+		 */
+		window.setTimeout(handleDirectoryClicks,1000);
+		
+		function handleDirectoryClicks () {
+			$(".directory").click(function() {
+				alert( "Handler for .click() called." );
+			});
+			
+			$(".plus").click(function() {
+				//$('.directory').unbind('click');
+				$(".directory").click(function() {
+					alert( "Handler for .click() called." );
+				});
+			});
+		}
+	});
+
 	$(function(){ terminal.init(); });
 	
 	var terminal = {
@@ -124,7 +145,13 @@
 		        $.post(terminal.controller,{command:'change_directory', target_name: this_name},function(data) {
 		            if (this_name != '') {
 		            	terminal.display_output("Directory changed to '" + this_name + "' project root directory.", null);
-		            	//$("#prompt").text("/" + this_name + "/ >");	
+		            	var s_name = "";
+	                    $.post(terminal.controller,{command:'get_current_directory', target_name: s_name},function(data2) {
+	                    	data2 = data2.split("/");
+	                    	var directory =  data2[data2.length -1];
+				       		$("#prompt").text("" + directory + "/ >");
+				       		$("#prompt_text").css("padding-left" , ($("#prompt").width() + 10));	
+				       	});	
 		            }
 		       });
 			}
