@@ -31,7 +31,8 @@
 				if ($_FILES['file_csv']['size'] > 0) { 
 					//print_r($_FILES);
 				    //get the csv file 
-				    $file = $_FILES['file_csv']['tmp_name']; 
+				    $file = $_FILES['file_csv']['tmp_name'];
+					ini_set('auto_detect_line_endings', TRUE); 
 				    $handle = fopen($file,"r"); 
 				     
 				    //loop through the csv file and insert into database
@@ -59,7 +60,7 @@
 						$User->email 	= $users[$i][1];
 						$User->password = $users[$i][2];
 						$User->courses = $courses;
-						
+						error_log("User [" . $i . "] = " . $users[$i][0]);
 						// If no type was defined, the type is defined as "student"
 						if (isset($users[$i][3])) {
 							if (strlen($users[$i][3]) > 0 && ((strtolower($users[$i][3]) == $Permission->user_types[2]) || (strtolower($users[$i][3]) == $Permission->user_types[3]))) {

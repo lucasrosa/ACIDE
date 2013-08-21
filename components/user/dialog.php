@@ -48,7 +48,7 @@
             <button onclick="codiad.modal.unload();return false;">Close</button>
             <?php } else { ?>
             <label>User List</label>
-            <div id="user-list">
+            <div id="user-list" style="overflow-y: scroll; height: 400px;">
             <table width="100%">
                 <tr>
                     <th>Login</th>
@@ -103,7 +103,7 @@
             ?>
             </table>
             </div>
-            <button class="btn-left" onclick="codiad.user.createNew();">New Account</button><button class="btn-mid" onclick="window.open('<?=$import_user_url?>');return false;">Import from CSV File</button><button class="btn-right" onclick="codiad.modal.unload();return false;">Close</button>
+            <button class="btn-left" onclick="codiad.user.createNew();">New Account</button><button class="btn-mid" onclick="window.open('<?=$import_user_url?>'); codiad.modal.unload();return false;">Import from CSV File</button><button class="btn-right" onclick="codiad.modal.unload();return false;">Close</button>
             <?php
             }
             

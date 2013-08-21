@@ -167,10 +167,14 @@
 									}
 								}
 								$Assignment["description_url"] .= "://";
+								$first_path = explode("/", $_SERVER["REQUEST_URI"]);
+								$first_path = "/" .$first_path[1];
+								
 								if ($_SERVER["SERVER_PORT"] != "80") {
-									$Assignment["description_url"] .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+									//$Assignment["description_url"] .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+									$Assignment["description_url"] .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]. "/" . $first_path. "/data/assignments/" . $_FILES["file"]["name"];
 								} else {
-									$Assignment["description_url"] .= $_SERVER["SERVER_NAME"]. "/Codiad/data/assignments/" . $_FILES["file"]["name"];
+									$Assignment["description_url"] .= $_SERVER["SERVER_NAME"]. $first_path. "/data/assignments/" . $_FILES["file"]["name"];
 								}
 							}
 						}

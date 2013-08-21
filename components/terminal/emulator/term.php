@@ -140,11 +140,35 @@
 				$first_command = $command_parts[0];
 				$result = in_array($first_command, $allowed_commands);
 				
-			
-				if (!empty($result)) {
+				$unallowed_commands[] = ";";
+				$unallowed_commands[] = "|";
+				$unallowed_commands[] = ">";
+				$unallowed_commands[] = "<";
+				$unallowed_commands[] = "`";
+				$unallowed_commands[] = "$";
+				$unallowed_commands[] = "!";
+				$unallowed_commands[] = "-";
+				
+				// TODO REMOVE LS PARAMETERS
+				
+				$unallowed_command_detected = FALSE;
+				foreach($command_parts as $command_part) {
+					for ($o = 0 ; $o < count($unallowed_commands); $o++){ 	
+						if (strpos($command_part, $unallowed_commands[$o]) !== false) {
+						    $unallowed_command_detected = TRUE;
+						}
+					}
+				}
+				
+				if (!empty($result) && !$unallowed_command_detected) {
 		            // Handle 'cd' command
-		            if(in_array('cd',$command_parts)){
-		                $cd_key = array_search('cd', $command_parts);
+		            if(in_array('cd',$command_parts) || in_array('ls',$command_parts)){
+		            	if (in_array('cd',$command_parts)) {
+		            		$cd_key = array_search('cd', $command_parts);	
+		            	} else {
+		            		$cd_key = array_search('ls', $command_parts);
+		            	}
+		                
 		                $cd_key++;
 						$unmodified_previous_directory = $this->directory;
 		                $this->directory = $command_parts[$cd_key];
@@ -175,9 +199,14 @@
 						}
 						
 						if ($cd_allowed) {
-							$this->ChangeDirectory();
-			                // Remove from command
-			                $this->command = str_replace('cd '.$this->directory,'',$this->command);	
+							if (in_array('cd',$command_parts)) {
+								$this->ChangeDirectory();
+			                	// Remove from command
+			                	$this->command = str_replace('cd '.$this->directory,'',$this->command);	
+							} else {
+								$this->command_exec = $this->command . ' 2>&1';
+							}
+								
 						} else {
 							// Resetting the directory in case the last command modified it 
 							$this->directory = $unmodified_previous_directory;
@@ -400,6 +429,7 @@
 		}
 		
         $command = explode("&&", $command);
+		//$command = explode(";", $command);
 		
         foreach($command as $c){
             $Terminal->command = $c;
