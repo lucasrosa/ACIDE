@@ -21,11 +21,11 @@
 <!-- <script src="js/system.js"></script> -->
 
 <script>
-
+/*
 	$(document).ready(function() {
   		/*
 		 * Handles click in the directory
-		 */
+		 /
 		window.setTimeout(handleDirectoryClicks,1000);
 		
 		function handleDirectoryClicks () {
@@ -41,6 +41,7 @@
 			});
 		}
 	});
+	*/	
 
 	$(function(){ terminal.init(); });
 	

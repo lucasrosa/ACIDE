@@ -47,6 +47,7 @@
                     if ($(this).parent().children("a").attr('data-type') == 'directory') {
                         _this.index($(this).parent().children("a")
                             .attr('data-path'));
+                        
                     } else {
                         _this.openFile($(this).parent().children("a")
                             .attr('data-path'));
@@ -55,6 +56,7 @@
                         if ($(this).hasClass('plus')) {
                             $(this).removeClass('plus')
                             $(this).addClass('minus');
+                            console.log("directory opened");
                         } else {
                             $(this).removeClass('minus')
                             $(this).addClass('plus');
@@ -94,6 +96,7 @@
                         if ($(this).parent().children("span").hasClass('plus')) {
                             $(this).parent().children("span").removeClass('plus')
                             $(this).parent().children("span").addClass('minus');
+                            console.log("directory opened");
                         } else {
                             $(this).parent().children("span").removeClass('minus')
                             $(this).parent().children("span").addClass('plus');
