@@ -171,7 +171,7 @@
 		                
 		                $cd_key++;
 						$unmodified_previous_directory = $this->directory;
-		                $this->directory = $command_parts[$cd_key];
+		                @$this->directory = $command_parts[$cd_key];
 						
 						$cd_allowed = TRUE;
 						
@@ -202,7 +202,9 @@
 							if (in_array('cd',$command_parts)) {
 								$this->ChangeDirectory();
 			                	// Remove from command
-			                	$this->command = str_replace('cd '.$this->directory,'',$this->command);	
+			                	$this->command = str_replace('cd '.$this->directory,'',$this->command);
+								//$this->output = "cd executed, eh?";	
+								//$this->command .= " ; echo cd executed, eh?" . ' 2>&1';
 							} else {
 								$this->command_exec = $this->command . ' 2>&1';
 							}
@@ -428,14 +430,18 @@
 			$Terminal->ChangeDirectory();
 		}
 		
-        $command = explode("&&", $command);
-		//$command = explode(";", $command);
-		
-        foreach($command as $c){
-            $Terminal->command = $c;
-            $output .= $Terminal->Process();
-        }
-    
+		if ($command == "get_current_directory") {
+			//error_log("get_current_directory called: current directory is :" . $_SESSION['dir']);
+			$output = $_SESSION['dir'];
+		} else {
+			$command = explode("&&", $command);
+			//$command = explode(";", $command);
+			
+	        foreach($command as $c){
+	            $Terminal->command = $c;
+	            $output .= $Terminal->Process();
+	        }	
+		}
     }
 	
     echo(htmlentities($output));

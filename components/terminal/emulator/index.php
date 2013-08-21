@@ -106,6 +106,14 @@
 	                    if (data.substr(0, 10) != "opnths::: ") {
 	                    	$('#prompt_text').focus();
 	                    }
+	                    //$("#prompt").text(">");
+	                    var this_name = "";
+	                    $.post(terminal.controller,{command:'get_current_directory', target_name: this_name},function(data) {
+	                    	data = data.split("/");
+	                    	var directory =  data[data.length -1];
+				       		$("#prompt").text("" + directory + "/ >");
+				       		$("#prompt_text").css("padding-left" , ($("#prompt").width() + 10));	
+				       	});
 	            }
 	        });
 	    },
@@ -115,7 +123,8 @@
 	    	if (this_name != '') {
 		        $.post(terminal.controller,{command:'change_directory', target_name: this_name},function(data) {
 		            if (this_name != '') {
-		            	terminal.display_output("Directory changed to '" + this_name + "' project root directory.", null);	
+		            	terminal.display_output("Directory changed to '" + this_name + "' project root directory.", null);
+		            	//$("#prompt").text("/" + this_name + "/ >");	
 		            }
 		       });
 			}
@@ -144,7 +153,7 @@
 						$('#prompt_text').focus();
 					});
 					
-	    			console.log("after that");
+	    			//console.log("after that");
 	    		} else {
 	    			terminal.output.append('<pre class="command">'+command+'</pre><pre class="data">'+data+'</pre>');
 	    		}
