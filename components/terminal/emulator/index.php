@@ -21,27 +21,19 @@
 <!-- <script src="js/system.js"></script> -->
 
 <script>
-/*
 	$(document).ready(function() {
   		/*
 		 * Handles click in the directory
-		 /
+		 */
 		window.setTimeout(handleDirectoryClicks,1000);
 		
 		function handleDirectoryClicks () {
 			$(".directory").click(function() {
-				alert( "Handler for .click() called." );
+				console.log("change directory");
 			});
 			
-			$(".plus").click(function() {
-				//$('.directory').unbind('click');
-				$(".directory").click(function() {
-					alert( "Handler for .click() called." );
-				});
-			});
 		}
 	});
-	*/	
 
 	$(function(){ terminal.init(); });
 	

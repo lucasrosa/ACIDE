@@ -56,7 +56,10 @@
                         if ($(this).hasClass('plus')) {
                             $(this).removeClass('plus')
                             $(this).addClass('minus');
-                            console.log("directory opened");
+                            $('.directory').unbind('click');
+							$(".directory").click(function() {
+								console.log( "Change directory." );
+							});
                         } else {
                             $(this).removeClass('minus')
                             $(this).addClass('plus');
@@ -96,7 +99,10 @@
                         if ($(this).parent().children("span").hasClass('plus')) {
                             $(this).parent().children("span").removeClass('plus')
                             $(this).parent().children("span").addClass('minus');
-                            console.log("directory opened");
+                            $('.directory').unbind('click');
+							$(".directory").click(function() {
+								console.log( "Change directory." );
+							});
                         } else {
                             $(this).parent().children("span").removeClass('minus')
                             $(this).parent().children("span").addClass('plus');
