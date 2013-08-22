@@ -436,8 +436,18 @@
 		} else if (substr($command, 0, 20) == "change_directory_to:") {
 			$this_directory = substr($command, 20, (strlen($command)-20));
 			$this_directory = explode("/", $this_directory);
-			error_log("changing directory to ->" . $this_directory);
-			error_log("root  = ". ROOT);
+			$new_directory = "";
+			
+			for($s = 1; $s < count($this_directory); $s++) {
+				$new_directory .= "/" . $this_directory[$s];
+			}
+			$new_directory = ROOT . $new_directory;
+			//error_log("changing directory to ->" . $new_directory);
+			//error_log("root  = ". ROOT);
+			
+			$Terminal->directory = $new_directory;
+			$Terminal->ChangeDirectory();
+			
 			$output = $_SESSION['dir'];
 		} else {
 			$command = explode("&&", $command);
