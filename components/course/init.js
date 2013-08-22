@@ -135,10 +135,12 @@
                 var courseCode = $('#modal-content form input[name="course_code"]')
                     .val(),
                     courseName = $('#modal-content form input[name="course_name"]')
+                    .val(),
+                    courseReadonly = $('#modal-content form select[name="course_readonly"]')
                     .val();
                     
                 if(create) {    
-                    $.get(_this.controller + '?action=create&course_code=' + courseCode + '&course_name=' + courseName, function(data) {
+                    $.get(_this.controller + '?action=create&course_code=' + courseCode + '&course_name=' + courseName + '&course_readonly=' + courseReadonly, function(data) {
                         createResponse = codiad.jsend.parse(data);
                         if (createResponse != 'error') {
                             codiad.modal.unload();

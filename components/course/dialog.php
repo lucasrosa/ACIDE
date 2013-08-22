@@ -236,7 +236,11 @@
             <input name="course_code" autofocus="autofocus" autocomplete="off">
 			<label>Course Name</label>
             <input name="course_name" autocomplete="off">
-			
+			<label>Public projects are readonly</label>
+			<select id="course_readonly">
+				<option value="FALSE" selected >No</option>
+				<option value="TRUE">Yes</option>
+			</select>
           <?php
                 $action = 'codiad.course.list();';
                 if($_GET['close'] == 'true') {
