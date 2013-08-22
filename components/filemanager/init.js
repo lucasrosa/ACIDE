@@ -5,14 +5,14 @@
  */
 
 function addClickListener() {
-	console.log("addClickListener() called");
+	//console.log("addClickListener() called");
 	window.setTimeout(clickListener,200);
 }
 
 function clickListener() {
 	$('.directory').unbind('click');
 	$(".directory").click(function() {
-		console.log( "Change directory." );
+		//console.log( "Change directory." );
 		var this_name = $(this).attr('data-path');
         $.post(terminal.controller,{command:'change_directory_to:'+this_name, target_name: this_name},function(data) {
         	data = data.split("/");
@@ -245,7 +245,6 @@ function clickListener() {
                     var shortName = this.getShortName(path);
                     if (type == 'directory') {
                         var appendage = '<li><span class="none"></span><a class="directory" data-type="directory" data-path="' + path + '">' + shortName + '</a></li>';
-                        console.log("appended 1");
                     } else {
                         var appendage = '<li><span class="none"></span><a class="file ext-' +
                             this.getExtension(shortName) +
@@ -358,7 +357,7 @@ function clickListener() {
             }
 
             this.index(path, true);
-            console.log("append 12");
+            
         },
 
         //////////////////////////////////////////////////////////////////
