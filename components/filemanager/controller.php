@@ -56,6 +56,9 @@
         case 'modify': $Filemanager->modify(); break;
         case 'duplicate': $Filemanager->duplicate(); break;
         case 'upload': $Filemanager->upload(); break;
+		case 'get_readonly':
+			return '{"status":"success","data":{"msg":"2"}}';
+			break;
         default: exit('{"status":"fail","data":{"error":"Unknown Action"}}');
     }
 

@@ -96,6 +96,9 @@ function clickListener() {
                         /*
                          * LF : Changing the mode of the editor for this file extension {
                          */
+                        var readonly = codiad.filemanager.getReadOnly($(this).attr('data-path'));
+                        console.log("data-path = " + $(this).attr('data-path'));
+                        console.log("readonly  = " + readonly);
                         var extension = $(this).attr('data-path').split(".").pop();
 		                var newMode = "ace/mode/" + extension;
 		                var actSession = codiad.editor.activeInstance.getSession();
@@ -221,6 +224,17 @@ function clickListener() {
         getExtension: function(path) {
             return path.split('.')
                 .pop();
+        },
+        
+        //////////////////////////////////////////////////////////////////
+        // Get Readonly
+        //////////////////////////////////////////////////////////////////
+
+        getReadOnly: function(path) {
+        	$.get(this.controller + '?action=get_readonly&path=' + path, function(data) {
+        		console.log("data = "+ JSON.stringify(data) );
+        	});
+            return "patho = " + path;
         },
 
         //////////////////////////////////////////////////////////////////
