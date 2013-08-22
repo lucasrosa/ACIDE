@@ -433,6 +433,12 @@
 		if ($command == "get_current_directory") {
 			//error_log("get_current_directory called: current directory is :" . $_SESSION['dir']);
 			$output = $_SESSION['dir'];
+		} else if (substr($command, 0, 20) == "change_directory_to:") {
+			$this_directory = substr($command, 20, (strlen($command)-20));
+			$this_directory = explode("/", $this_directory);
+			error_log("changing directory to ->" . $this_directory);
+			error_log("root  = ". ROOT);
+			$output = $_SESSION['dir'];
 		} else {
 			$command = explode("&&", $command);
 			//$command = explode(";", $command);

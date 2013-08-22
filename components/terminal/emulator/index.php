@@ -25,7 +25,7 @@
   		/*
 		 * Handles click in the directory
 		 */
-		window.setTimeout(handleDirectoryClicks,1000);
+		//window.setTimeout(handleDirectoryClicks,1000);
 		
 		function handleDirectoryClicks () {
 			$(".directory").click(function() {

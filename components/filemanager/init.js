@@ -4,6 +4,25 @@
  *  [root]/license.txt for more. This information must remain intact.
  */
 
+function addClickListener() {
+	console.log("addClickListener() called");
+	window.setTimeout(clickListener,200);
+}
+
+function clickListener() {
+	$('.directory').unbind('click');
+	$(".directory").click(function() {
+		console.log( "Change directory." );
+		var this_name = $(this).attr('data-path');
+        $.post(terminal.controller,{command:'change_directory_to:'+this_name, target_name: this_name},function(data) {
+        	data = data.split("/");
+        	var directory =  data[data.length -1];
+       		$("#prompt").text("" + directory + "/ >");
+       		$("#prompt_text").css("padding-left" , ($("#prompt").width() + 10));	
+       	});
+	});
+}
+
 (function(global, $){
 
     var codiad = global.codiad;
@@ -56,15 +75,13 @@
                         if ($(this).hasClass('plus')) {
                             $(this).removeClass('plus')
                             $(this).addClass('minus');
-                            $('.directory').unbind('click');
-							$(".directory").click(function() {
-								console.log( "Change directory." );
-							});
+                            addClickListener();
                         } else {
                             $(this).removeClass('minus')
                             $(this).addClass('plus');
                         }
                     }
+                    addClickListener();
                 });
             $('#file-manager a')
                 .live('dblclick', function() { // Open or Expand
@@ -99,10 +116,7 @@
                         if ($(this).parent().children("span").hasClass('plus')) {
                             $(this).parent().children("span").removeClass('plus')
                             $(this).parent().children("span").addClass('minus');
-                            $('.directory').unbind('click');
-							$(".directory").click(function() {
-								console.log( "Change directory." );
-							});
+                            addClickListener();
                         } else {
                             $(this).parent().children("span").removeClass('minus')
                             $(this).parent().children("span").addClass('plus');
@@ -124,7 +138,7 @@
         //////////////////////////////////////////////////////////////////
 
         contextMenuShow: function(e, path, type) {
-
+			
             var _this = this;
 
             // Selective options
@@ -180,6 +194,8 @@
                 .click(function() {
                     _this.contextMenuHide();
                 });
+                
+			addClickListener();            
         },
 
         contextMenuHide: function() {
@@ -229,6 +245,7 @@
                     var shortName = this.getShortName(path);
                     if (type == 'directory') {
                         var appendage = '<li><span class="none"></span><a class="directory" data-type="directory" data-path="' + path + '">' + shortName + '</a></li>';
+                        console.log("appended 1");
                     } else {
                         var appendage = '<li><span class="none"></span><a class="file ext-' +
                             this.getExtension(shortName) +
@@ -243,11 +260,13 @@
                         $('<ul>' + appendage + '</ul>')
                             .insertAfter(parentNode);
                     }
+                    addClickListener();
                 } else {
                     parentNode.parent().children('span').removeClass('none');  
                     parentNode.parent().children('span').addClass('plus');  
                 }
             }
+            addClickListener();
         },
 
         //////////////////////////////////////////////////////////////////
@@ -318,6 +337,7 @@
                     }
                 });
             }
+            addClickListener();
         },
 
         rescanChildren: [],
@@ -338,6 +358,7 @@
             }
 
             this.index(path, true);
+            console.log("append 12");
         },
 
         //////////////////////////////////////////////////////////////////
