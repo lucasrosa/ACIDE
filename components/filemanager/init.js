@@ -93,12 +93,18 @@ function clickListener() {
                         _this.openFile($(this)
                             .attr('data-path'));
 
+
+						/*
+						 *  LF : Set the readonly property
+						 */
+						
+						codiad.filemanager.setReadOnly($(this).attr('data-path'));
+						
                         /*
                          * LF : Changing the mode of the editor for this file extension {
                          */
-                        var readonly = codiad.filemanager.getReadOnly($(this).attr('data-path'));
-                        console.log("data-path = " + $(this).attr('data-path'));
-                        console.log("readonly  = " + readonly);
+                        
+                        
                         var extension = $(this).attr('data-path').split(".").pop();
 		                var newMode = "ace/mode/" + extension;
 		                var actSession = codiad.editor.activeInstance.getSession();
@@ -230,11 +236,17 @@ function clickListener() {
         // Get Readonly
         //////////////////////////////////////////////////////////////////
 
-        getReadOnly: function(path) {
+        setReadOnly: function(path) {
         	$.get(this.controller + '?action=get_readonly&path=' + path, function(data) {
         		console.log("data = "+ data);
+        		 if (data == "TRUE") {
+        		 	codiad.editor.getActive().setReadOnly(true);
+        		 	console.log("readonly true");
+        		 } else {
+        		 	codiad.editor.getActive().setReadOnly(false);
+        		 	console.log("readonly false");
+        		 }
         	});
-            return "patho = " + path;
         },
 
         //////////////////////////////////////////////////////////////////

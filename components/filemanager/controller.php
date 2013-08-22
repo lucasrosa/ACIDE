@@ -66,18 +66,20 @@
 	
 	function getReadOnly($path) {
 		$Project = new Project();
-		$this_path = explode("/" . $path);
+		$this_path = explode("/" , $path);
 		$this_path = $this_path[0];
 		 
 		$Project->path = $this_path;
 		$Project->Load(); 
 		
-		if($Project->type != "public") {
-			return "false";
+		if($Project->privacy != "public") {
+			return "FALSE";
 		} else {
+			$Course = new Course();
+			$Course->id = $Project->course;
+			$Course->Load();
 			
-			
-			return "The path is " . $path;
+			return $Course->readonly;
 		}
 	}
 

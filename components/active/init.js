@@ -126,6 +126,12 @@
                         _this.focus($(this).parent('li').attr('data-path'));
                         //console.log("focused on = " + $(this).parent('li').attr('data-path'));
                         /*
+						 *  LF : Set the readonly property
+						 */
+						
+						codiad.filemanager.setReadOnly($(this).attr('data-path'));
+						
+                        /*
                          * LF : Changing the mode of the editor for this file extension {
                          */
                         var extension = $(this).parent('li').attr('data-path').split(".").pop();

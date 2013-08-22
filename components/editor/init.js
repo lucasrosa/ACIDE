@@ -555,6 +555,12 @@
 
             $('#changemode-menu a').click(function(e){
                 e.stopPropagation();
+                /*
+				 *  LF : Set the readonly property
+				 */
+				
+				codiad.filemanager.setReadOnly($(this).attr('data-path'));
+				
                 var newMode = "ace/mode/" + $(e.currentTarget).text();
                 var actSession = _this.activeInstance.getSession();
 
