@@ -12,11 +12,13 @@ class Course {
     // PUBLIC  PROPERTIES
     //////////////////////////////////////////////////////////////////
     // The id of the course (MongoId: '51c497a850ebc1b804fba437')
-	public $id	= '';
+	public $id			= '';
 	// The code of the course (CS 101, MATH 101)
-	public $code	= '';
+	public $code		= '';
 	// The name of the course
-    public $name    = '';
+    public $name    	= '';
+	// Identify if the course can be edited by students or not
+    public $readonly	= '';
 	
 	//////////////////////////////////////////////////////////////////
     // PRIVATE PROPERTIES
@@ -35,9 +37,11 @@ class Course {
     // Construct
     //////////////////////////////////////////////////////////////////
 
-    public function __construct($code = "", $name = ""){
+    public function __construct($code = "", $name = "", $readonly = ""){
     	$this->code = $code;
     	$this->name = $name;
+		$this->readonly = $readonly;
+		
     	/*
 		 * Defining the collection
 		 */
@@ -63,7 +67,8 @@ class Course {
     public function Save () {
     	$new_course = array( 	
 								"code" => $this->code,
-								"name" => $this->name
+								"name" => $this->name,
+								"readonly" => $this->readonly
 							 );
 		// Insert the user in the database:
 		return $this->collection->insert($new_course);
@@ -76,8 +81,9 @@ class Course {
 	public function Load () {
 		$course = $this->collection->findOne(array('_id' => new MongoId($this->id)));
 		
-		$this->code = $course['code'];
-		$this->name = $course['name']; 
+		$this->code 	= $course['code'];
+		$this->name 	= $course['name'];
+		$this->readonly = $course['readonly']; 
 	}
 	
 	public function GetUsersInCourse() {

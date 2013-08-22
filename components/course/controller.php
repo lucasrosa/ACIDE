@@ -23,8 +23,9 @@
 
     if($_GET['action']=='create'){
         if(checkAccess()) {
-        	$Course->code = $_GET['course_code'];
-            $Course->name = $_GET['course_name'];
+        	$Course->code 		= $_GET['course_code'];
+            $Course->name 		= $_GET['course_name'];
+			$Course->readonly 	= $_GET['course_readonly'];
 			// Saving the Course in the database
             if ($Course->Save()) {
             	echo formatJSEND("success");
