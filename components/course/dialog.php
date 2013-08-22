@@ -237,7 +237,7 @@
 			<label>Course Name</label>
             <input name="course_name" autocomplete="off">
 			<label>Public projects are readonly</label>
-			<select id="course_readonly">
+			<select name="course_readonly">
 				<option value="FALSE" selected >No</option>
 				<option value="TRUE">Yes</option>
 			</select>
