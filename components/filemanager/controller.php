@@ -8,6 +8,8 @@
 
     require_once('../../common.php');
     require_once('class.filemanager.php');
+	require_once('../course/class.course.php');
+	require_once('../project/class.project.php');
 
     //////////////////////////////////////////////////////////////////
     // Verify Session or Key
@@ -57,10 +59,26 @@
         case 'duplicate': $Filemanager->duplicate(); break;
         case 'upload': $Filemanager->upload(); break;
 		case 'get_readonly':
-			return '{"status":"success","data":{"msg":"2"}}';
+			print getReadOnly($_GET['path']);
 			break;
         default: exit('{"status":"fail","data":{"error":"Unknown Action"}}');
     }
-
+	
+	function getReadOnly($path) {
+		$Project = new Project();
+		$this_path = explode("/" . $path);
+		$this_path = $this_path[0];
+		 
+		$Project->path = $this_path;
+		$Project->Load(); 
+		
+		if($Project->type != "public") {
+			return "false";
+		} else {
+			
+			
+			return "The path is " . $path;
+		}
+	}
 
 ?>

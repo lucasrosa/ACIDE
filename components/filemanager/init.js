@@ -232,7 +232,7 @@ function clickListener() {
 
         getReadOnly: function(path) {
         	$.get(this.controller + '?action=get_readonly&path=' + path, function(data) {
-        		console.log("data = "+ JSON.stringify(data) );
+        		console.log("data = "+ data);
         	});
             return "patho = " + path;
         },
