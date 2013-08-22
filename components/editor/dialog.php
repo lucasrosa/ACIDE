@@ -230,6 +230,7 @@ var editor_settings = {
     
     
     change_listener : function(){
+    	//codiad.editor.getActive().setReadOnly(true);
         $('select.setting').change(function(){
             var setting = $(this).data('setting');
             var val = $(this).val();
