@@ -65,6 +65,7 @@
     }
 	
 	function getReadOnly($path) {
+		error_log("analyzing path: " . $path);
 		$Project = new Project();
 		$this_path = explode("/" , $path);
 		$this_path = $this_path[0];

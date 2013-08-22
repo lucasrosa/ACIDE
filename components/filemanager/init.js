@@ -403,6 +403,7 @@ function clickListener() {
                     if (openResponse != 'error') {
                         node.removeClass('loading');
                         codiad.active.open(path, openResponse.content, openResponse.mtime, false, focus);
+                        
                     }
                 });
             } else {
@@ -416,6 +417,7 @@ function clickListener() {
                     codiad.message.error('Unable to open file in Browser');
                  }
             }
+			
         },
 
         //////////////////////////////////////////////////////////////////

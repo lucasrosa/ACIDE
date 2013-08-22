@@ -559,7 +559,7 @@
 				 *  LF : Set the readonly property
 				 */
 				
-				codiad.filemanager.setReadOnly($(this).attr('data-path'));
+				codiad.filemanager.setReadOnly($(e.currentTarget).text());
 				
                 var newMode = "ace/mode/" + $(e.currentTarget).text();
                 var actSession = _this.activeInstance.getSession();

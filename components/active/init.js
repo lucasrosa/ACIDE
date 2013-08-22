@@ -129,7 +129,7 @@
 						 *  LF : Set the readonly property
 						 */
 						
-						codiad.filemanager.setReadOnly($(this).attr('data-path'));
+						codiad.filemanager.setReadOnly($(this).parent('li').attr('data-path'));
 						
                         /*
                          * LF : Changing the mode of the editor for this file extension {
@@ -408,10 +408,16 @@
                 this.history.push(path);
                 $.get(this.controller, {'action':'focused', 'path':path});
             }
+            
+			/*
+			 *  LF : Set the readonly property
+			 */
 			
+			codiad.filemanager.setReadOnly(path);
 			/*
              * LF : Changing the mode of the editor for this file extension {
              */
+            
             var extension = path.split(".").pop();
             var newMode = "ace/mode/" + extension;
             var actSession = codiad.editor.activeInstance.getSession();
