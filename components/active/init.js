@@ -49,6 +49,9 @@
         },
 
         open: function(path, content, mtime, inBackground, focus) {
+            
+            console.log("active opened");
+            codiad.filemanager.setReadOnly(path);
             if (focus === undefined) {
                 focus = true;
             }
@@ -129,7 +132,7 @@
 						 *  LF : Set the readonly property
 						 */
 						codiad.filemanager.setContextMenuBlocked(path);
-						codiad.filemanager.setReadOnly($(this).parent('li').attr('data-path'));
+						//codiad.filemanager.setReadOnly($(this).parent('li').attr('data-path'));
 						
                         /*
                          * LF : Changing the mode of the editor for this file extension {

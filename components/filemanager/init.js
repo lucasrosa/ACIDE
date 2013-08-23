@@ -99,7 +99,7 @@ function clickListener() {
 						 *  LF : Set the readonly property
 						 */
 						
-						codiad.filemanager.setReadOnly($(this).attr('data-path'));
+						//codiad.filemanager.setReadOnly($(this).attr('data-path'));
 						
                         /*
                          * LF : Changing the mode of the editor for this file extension {
@@ -326,7 +326,7 @@ function clickListener() {
                 rescan = false;
             }
             
-            codiad.filemanager.setContextMenuBlocked(path);
+            
             node = $('#file-manager a[data-path="' + path + '"]');
             if (node.hasClass('open') && !rescan) {
                 node.parent('li')
@@ -388,6 +388,7 @@ function clickListener() {
                 });
             }
             addClickListener();
+            codiad.filemanager.setContextMenuBlocked(path);
         },
 
         rescanChildren: [],
@@ -416,6 +417,13 @@ function clickListener() {
         //////////////////////////////////////////////////////////////////
 
         openFile: function(path, focus) {
+        	
+        	console.log("open file called");
+        	/*
+			 *  LF : Set the readonly property
+			 */
+			
+			
             if (focus === undefined) {
                 focus = true;
             }
