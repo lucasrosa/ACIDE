@@ -14,11 +14,31 @@
 	$filename = $class_name;	
 	
 	header('Content-Disposition: inline; filename="'. $filename .'.jnlp"');
-	header('Content-type: application/x-java-jnlp-file');	 
+	header('Content-type: application/x-java-jnlp-file');
+	
+	$pageURL = 'http';
+	if (@$_SERVER["HTTPS"] == "on") {
+		$pageURL .= "s";
+	}
+	
+	$pageURL .= "://";
+	
+	if ($_SERVER["SERVER_PORT"] != "80") {
+		 $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"];
+	} else {
+		$pageURL .= $_SERVER["SERVER_NAME"];
+	}
+	
+	$dir =  dirname($_SERVER['PHP_SELF']);
+	$dirs = explode('/', $dir);
+	$pageURL .= "/" . $dirs[1] . "/javaws_workspace";
+	//error_log("url =" . $pageURL);
+	//error_log("ASDJAKhsjf adhs fdahs uisdhfDFSJK DSF ASDLFJK ASD;LFJK");
+	//http://hci.csit.upei.ca/Codiad/javaws_workspace/
 ?>
 <?="<?xml version=\"1.0\" encoding=\"utf-8\"?>"?>
 <!--- we may need to update the codebase path --->
-<jnlp spec="1.0" codebase="http://hci.csit.upei.ca/Codiad/javaws_workspace/">
+<jnlp spec="1.0" codebase="<?=$pageURL?>">
   <information>
     <title>Console</title>
     <vendor>UPEI</vendor>
