@@ -52,7 +52,7 @@
             if (focus === undefined) {
                 focus = true;
             }
-			
+			//codiad.filemanager.setContextMenuBlocked(path);
             var _this = this;
             if (this.isOpen(path)) {
                 if(focus) this.focus(path);
@@ -128,7 +128,7 @@
                         /*
 						 *  LF : Set the readonly property
 						 */
-						
+						codiad.filemanager.setContextMenuBlocked(path);
 						codiad.filemanager.setReadOnly($(this).parent('li').attr('data-path'));
 						
                         /*
@@ -412,7 +412,7 @@
 			/*
 			 *  LF : Set the readonly property
 			 */
-			
+			//codiad.filemanager.setContextMenuBlocked(path);
 			codiad.filemanager.setReadOnly(path);
 			/*
              * LF : Changing the mode of the editor for this file extension {

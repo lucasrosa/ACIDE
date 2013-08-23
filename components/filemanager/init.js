@@ -325,6 +325,8 @@ function clickListener() {
             if (rescan === undefined) {
                 rescan = false;
             }
+            
+            codiad.filemanager.setContextMenuBlocked(path);
             node = $('#file-manager a[data-path="' + path + '"]');
             if (node.hasClass('open') && !rescan) {
                 node.parent('li')
