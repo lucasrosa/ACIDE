@@ -288,10 +288,6 @@ class Project extends Common {
 			$This_user->username = $_SESSION['user'];
 			$This_user->Load();
 			
-			error_log($This_user->type . " == student");
-			error_log($Course->readonly . " == TRUE");
-			error_log($this->privacy . " == public");
-			
 			if ($This_user->type 	 == "student" 
 				&& $Course->readonly == "TRUE" 
 				&& $this->privacy 	 == "public"
