@@ -72,8 +72,11 @@
 		 
 		$Project->path = $this_path;
 		$Project->Load(); 
+		$User = new User();
+		$User->username = $_SESSION['user'];
+		$User->Load();
 		
-		if($Project->privacy != "public") {
+		if($Project->privacy != "public" || $User->type != "student") {
 			return "FALSE";
 		} else {
 			$Course = new Course();

@@ -42,6 +42,7 @@ function clickListener() {
         controller: 'components/filemanager/controller.php',
         dialog: 'components/filemanager/dialog.php',
         dialogUpload: 'components/filemanager/dialog_upload.php',
+        contextMenuBlocked: 'false', // used for readonl project
 
         init: function() {
             // Initialize node listener
@@ -58,7 +59,7 @@ function clickListener() {
 
         nodeListener: function() {
             var _this = this;
-            
+			            
             $('#file-manager').on('selectstart', false);
 
             $('#file-manager span')
@@ -147,64 +148,66 @@ function clickListener() {
         //////////////////////////////////////////////////////////////////
 
         contextMenuShow: function(e, path, type) {
-			
+			console.log("showing context menu");
             var _this = this;
-
-            // Selective options
-            switch (type) {
-            case 'directory':
-                $('#context-menu .directory-only, #context-menu .non-root')
-                    .show();
-                $('#context-menu .file-only, #context-menu .root-only')
-                    .hide();
-                break;
-            case 'file':
-                $('#context-menu .directory-only, #context-menu .root-only')
-                    .hide();
-                $('#context-menu .file-only,#context-menu .non-root')
-                    .show();
-                break;
-            case 'root':
-                $('#context-menu .directory-only, #context-menu .root-only')
-                    .show();
-                $('#context-menu .non-root, #context-menu .file-only')
-                    .hide();
-                break;
-            }
-            if(codiad.project.isAbsPath($('#file-manager a[data-type="root"]').attr('data-path'))) {
-                $('#context-menu .no-external').hide();
-            } else {
-                $('#context-menu .no-external').show();
-            }
-            // Show menu
-            $('#context-menu')
-                .css({
-                'top': (e.pageY - 40) + 'px',
-                'left': (e.pageX - 30) + 'px'
-            })
-                .fadeIn(200)
-                .attr('data-path', path)
-                .attr('data-type', type);
-            // Show faded 'paste' if nothing in clipboard
-            if (this.clipboard === '') {
-                $('#context-menu a[content="Paste"]')
-                    .addClass('disabled');
-            } else {
-                $('#context-menu a[data-action="paste"]')
-                    .removeClass('disabled');
-            }
-            // Hide menu
-            $('#file-manager, #editor-region')
-                .on('mouseover', function() {
-                    _this.contextMenuHide();
-                });
-            // Hide on click
-            $('#context-menu a')
-                .click(function() {
-                    _this.contextMenuHide();
-                });
-                
-			addClickListener();            
+			_this.setContextMenuBlocked(path);
+			if (_this.contextMenuBlocked == 'false') {
+	            // Selective options
+	            switch (type) {
+	            case 'directory':
+	                $('#context-menu .directory-only, #context-menu .non-root')
+	                    .show();
+	                $('#context-menu .file-only, #context-menu .root-only')
+	                    .hide();
+	                break;
+	            case 'file':
+	                $('#context-menu .directory-only, #context-menu .root-only')
+	                    .hide();
+	                $('#context-menu .file-only,#context-menu .non-root')
+	                    .show();
+	                break;
+	            case 'root':
+	                $('#context-menu .directory-only, #context-menu .root-only')
+	                    .show();
+	                $('#context-menu .non-root, #context-menu .file-only')
+	                    .hide();
+	                break;
+	            }
+	            if(codiad.project.isAbsPath($('#file-manager a[data-type="root"]').attr('data-path'))) {
+	                $('#context-menu .no-external').hide();
+	            } else {
+	                $('#context-menu .no-external').show();
+	            }
+	            // Show menu
+	            $('#context-menu')
+	                .css({
+	                'top': (e.pageY - 40) + 'px',
+	                'left': (e.pageX - 30) + 'px'
+	            })
+	                .fadeIn(200)
+	                .attr('data-path', path)
+	                .attr('data-type', type);
+	            // Show faded 'paste' if nothing in clipboard
+	            if (this.clipboard === '') {
+	                $('#context-menu a[content="Paste"]')
+	                    .addClass('disabled');
+	            } else {
+	                $('#context-menu a[data-action="paste"]')
+	                    .removeClass('disabled');
+	            }
+	            // Hide menu
+	            $('#file-manager, #editor-region')
+	                .on('mouseover', function() {
+	                    _this.contextMenuHide();
+	                });
+	            // Hide on click
+	            $('#context-menu a')
+	                .click(function() {
+	                    _this.contextMenuHide();
+	                });
+	                
+				addClickListener();
+			}            
         },
 
         contextMenuHide: function() {
@@ -238,17 +241,37 @@ function clickListener() {
 
         setReadOnly: function(path) {
         	$.get(this.controller + '?action=get_readonly&path=' + path, function(data) {
-        		console.log("data = "+ data);
+        		//console.log("data = "+ data);
         		 if (data == "TRUE") {
         		 	codiad.editor.getActive().setReadOnly(true);
-        		 	console.log("readonly true");
+        		 	//console.log("readonly true");
         		 } else {
         		 	codiad.editor.getActive().setReadOnly(false);
+        		 	//console.log("readonly false");
+        		 }
+        	});
+        },
+        
+        //////////////////////////////////////////////////////////////////
+        // Set contextMenuBlocked
+        //////////////////////////////////////////////////////////////////
+
+        setContextMenuBlocked: function(path) {
+        	var _this = this;
+        	$.get(this.controller + '?action=get_readonly&path=' + path, function(data) {
+        		
+        		 if (data == "TRUE") {
+        		 	_this.contextMenuBlocked = 'true';
+        		 	//codiad.editor.getActive().setReadOnly(true);
+        		 	console.log("readonly true");
+        		 } else {
+        		 	_this.contextMenuBlocked = 'false';
+        		 	//codiad.editor.getActive().setReadOnly(false);
         		 	console.log("readonly false");
         		 }
         	});
         },
-
+		
         //////////////////////////////////////////////////////////////////
         // Return type
         //////////////////////////////////////////////////////////////////
@@ -503,6 +526,8 @@ function clickListener() {
         //////////////////////////////////////////////////////////////////
 
         createNode: function(path, type) {
+        	var _this = this;
+        	_this.setContextMenuBlocked(path);
             codiad.modal.load(250, this.dialog, {
                 action: 'create',
                 type: type,
