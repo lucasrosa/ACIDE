@@ -150,6 +150,33 @@
                 }
             });
         },
+        
+        //////////////////////////////////////////////////////////////////
+        // Readonly
+        //////////////////////////////////////////////////////////////////
+
+        readonly: function(id) {
+            var _this = this;
+            codiad.modal.load(500, this.dialog + '?action=readonly&course_id=' + id);
+            $('#modal-content form')
+                .live('submit', function(e) {
+                e.preventDefault();
+                var courseId = $('#modal-content form input[name="course_id"]')
+                    .val(),
+                    courseReadonly = $('#modal-content form select[name="course_readonly"]')
+                    .val();
+                    
+                $.get(_this.controller + '?action=readonly&course_id=' + courseId + '&course_readonly=' + courseReadonly, function(data) {
+                    createResponse = codiad.jsend.parse(data);
+                    if (createResponse != 'error') {
+                        codiad.modal.unload();
+                        codiad.course.list();
+                        codiad.message.success(i18n('Course edited with success!'));
+                    }
+                });
+                
+            });
+        },
         /*
         
         //////////////////////////////////////////////////////////////////

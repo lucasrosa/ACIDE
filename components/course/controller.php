@@ -32,6 +32,20 @@
             }
         }
     }
+	
+	//////////////////////////////////////////////////////////////////
+    // Create Project
+    //////////////////////////////////////////////////////////////////
+
+    if($_GET['action']=='readonly'){
+    	$Course->id 		= $_GET['course_id'];
+		$Course->Load();
+		$Course->readonly 	= $_GET['course_readonly'];
+		// Saving the Course in the database
+        if ($Course->Update()) {
+        	echo formatJSEND("success");
+        }
+    }
     
     //////////////////////////////////////////////////////////////////
     // Rename Project

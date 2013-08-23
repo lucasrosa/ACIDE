@@ -187,6 +187,7 @@
                     <th>Students</th>
                     <th>Markers</th>
                     <th>Professors</th>
+                    <th>Readonly</th>
                     <?php if(TRUE){ ?><th width="5">Delete</th><?php } ?>
                 </tr>
             <?php
@@ -202,7 +203,7 @@
             for ($a = 0; $a < count($courses); $a++){
                 $Course->id = $courses[$a];
 				$Course->Load();
-				
+				if ($Course->name != "") {
             ?>
 	                <tr>
 	                    <td><?php echo($Course->code); ?></td>
@@ -210,11 +211,21 @@
 	                    <td><a onclick="codiad.course.manage_users('<?=$Course->id?>', 'student');" class="icon-users bigger-icon"></a></td>
 	                    <td><a onclick="codiad.course.manage_users('<?=$Course->id?>', 'marker');" class="icon-users bigger-icon"></a></td>
 	                    <td><a onclick="codiad.course.manage_users('<?=$Course->id?>', 'professor');" class="icon-users bigger-icon"></a></td>
+	                    <td>
+	                    	<a onclick="codiad.course.readonly('<?=$Course->id?>');">
+	                    	<?
+	                    		if ($Course->readonly == "TRUE") {
+	                    			echo "Yes";
+	                    		} else {
+	                    			echo "No";
+	                    		}
+	                    	?>
+	                    	</a>
+	                    </td>
 	                    <td><a onclick="codiad.course.delete('<?=$Course->id?>');" class="icon-cancel-circled bigger-icon"></a></td>
 	                </tr>
             <?php
-				
-            
+            	}
             }
             ?>
             </table>
@@ -248,6 +259,28 @@
                 } 
             ?>           
             <button class="btn-left">Create Course</button><button class="btn-right" onclick="<?php echo $action;?>return false;">Cancel</button>
+            <form>
+            <?php
+            break;
+			
+		//////////////////////////////////////////////////////////////////////
+        // Edit readonly
+        //////////////////////////////////////////////////////////////////////
+        
+        case 'readonly':
+        
+            ?>
+            <form>
+            <input type="hidden" name="course_id" value="<?=$_GET['course_id']?>">
+			<label>Public projects are readonly</label>
+			<select name="course_readonly">
+				<option value="FALSE" selected >No</option>
+				<option value="TRUE">Yes</option>
+			</select>
+          <?php
+                $action = 'codiad.course.list();';
+            ?>           
+            <button class="btn-left">Update</button><button class="btn-right" onclick="<?php echo $action;?>return false;">Cancel</button>
             <form>
             <?php
             break;

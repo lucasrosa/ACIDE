@@ -61,7 +61,7 @@ class Course {
     }
 	
 	//////////////////////////////////////////////////////////////////
-    // Return permissions
+    // Save
     //////////////////////////////////////////////////////////////////
     
     public function Save () {
@@ -72,6 +72,20 @@ class Course {
 							 );
 		// Insert the user in the database:
 		return $this->collection->insert($new_course);
+	}
+	
+	//////////////////////////////////////////////////////////////////
+    // Update
+    //////////////////////////////////////////////////////////////////
+    
+    public function Update () {
+    	$new_course = $this->collection->findOne(array('_id' => new MongoId($this->id)));
+		$new_course['code'] 	= $this->code;
+		$new_course['name'] 	= $this->name;
+		$new_course['readonly'] = $this->readonly;
+		
+		// LF: Updating in the database : Overwriting the user document  
+		return $this->collection->update(array("_id" => $new_course["_id"]), $new_course);
 	}
 	
 	public function GetAllCourses () {
