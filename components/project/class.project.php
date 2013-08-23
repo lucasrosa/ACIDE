@@ -7,6 +7,8 @@
 */
 
 //require_once('../../common.php');
+require_once('../course/class.course.php');
+require_once('../user/class.user.php');
 
 class Project extends Common {
 
@@ -274,6 +276,30 @@ class Project extends Common {
 			} else {
 				$pass = $this->checkDuplicate();	
 			}
+			
+			/*
+			 * Check if the user can create
+			 */
+			$Course = new Course();
+			$Course->id = $this->course;
+			$Course->Load();
+			
+			$This_user = new User();
+			$This_user->username = $_SESSION['user'];
+			$This_user->Load();
+			
+			error_log($This_user->type . " == student");
+			error_log($Course->readonly . " == TRUE");
+			error_log($this->privacy . " == public");
+			
+			if ($This_user->type 	 == "student" 
+				&& $Course->readonly == "TRUE" 
+				&& $this->privacy 	 == "public"
+			) {
+				echo formatJSEND("error","This course doesn't allow the creation of public projects.");
+				return;
+			}
+			
             
 			
             if($pass){
