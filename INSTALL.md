@@ -17,11 +17,11 @@ Ensure that the following have write capabilities:
 
 For the 'java' command work properly in the terminal, you have to configure the javaws so it can generate the required jar files.
 
-### Creating the '.keys' file
+#### Creating the '.keys' file
 
   TODO
 
-### Updating the file `term.php` to point to the `.keys` file path
+#### Updating the file `term.php` to point to the `.keys` file path
 
 Open the file `components/terminal/emulator/term.php`.
 
@@ -33,7 +33,19 @@ In line `266` do the following:
   - Overwrite `http://hci.csit.upei.ca/` with your own website address.
 
 
+## MongoDB Installtion
 
+ACIDE uses the database system MongoDB and the MongoDB driver for PHP. 
+
+Both have to be installed in your server.
+
+#### Installing MongoDB
+
+Follow the tutorial in the MongoDB **[website](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/)** .
+
+#### Installing the MongoDB PHP driver.
+
+Follow the tutorial in the PHP **[website](http://php.net/manual/en/mongo.installation.php)**.
 
 ## System Installation
     
