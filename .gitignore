@@ -2,7 +2,6 @@
 *\#
 *.swp
 config.php
-data/
 workspace/
 plugins/
 .project
