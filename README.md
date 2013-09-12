@@ -1,6 +1,14 @@
-### ACIDE - Academic Collaborative Integrated Development Environment
+# ACIDE
+### Academic Collaborative Integrated Development Environment
+
+For installation instructions, read the **[INSTALL.md](https://github.com/lucasfurlani/ACIDE/blob/master/INSTALL.md)** file.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+## Description
 
 ACIDE is an online IDE based on the **[Codiad](https://github.com/Codiad/Codiad)** project. 
+
 
 #### For students
 
@@ -10,7 +18,10 @@ ACIDE is designed to be used by students in courses of introduction to programmi
 
 For the teacher, the system provides an easy way of keeping track of assignments and group projects. Also, the Reports give the teacher an incredible detailed feedback of the students behaviour.
 
+---------------------------------------------------------------------------------------------------------------------------------------
+
 ### Features
+
 
 #### Collaboration
 The collaboration tool allows students to work in the same file at the same time using different computers.
@@ -32,3 +43,6 @@ The system provides various reports of the students' behavior, like time spent i
 For more information on the project please check out the **[check out the Wiki](https://github.com/lucasfurlani/ACIDE/wiki)** or **[the ACIDE Website](http://hci.csit.upei.ca/ACIDE/)**
 
 Distributed under the MIT-Style License. See `LICENSE.txt` file for more information.
+
+
+
