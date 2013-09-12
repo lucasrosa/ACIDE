@@ -7,7 +7,7 @@ folder.
 Ensure that the following have write capabilities:
 
     /config.php
-    /data 
+    /data (including subfolders)
     /workspace
     
 Navigate in your browser to the URL where the system is placed and the
@@ -18,9 +18,11 @@ Enter the requsted information to create a admin account, and
 set your timezone and submit the form. If everything goes as planned 
 you will be greeted with a login screen.
 
-After logging in:
+After logging in as the admin:
 
  - Create a new course.
  - Add a professor to the course.
+ - Logged as a professor: Add students to a course
+ 
  
 DO NOT use the admin account to manage courses.
