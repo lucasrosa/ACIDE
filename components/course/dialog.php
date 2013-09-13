@@ -180,6 +180,15 @@
             ?>
             <label>Course List</label>
             <div id="course-list">
+            <?
+            $Course = new Course();
+			$courses = $Course->GetAllCourses();
+            $User = new User();
+			$User->username = $_SESSION['user'];
+			$User->Load();
+			$courses = $User->GetUserCourses();
+			
+            ?>
             <table width="100%">
                 <tr>
                     <th>Course Code</th>
@@ -188,16 +197,11 @@
                     <th>Markers</th>
                     <th>Professors</th>
                     <th>Readonly</th>
-                    <?php if(TRUE){ ?><th width="5">Delete</th><?php } ?>
+                    <?php if($User->type == "admin") { ?><th width="5">Delete</th><?php } ?>
                 </tr>
             <?php
             
-            $Course = new Course();
-			$courses = $Course->GetAllCourses();
-            $User = new User();
-			$User->username = $_SESSION['user'];
-			$User->Load();
-			$courses = $User->GetUserCourses();
+            
             //sort($courses);
             
             for ($a = 0; $a < count($courses); $a++){
@@ -222,7 +226,9 @@
 	                    	?>
 	                    	</a>
 	                    </td>
-	                    <td><a onclick="codiad.course.delete('<?=$Course->id?>');" class="icon-cancel-circled bigger-icon"></a></td>
+	                    <?php if($User->type == "admin") { ?>
+	                    	<td><a onclick="codiad.course.delete('<?=$Course->id?>');" class="icon-cancel-circled bigger-icon"></a></td>
+	                    <? } ?>
 	                </tr>
             <?php
             	}
