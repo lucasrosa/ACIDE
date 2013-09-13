@@ -14,22 +14,33 @@ Ensure that the following have write capabilities:
 
 ## Java WS Configuration
 
-For the 'java' command work properly in the terminal, you have to configure the Java WS so it can generate the required jar files.
+For the 'java' command work properly in the terminal and the generated `.class` file run by the browser automatically, you have to configure the Java WS so it can generate and sign the required jar files.
 
 #### Creating the '.keys' file
 
-  TODO
+To sign a jar, we must first have a keystore (a private key) to do the signing. 
+
+To generate a keystore we use the keytool that is part of the Java SDK.
+
+    keytool -genkey -keystore keystore_file.keys -alias http://your_website.ca/ -validity 365
+
+This will create a new keystore in the file keystore_file.keys. 
+
+The alias is typically the domain of the site you want to sign for, and the validity is the number of days until the keys will expire. 
+
+In this case we would have to generate a new key in a year.
+
 
 #### Updating the file `term.php` to point to the `.keys` file path
 
 Open the file `components/terminal/emulator/term.php`.
 
 Go to line `266`:
-  `system("jarsigner -keystore /var/codiad_files/jaxb.keys -storepass 'keystore password' " . $jar_path_and_name . " http://hci.csit.upei.ca/");`
+  `system("jarsigner -keystore /var/codiad_files/jaxb.keys -storepass 'keystore password' " . $jar_path_and_name . " http://your_website.ca/");`
 
 In line `266` do the following:
   - Overwrite `/var/codiad_files/jaxb.keys` to point to the `.keys` file you just created.
-  - Overwrite `http://hci.csit.upei.ca/` with your own website address.
+  - Overwrite `http://your_website.ca/` with your own website address.
 
 
 ## MongoDB Installtion
