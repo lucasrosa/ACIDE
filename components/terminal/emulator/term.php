@@ -82,8 +82,15 @@
         ////////////////////////////////////////////////////
         
         public function Process(){
-            $this->ParseCommand();
-            $this->Execute();
+        	$current_directory = explode("/", $this->directory);
+			$current_directory = $current_directory[count($current_directory)-1];
+			
+			if ($current_directory != "workspace") {
+	            $this->ParseCommand();
+	            $this->Execute();
+			} else {
+				return "Warning: No working directory set. Please choose one project in the project navigator first.";
+			}
 			
 			if (substr($this->command,0,5) == "javac") {
 				$Userlog = new Userlog();
