@@ -46,7 +46,7 @@ if(!file_exists(DATA . '/plugins.php')) {
 
 <head>
     <meta charset="utf-8">
-    <title>CODIAD</title>
+    <title>ACIDE</title>
     <?php
     // Load System CSS Files
     $stylesheets = array("jquery.toastmessage.css","reset.css","fonts.css","screen.css");
