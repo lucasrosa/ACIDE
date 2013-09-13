@@ -9,13 +9,13 @@ folder.
 
 Ensure that the following have write capabilities:
 
-    `/config.php`
-    `/data (including subfolders)`
-    `/workspace`
+    /config.php
+    /data (including subfolders)
+    /workspace
 
 ## Java WS Configuration
 
-For the 'java' command work properly in the terminal, you have to configure the javaws so it can generate the required jar files.
+For the 'java' command work properly in the terminal, you have to configure the Java WS so it can generate the required jar files.
 
 #### Creating the '.keys' file
 
@@ -49,7 +49,7 @@ Follow the tutorial in the PHP **[website](http://php.net/manual/en/mongo.instal
 
 ## System Installation
     
-Navigate in your browser to the URL where the system is placed and the
+Open the URL correspondent to where the system is placed and the
 installer screen will appear. If any dependencies have not been met the
 system will alert you.
 
