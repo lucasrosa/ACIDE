@@ -1,8 +1,7 @@
 # ACIDE INSTALLATION
 ----------------------------------------------------------------------
 
-To install simply place the contents of the system in a web accessible
-folder.
+To install simply place the contents of the system in a web accessible folder.
 
 
 ## Write capabilities
@@ -53,15 +52,25 @@ Open the URL correspondent to where the system is placed and the
 installer screen will appear. If any dependencies have not been met the
 system will alert you.
 
-Enter the requested information to create a admin account, and
-set your timezone and submit the form. If everything goes as planned 
+Enter the requested information to create an administrator account:
+
+    - Username (whithout spaces).
+    - Password
+    - E-mail
+    - Database Name (without spaces)
+    - Timezone
+    
+and submit the form using the 'Submit' button in the bottom.
+    
+If everything goes as planned 
 you will be greeted with a login screen.
+
+Log in using the administrator account you just created.
 
 After logging in as the admin:
 
  - Create a new course.
- - Add a professor to the course.
- - Logged as a professor: Add students to a course
+ - Create a professor and add to the course.
+ - Logged as a professor add students to a course.
  
- 
-DO NOT use the admin account to manage courses.
+#### DO NOT use the admin account to manage courses.
