@@ -398,17 +398,22 @@ class User {
 	public function Save () {
 		$collection = $this->collection;
 		
-		$users = $collection->find();
+		$users = $this->users; // $collection->find();
+		//error_log("User count = ". $users->Count());
+		
 		foreach ($users as $user) {
+			
 			if ($user['username'] == $this->username) {
 				$user['type'] = $this->type;
 				$user['email'] = $this->email;
+				
 				if (!in_array($this->courses[0], $user['courses'])) {
 					$user['courses'][] = $this->courses[0]; 
 				}
+				
+				// LF: Updating in the database : Overwriting the user document  
+				return $collection->update(array("username" => $user["username"]), $user);
 			}
-			// LF: Updating in the database : Overwriting the user document  
-			return $collection->update(array("username" => $user["username"]), $user);
 		}
 		return FALSE;
     }
