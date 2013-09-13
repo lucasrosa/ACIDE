@@ -6,7 +6,7 @@ To install simply place the contents of the system in a web accessible folder.
 
 ## Write capabilities
 
-Ensure that the following have write capabilities:
+Ensure that the following directories/files have write capabilities:
 
     /config.php
     /data (including subfolders)
@@ -14,9 +14,9 @@ Ensure that the following have write capabilities:
 
 ## Java WS Configuration
 
-For the 'java' command work properly in the terminal and the generated `.class` file run by the browser automatically, you have to configure the Java WS so it can generate and sign the required jar files.
+For the 'java' command work properly in the terminal and the generated `.class` file run by the browser automatically, you have to configure the system so it can generate and sign the required jar files.
 
-#### Creating the '.keys' file
+#### Creating the keystore file
 
 To sign a jar, we must first have a keystore (a private key) to do the signing. 
 
@@ -51,11 +51,11 @@ Both have to be installed in your server.
 
 #### Installing MongoDB
 
-Follow the tutorial in the MongoDB **[website](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/)** .
+Follow the tutorial in the **[MongoDB website](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/)** .
 
 #### Installing the MongoDB PHP driver.
 
-Follow the tutorial in the PHP **[website](http://php.net/manual/en/mongo.installation.php)**.
+Follow the tutorial in the **[PHP website](http://php.net/manual/en/mongo.installation.php)**.
 
 ## System Installation
     
