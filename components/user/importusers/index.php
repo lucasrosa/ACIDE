@@ -96,20 +96,29 @@
 		}
 	
 		$pageURL = 'http';
-		
 		if (@$_SERVER["HTTPS"] == "on") {
 			$pageURL .= "s";
 		}
-			$pageURL .= "://";
+		
+		$pageURL .= "://";
+		
 		if ($_SERVER["SERVER_PORT"] != "80") {
 			 $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"];
 		} else {
 			$pageURL .= $_SERVER["SERVER_NAME"];
 		}
 		
-		$dir =  dirname($_SERVER['PHP_SELF']);
-		$dirs = explode('/', $dir);
-		$pageURL .= "/" . $dirs[1];
+		$url =  $pageURL;
+		$directory = explode("/", $_SERVER["REQUEST_URI"]);
+		    
+		for ($i = 1; $i < count($directory); $i++) {
+		    if ($directory[$i] == "components") {
+		        break;
+		    } else {
+		        $url .= "/" . $directory[$i];   
+		    }
+		}
+		$pageURL = $url;
 		
 		
 		
@@ -118,14 +127,15 @@
 		$courses = $Course->GetAllCourses();
 		
 		// Get the url to the user import example .csv
-		
+		/*
 		$directory =  dirname($_SERVER['SCRIPT_NAME']);
 		$directories = explode('/', $directory);
 		if ($directories[1] != "") {
 			$root_directory = "/" . $directories[1];
 		}
+		*/
 		
-		$url = $root_directory . "/components/user/importusers/UserImportWithHeader.csv";
+		$url .= "/components/user/importusers/UserImportWithHeader.csv";
 		
 	?>
 	<!doctype html>
