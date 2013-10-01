@@ -29,11 +29,18 @@
 		$pageURL .= $_SERVER["SERVER_NAME"];
 	}
 	
-	$dir =  dirname($_SERVER['PHP_SELF']);
-	$dirs = explode('/', $dir);
-	$pageURL .= "/" . $dirs[1] . "/javaws_workspace";
-	//error_log("url =" . $pageURL);
-	//error_log("ASDJAKhsjf adhs fdahs uisdhfDFSJK DSF ASDLFJK ASD;LFJK");
+	$url =  $pageURL;
+	$directory = explode("/", $_SERVER["REQUEST_URI"]);
+	    
+	for ($i = 1; $i < count($directory); $i++) {
+	    if ($directory[$i] == "javaws_workspace") {
+	        break;
+	    } else {
+	        $url .= "/" . $directory[$i];   
+	    }
+	}
+	
+	$pageURL = $url . "/javaws_workspace";
 	//http://hci.csit.upei.ca/Codiad/javaws_workspace/
 ?>
 <?="<?xml version=\"1.0\" encoding=\"utf-8\"?>"?>
