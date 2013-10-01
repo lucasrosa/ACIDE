@@ -287,15 +287,28 @@
 						if (@$_SERVER["HTTPS"] == "on") {
 							$pageURL .= "s";
 						}
+						
 						$pageURL .= "://";
-						$first_path = explode("/", $_SERVER["REQUEST_URI"]);
-						$first_path = "/" .$first_path[1];
 						
 						if ($_SERVER["SERVER_PORT"] != "80") {
-							$pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$first_path;
+							 $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"];
 						} else {
-							$pageURL .= $_SERVER["SERVER_NAME"].$first_path;
+							$pageURL .= $_SERVER["SERVER_NAME"];
 						}
+						
+						$url =  $pageURL;
+						$directory = explode("/", $_SERVER["REQUEST_URI"]);
+						    
+						for ($i = 1; $i < count($directory); $i++) {
+						    if ($directory[$i] == "components") {
+						        break;
+						    } else {
+						        $url .= "/" . $directory[$i];   
+						    }
+						}
+						
+						$pageURL = $url;
+						
 						
 						// Set the GET arguments
 						$pageURL .= "/javaws_workspace/jnlp_xml/jnlp_xml_generator.php";
