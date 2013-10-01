@@ -573,12 +573,23 @@
 								$pageURL .= "://";
 								
 								if ($_SERVER["SERVER_PORT"] != "80") {
-									 $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+									 $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"];
 								} else {
-									$pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+									$pageURL .= $_SERVER["SERVER_NAME"];
+								}
+								
+								$url =  $pageURL;
+								$directory = explode("/", $_SERVER["REQUEST_URI"]);
+								    
+								for ($i = 1; $i < count($directory); $i++) {
+								    if ($directory[$i] == "components") {
+								        break;
+								    } else {
+								        $url .= "/" . $directory[$i];   
+								    }
 								}
 							?>
-							<a href="<?=$pageURL?>">Cancel</a>
+							<a href="<?=$url?>">Cancel</a>
 						<? } ?>
 					</form>
 				</div>
