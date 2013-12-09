@@ -11,6 +11,7 @@ Ensure that the following directories/files have write capabilities:
     /config.php
     /data (including subfolders)
     /workspace
+    /javaws_workspace
 
 ## Java WS Configuration
 
@@ -24,11 +25,19 @@ To generate a keystore we use the keytool that is part of the Java SDK.
 
     keytool -genkey -keystore keystore_file.keys -alias http://your_website.ca/ -validity 365
 
+You will have to provide your information and a password.
+
 This will create a new keystore in the file keystore_file.keys. 
 
 The alias is typically the domain of the site you want to sign for, and the validity is the number of days until the keys will expire. 
 
 In this case we would have to generate a new key in a year.
+
+#### Sign the Console.jar file
+
+To sign the Console.jar file using the keystore you just created, use the following command (Make sure you: overwrite 'password' with the password you just used to create the keystore and that you are in the website root's directory):
+
+    jarsigner -keystore /directory_where_the_keystore_file_is/keystore_file.keys -storepass 'password'  ./javaws_workspace/jnlp_xml/Console.jar   http://hci.csit.upei.ca/
 
 
 #### Updating the file `term.php` to point to the `.keys` file path
@@ -36,12 +45,13 @@ In this case we would have to generate a new key in a year.
 Open the file `components/terminal/emulator/term.php`.
 
 Go to line `266`:
-  `system("jarsigner -keystore /var/codiad_files/jaxb.keys -storepass 'keystore password' " . $jar_path_and_name . " http://your_website.ca/");`
+    `system("jarsigner -keystore /var/codiad_files/jaxb.keys -storepass 'keystore password' " . $jar_path_and_name . " http://your_website.ca/");`
 
 In line `266` do the following:
   - Overwrite `/var/codiad_files/jaxb.keys` to point to the `.keys` file you just created.
+  - Overwrite `keystore password` with the password you used to generate the keystore.
   - Overwrite `http://your_website.ca/` with your own website address.
-
+  
 
 ## MongoDB Installtion
 
