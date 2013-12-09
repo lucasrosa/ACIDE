@@ -41,7 +41,6 @@
 	}
 	
 	$pageURL = $url . "/javaws_workspace";
-	//http://hci.csit.upei.ca/Codiad/javaws_workspace/
 ?>
 <?="<?xml version=\"1.0\" encoding=\"utf-8\"?>"?>
 <!--- we may need to update the codebase path --->
