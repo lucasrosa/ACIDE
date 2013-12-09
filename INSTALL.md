@@ -11,6 +11,7 @@ Ensure that the following directories/files have write capabilities:
     /config.php
     /data (including subfolders)
     /workspace
+    /javaws_workspace
 
 ## Java WS Configuration
 
