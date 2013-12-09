@@ -6,12 +6,14 @@
 *  [root]/license.txt for more. This information must remain intact.
 */
 // Gets the root folder
-$root_folder = substr(substr($_SERVER["REQUEST_URI"],1), 0, strpos(substr($_SERVER["REQUEST_URI"],1), "/"));
+//$root_folder = substr(substr($_SERVER["REQUEST_URI"],1), 0, strpos(substr($_SERVER["REQUEST_URI"],1), "/"));
 // Sets the include path
-set_include_path("/var/www/");
+//set_include_path("/var/www/");
 	
-require_once($root_folder . '/components/course/class.course.php');
+//require_once($root_folder . '/components/course/class.course.php');
 //require_once($root_folder . '/common.php');
+define('__ROOT__', dirname(dirname(__FILE__))); 
+require_once(__ROOT__.'/course/class.course.php');
 
 class User {
 

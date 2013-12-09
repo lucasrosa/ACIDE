@@ -2,7 +2,7 @@
 	//FIXME Support of windows, use command 'cd' instead of 'pwd'
 
     /*
-    *  PHP+JQuery Temrinal Emulator by Fluidbyte <http://www.fluidbyte.net>
+    *  PHP+JQuery Terminal Emulator by Fluidbyte <http://www.fluidbyte.net>
     *
     *  This software is released as-is with no warranty and is complete free
     *  for use, modification and redistribution
@@ -260,18 +260,21 @@
 							} 
 						}
 						
-						
+					
 						/*
 						* Create jar File
 						*/
 						$exploded_directory = explode("/", $this->directory);
 						$jar_name = $exploded_directory[count($exploded_directory)-1]. ".jar";
-						$jar_path_and_name = WORKSPACE . "/../javaws_workspace/" . $jar_name;
+						
+						define('__ROOT__', dirname(dirname(dirname(dirname(__FILE__))))); 
+						$jar_path_and_name = __ROOT__ . "/javaws_workspace/" . $jar_name;
+						
 						system("jar cf ". $jar_path_and_name . " *.class");
 						 
 						// Sign the file
-						system("jarsigner -keystore /var/codiad_files/jaxb.keys -storepass 'keystore password' " . $jar_path_and_name . " http://hci.csit.upei.ca/");
-						 
+						system("jarsigner -keystore /var/acide_files/keystore_file.keys -storepass '123123' " . $jar_path_and_name . " http://hci.csit.upei.ca/");
+						//system("jarsigner -keystore /var/codiad_files/jaxb.keys -storepass 'keystore password' " . $jar_path_and_name . " http://hci.csit.upei.ca/"); 
 						/* 
 						 * Download the file
 						 */
