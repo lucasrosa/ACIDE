@@ -40,7 +40,7 @@ The system provides various reports of the students' behavior, like time spent i
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 
-For more information on the project please check out the **[check out the Wiki](https://github.com/lucasfurlani/ACIDE/wiki)** or **[the ACIDE Website](http://hci.csit.upei.ca/ACIDE/)**
+For more information on the project please check out the **[check out the Wiki](https://github.com/lucasfurlani/ACIDE/wiki)** or **[the ACIDE Website](http://hci.csit.upei.ca/acide/)**
 
 Distributed under the MIT-Style License. See `LICENSE.txt` file for more information.
 
