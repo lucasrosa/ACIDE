@@ -40,8 +40,9 @@ Go to line `266`:
 
 In line `266` do the following:
   - Overwrite `/var/codiad_files/jaxb.keys` to point to the `.keys` file you just created.
+  - Overwrite `keystore password` with the password you used to generate the keystore.
   - Overwrite `http://your_website.ca/` with your own website address.
-
+  
 
 ## MongoDB Installtion
 
