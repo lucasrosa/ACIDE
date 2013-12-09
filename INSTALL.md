@@ -35,9 +35,13 @@ In this case we would have to generate a new key in a year.
 
 #### (Optional) Compile your own Console.jar
     
-    javac Console.java
-    jar cf Console.jar *.class
-
+    `javac Console.java`
+    `jar cf Console.jar *.class`
+    
+    Add permission attributes to the MANIFEST file inside this jar
+    `jar ufm Console.jar BASE-MANIFEST.MF`
+    
+    
 #### Sign the Console.jar file
 
 To sign the Console.jar file using the keystore you just created, use the following command (Make sure you: overwrite 'password' with the password you just used to create the keystore and that you are in the website root's directory):
