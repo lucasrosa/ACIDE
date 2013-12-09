@@ -37,7 +37,7 @@ In this case we would have to generate a new key in a year.
 
 To sign the Console.jar file using the keystore you just created, use the following command (Make sure you: overwrite 'password' with the password you just used to create the keystore and that you are in the website root's directory):
 
-    `jarsigner -keystore /directory_where_the_keystore_file_is/keystore_file.keys -storepass 'password'  ./javaws_workspace/jnlp_xml/Console.jar   http://hci.csit.upei.ca/`
+    jarsigner -keystore /directory_where_the_keystore_file_is/keystore_file.keys -storepass 'password'  ./javaws_workspace/jnlp_xml/Console.jar   http://hci.csit.upei.ca/
 
 
 #### Updating the file `term.php` to point to the `.keys` file path
