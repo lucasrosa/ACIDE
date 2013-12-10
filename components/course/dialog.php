@@ -195,7 +195,13 @@
                     <th>Course Name</th>
                     <th>Students</th>
                     <th>Markers</th>
-                    <th>Professors</th>
+                    <?
+						if ($Course->getPermissionToEditProfessorsInCourse($User->GetUserType())) {
+					?>
+                    	<th>Professors</th>
+                    <?
+	                    }
+                    ?>
                     <th>Readonly</th>
                     <?php if($User->type == "admin") { ?><th width="5">Delete</th><?php } ?>
                 </tr>
@@ -214,7 +220,13 @@
 	                    <td><?php echo($Course->name); ?></td>
 	                    <td><a onclick="codiad.course.manage_users('<?=$Course->id?>', 'student');" class="icon-users bigger-icon"></a></td>
 	                    <td><a onclick="codiad.course.manage_users('<?=$Course->id?>', 'marker');" class="icon-users bigger-icon"></a></td>
-	                    <td><a onclick="codiad.course.manage_users('<?=$Course->id?>', 'professor');" class="icon-users bigger-icon"></a></td>
+	                    <?
+						if ($Course->getPermissionToEditProfessorsInCourse($User->GetUserType())) {
+						?>
+	                    	<td><a onclick="codiad.course.manage_users('<?=$Course->id?>', 'professor');" class="icon-users bigger-icon"></a></td>
+	                    <?
+		                }
+	                    ?>
 	                    <td>
 	                    	<a onclick="codiad.course.readonly('<?=$Course->id?>');">
 	                    	<?
@@ -236,7 +248,15 @@
             ?>
             </table>
             </div>
-            <button class="btn-left" onclick="codiad.course.create();">New Course</button><button class="btn-right" onclick="codiad.modal.unload();return false;">Close</button>
+            <?
+	            if ($Course->getPermissionToCreateCourse($User->GetUserType())) {
+		            
+            ?>
+            	<button class="btn-left" onclick="codiad.course.create();">New Course</button>
+            <?
+	            }
+            ?>
+            <button class="btn-right" onclick="codiad.modal.unload();return false;">Close</button>
             <?php
             
             break;

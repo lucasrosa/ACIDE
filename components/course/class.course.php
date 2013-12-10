@@ -136,4 +136,12 @@ class Course {
 		// Remove User from database
 		return $this->collection->remove(array('_id' => new MongoId($this->id)));
 	}
+	
+	public static function getPermissionToCreateCourse($user_type) {
+		return in_array($user_type, array("admin"));
+	}
+	
+	public static function getPermissionToEditProfessorsInCourse($user_type) {
+		return in_array($user_type, array("admin"));
+	}
 }

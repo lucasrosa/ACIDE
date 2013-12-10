@@ -208,10 +208,10 @@
 					$Assignment["id"] = str_replace(" ","_",$_POST['project_name']);
 	        		$Assignment["id"] = preg_replace('/[^\w-]/', '', $Assignment["id"]);					
 					//$Project->path = $_POST['id'];
-					$Project->path = $Assignment["id"]; 
-					$Project->name = $_POST['project_name'];
-					$Project->privacy = "private";
-					$Project->course = $_POST['course'];
+					$Project->path 		= $Assignment["id"]; 
+					$Project->name 		= $_POST['project_name'];
+					$Project->privacy 	= "private";
+					$Project->course 	= $_POST['course'];
 					
 					//$Assignment["id"] = $Project->path;
 					
