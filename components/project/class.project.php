@@ -953,18 +953,3 @@ class Project extends Common {
 		return $update_successful;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

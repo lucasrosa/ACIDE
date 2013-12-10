@@ -215,7 +215,12 @@
 							//for ($iprojects = 0; $iprojects < count($this_user_projects); $iprojects++) {
 							foreach($this_user_projects as $this_project){
 								// If this project is not in this course or is not an assignment, go to the next one
-								if (($this_project["course"] != $This_course->id) || (!isset($this_project["assignment"]["name"]))) {
+								if (($this_project["course"] != $This_course->id) || 
+									(!isset($this_project["assignment"]["name"])) ||
+									($this_project['privacy'] 	!= 'private') ||
+				                	($this_project['visibility']  != 'true')
+									
+								   ) {
 									continue;
 								}
 								
@@ -423,133 +428,272 @@
 					$course_title_added = FALSE;
 					$course_div_added = FALSE;
 					
-					# Assignments
-					$Project = new Project();
-					$assignments  = $Project->GetAssignmentsInTheSameCoursesOfUser($_SESSION['user'], $courses[$l]);
-					array_unshift($assignments, "User");
 					
-					for ($a = 0; $a < count($assignments); $a++) {
-						$assignment_title_added = FALSE;
-						$assignment_div_added = FALSE;
+					########################
+					########PROFESSOR { ####
+					########################
+					if ($User->type != "student") {					
 						
-			            foreach($projects as $project=>$data){
-			                $show = true;
-			                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
-			                if($show 
-			                	&& $data['privacy'] == 'shared'  
-			                	&& $data['visibility'] == 'true' 
-			                	&& $data['course'] == $courses[$l]
-								&& (
-									($data["assignment"] == '' && $a == 0)
-									||
-									(@$data["assignment"]['id'] == $assignments[$a]['id'])
-							       )
-			                	
-							  ){ //: needed when not using getUserProjects && $data['user'] == $_SESSION['user']){
-			                	if (!$course_title_added) {
-			                		$This_course = new Course();
-									$This_course->id = $courses[$l];
-									$This_course->Load();
-									$course_title_added = TRUE;
-			               		?>
-			                		<li id="shared_li_<?=$This_course->id?>" style="font-size:13px; font-style:italic;  cursor: pointer;">
-			                			<span id="shared_span_right_<?=$This_course->id?>" class="icon-right-dir icon" alt="Collapse" title="Collapse"></span>
-			                			<span id="shared_span_down_<?=$This_course->id?>" class="icon-down-dir icon" alt="Collapse" title="Collapse"></span>
-			                			<i><?=$This_course->code?></i>
-			                		</li>
-			                		
-			                		<script>
-			                			$('#shared_div_<?=$This_course->id?>').hide();
-			                			$('#shared_span_down_<?=$This_course->id?>').hide();
-			                			$("#shared_li_<?=$This_course->id?>").on('click', function () {
-			                				$('#shared_div_<?=$This_course->id?>').slideToggle();
-			                				$('#shared_span_right_<?=$This_course->id?>').toggle();
-			                				$('#shared_span_down_<?=$This_course->id?>').toggle();
-			                				
-			                			});
-			                		</script>
-			                		
-			                		<div id="shared_div_<?=$This_course->id?>" class="acide-course" >
-			                	<?		
-			                	}
+						$This_course = new Course();
+						$This_course->id = $courses[$l];
+						$This_course->Load();
+						
+						$students = $This_course->GetUsersInCourse();
+						
+						// Add course title for this course
+						?>
+						<li id="li_shared_<?=$This_course->id?>" style="font-size:13px; font-style:italic;  cursor: pointer;">
+                			<span id="span_right_shared_<?=$This_course->id?>" class="icon-right-dir icon" alt="Collapse" title="Collapse"></span>
+                			<span id="span_down_shared_<?=$This_course->id?>" class="icon-down-dir icon" alt="Collapse" title="Collapse"></span>
+                			<i><?=$This_course->code?></i>
+                		</li>
+                		
+                		<script>
+                			$('#div_shared_<?=$This_course->id?>').hide();
+                			$('#span_down_shared_<?=$This_course->id?>').hide();
+                			$("#li_shared_<?=$This_course->id?>").on('click', function () {
+                				$('#div_shared_<?=$This_course->id?>').slideToggle();
+                				$('#span_right_shared_<?=$This_course->id?>').toggle();
+                				$('#span_down_shared_<?=$This_course->id?>').toggle();
+                				
+                			});
+                		</script>
+                		
+                		<div id="div_shared_<?=$This_course->id?>" class="acide-course" >
+						<?
+						
+						
+						// go through all the students
+						for ($istudents = 0; $istudents < count($students); $istudents++) {
+						
+							$Student = new User();
+							$Student->username = $students[$istudents];
+							//$courses = $User->GetUserCourses();
+							$Student->Load(); 
+							
+							
+							// This list only contains students, if not a student, jumps to the next one
+							if ($Student->type != "student") {
+								continue;
+							}
+							
+							// Add li for each student
+						?>
+							<li id="li_shared_<?=$This_course->id?>_<?=$students[$istudents]?>" style="font-size:13px; font-style:italic;  cursor: pointer;">
+	                			<span id="span_right_shared_<?=$This_course->id?>_<?=$students[$istudents]?>" 
+	                				class="icon-right-dir icon" alt="Collapse" title="Collapse"></span>
+	                			<span id="span_down_shared_<?=$This_course->id?>_<?=$students[$istudents]?>" 
+	                				class="icon-down-dir icon" alt="Collapse" title="Collapse"></span>
+	                			<i><?=$students[$istudents]?></i>
+	                		</li>
+	                		
+	                		<script>
+	                			$('#div_shared_<?=$This_course->id?>_<?=$students[$istudents]?>').hide();
+	                			$('#span_down_shared_<?=$This_course->id?>_<?=$students[$istudents]?>').hide();
+	                			$("#li_shared_<?=$This_course->id?>_<?=$students[$istudents]?>").on('click', function () {
+	                				$('#div_shared_<?=$This_course->id?>_<?=$students[$istudents]?>').slideToggle();
+	                				$('#span_right_shared_<?=$This_course->id?>_<?=$students[$istudents]?>').toggle();
+	                				$('#span_down_shared_<?=$This_course->id?>_<?=$students[$istudents]?>').toggle();
+	                				
+	                			});
+	                		</script>
+	                		
+	                		<div id="div_shared_<?=$This_course->id?>_<?=$students[$istudents]?>" class="acide-assignments" >
+						<?
+							// Get assignments for this user
+							$Project = new Project();
+							$this_user_projects = $Project->GetProjectsForUser($students[$istudents]);
+							//for ($iprojects = 0; $iprojects < count($this_user_projects); $iprojects++) {
+							foreach($this_user_projects as $this_project){
+								// If this project is not in this course or is not an assignment, go to the next one
+								if (($this_project["course"] != $This_course->id) || 
+								    (!isset($this_project["assignment"]["name"])) ||
+								    ($this_project['privacy'] 	!= 'shared') ||
+				                	($this_project['visibility']  != 'true')
+								   ) {
+									continue;
+								}
 								
-			                	if (!$assignment_title_added && $a > 0 && $User->type != "student") {
-										$assignment_title_added = TRUE;
-			               		?>
-			                		<li id="shared_li_<?=$assignments[$a]['id']?>" style="font-size:12px; text-decoration:underline; cursor: pointer;">
-			                			<span id="shared_span_right_<?=$assignments[$a]['id']?>" class="icon-right-dir icon" alt="Collapse" title="Collapse"></span>
-			                			<span id="shared_span_down_<?=$assignments[$a]['id']?>" class="icon-down-dir icon" alt="Collapse" title="Collapse"></span>
-			                			<i><?=$assignments[$a]['name']?></i>
-			                		</li>
-			                		
-			                		<script>
-			                			$('#shared_div_<?=$assignments[$a]['id']?>').hide();
-			                			$('#shared_span_down_<?=$assignments[$a]['id']?>').hide();
-			                			$("#shared_li_<?=$assignments[$a]['id']?>").on('click', function () {
-			                				$('#shared_div_<?=$assignments[$a]['id']?>').slideToggle();
-			                				$('#shared_span_right_<?=$assignments[$a]['id']?>').toggle();
-			                				$('#shared_span_down_<?=$assignments[$a]['id']?>').toggle();
-			                				
-			                			});
-			                		</script>
-			                		
-			                		<div id="shared_div_<?=$assignments[$a]['id']?>" >
-			                			
-			                	<?		
-			                	}
-			                	?>
-			                <li style="padding-left:20px;">
-								<div>
-									<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
-										<div class="icon-archive icon"></div>
+								// Show the project
+								?>
+								<li style="padding-left:20px;">
+									<div>
+										<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
+											<div class="icon-archive icon"></div>
+											<?=$this_project['name'];?>
+										</span>
+										<!-- Adding a button to Submit the project as an assignment, only if it has an assignment attached to it -->
+										<?php
+										if ($this_project['assignment'] != '' && !isset($this_project['assignment']['submitted_date'])) {
+										?>
+										<span  onclick="codiad.project.submit('<?php echo($this_project['path']); ?>');">
+											<div title="Submit Assignment" 
+												class="icon-graduation-cap icon" style="position:absolute; right:25px;">
+												&nbsp;&nbsp;Submit
+											</div>
+										</span>
+										<?php 
+										} else if (isset($this_project['assignment']['submitted_date'])) {
+										?>
+										<span style="cursor: auto;">
+											<div title="The changes made in this assignment will not be submitted to evaluation anymore." 
+												class="icon-lock icon" style="position:absolute; right:25px;">
+											</div>
+										</span>
 										<?
-										if ($a == 0 || $User->type == "student") {
-											echo $data['name'];	
-										} else {
-											echo $data['group_members'][0]['username'];
 										}
 										?>
-									</span>
+									</div>
+								</li>
+								<?
+							}
+						?>
+							</div>
+						<?	
+						}
+						// Close acide-course DIV
+						?>
+                		</div>
+						<?
+						
+					########################
+					#### } PROFESSOR########
+					########################	
+					} else {
+						########################
+						#########STUDENT { #####
+						########################
+						# Assignments
+						$Project = new Project();
+						$assignments  = $Project->GetAssignmentsInTheSameCoursesOfUser($_SESSION['user'], $courses[$l]);
+						array_unshift($assignments, "User");
+						
+						for ($a = 0; $a < count($assignments); $a++) {
+							$assignment_title_added = FALSE;
+							$assignment_div_added = FALSE;
+							
+				            foreach($projects as $project=>$data){
+				                $show = true;
+				                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
+				                if($show 
+				                	&& $data['privacy'] == 'shared'  
+				                	&& $data['visibility'] == 'true' 
+				                	&& $data['course'] == $courses[$l]
+									&& (
+										($data["assignment"] == '' && $a == 0)
+										||
+										(@$data["assignment"]['id'] == $assignments[$a]['id'])
+								       )
+				                	
+								  ){ //: needed when not using getUserProjects && $data['user'] == $_SESSION['user']){
+				                	if (!$course_title_added) {
+				                		$This_course = new Course();
+										$This_course->id = $courses[$l];
+										$This_course->Load();
+										$course_title_added = TRUE;
+				               		?>
+				                		<li id="shared_li_<?=$This_course->id?>" style="font-size:13px; font-style:italic;  cursor: pointer;">
+				                			<span id="shared_span_right_<?=$This_course->id?>" class="icon-right-dir icon" alt="Collapse" title="Collapse"></span>
+				                			<span id="shared_span_down_<?=$This_course->id?>" class="icon-down-dir icon" alt="Collapse" title="Collapse"></span>
+				                			<i><?=$This_course->code?></i>
+				                		</li>
+				                		
+				                		<script>
+				                			$('#shared_div_<?=$This_course->id?>').hide();
+				                			$('#shared_span_down_<?=$This_course->id?>').hide();
+				                			$("#shared_li_<?=$This_course->id?>").on('click', function () {
+				                				$('#shared_div_<?=$This_course->id?>').slideToggle();
+				                				$('#shared_span_right_<?=$This_course->id?>').toggle();
+				                				$('#shared_span_down_<?=$This_course->id?>').toggle();
+				                				
+				                			});
+				                		</script>
+				                		
+				                		<div id="shared_div_<?=$This_course->id?>" class="acide-course" >
+				                	<?		
+				                	}
 									
-									<!-- Adding a button to Submit the project as an assignment -->
-									<!-- Only if it has an assignment attached to it and if this user is the owner (the first one in the group_members array) -->
-									<?php
-									if ($data['assignment'] != '' && $data['group_members'][0]["username"] == $_SESSION['user'] && !isset($data['assignment']['submitted_date'])) {
-									?>
-									<span  onclick="codiad.project.submit('<?=($data['path']); ?>');">
-										<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
-									</span>
-									<?php 
-									} else if (isset($data['assignment']['submitted_date'])) {
-									?>
-									<span style="cursor: auto;">
-										<div title="The changes made in this assignment will not be submitted to evaluation anymore." class="icon-lock icon" style="position:absolute; right:25px;"></div>
-									</span>
-									<?
-									}
-									?>
-									
-								</div>
-							</li>
-		                
-			                <?php
-			                }
+				                	if (!$assignment_title_added && $a > 0 && $User->type != "student") {
+											$assignment_title_added = TRUE;
+				               		?>
+				                		<li id="shared_li_<?=$assignments[$a]['id']?>" style="font-size:12px; text-decoration:underline; cursor: pointer;">
+				                			<span id="shared_span_right_<?=$assignments[$a]['id']?>" class="icon-right-dir icon" alt="Collapse" title="Collapse"></span>
+				                			<span id="shared_span_down_<?=$assignments[$a]['id']?>" class="icon-down-dir icon" alt="Collapse" title="Collapse"></span>
+				                			<i><?=$assignments[$a]['name']?></i>
+				                		</li>
+				                		
+				                		<script>
+				                			$('#shared_div_<?=$assignments[$a]['id']?>').hide();
+				                			$('#shared_span_down_<?=$assignments[$a]['id']?>').hide();
+				                			$("#shared_li_<?=$assignments[$a]['id']?>").on('click', function () {
+				                				$('#shared_div_<?=$assignments[$a]['id']?>').slideToggle();
+				                				$('#shared_span_right_<?=$assignments[$a]['id']?>').toggle();
+				                				$('#shared_span_down_<?=$assignments[$a]['id']?>').toggle();
+				                				
+				                			});
+				                		</script>
+				                		
+				                		<div id="shared_div_<?=$assignments[$a]['id']?>" >
+				                			
+				                	<?		
+				                	}
+				                	?>
+				                <li style="padding-left:20px;">
+									<div>
+										<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
+											<div class="icon-archive icon"></div>
+											<?
+											if ($a == 0 || $User->type == "student") {
+												echo $data['name'];	
+											} else {
+												echo $data['group_members'][0]['username'];
+											}
+											?>
+										</span>
+										
+										<!-- Adding a button to Submit the project as an assignment -->
+										<!-- Only if it has an assignment attached to it and if this user is the owner (the first one in the group_members array) -->
+										<?php
+										if ($data['assignment'] != '' && $data['group_members'][0]["username"] == $_SESSION['user'] && !isset($data['assignment']['submitted_date'])) {
+										?>
+										<span  onclick="codiad.project.submit('<?=($data['path']); ?>');">
+											<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
+										</span>
+										<?php 
+										} else if (isset($data['assignment']['submitted_date'])) {
+										?>
+										<span style="cursor: auto;">
+											<div title="The changes made in this assignment will not be submitted to evaluation anymore." class="icon-lock icon" style="position:absolute; right:25px;"></div>
+										</span>
+										<?
+										}
+										?>
+										
+									</div>
+								</li>
+			                
+				                <?php
+				                }
+				            }
+	
+										if ($assignment_title_added && !$assignment_div_added) {
+						                	$assignment_div_added = TRUE;
+						                ?>
+						                </div>
+						                <?		
+						                }
+				    	}
+	
+						if ($course_title_added && !$course_div_added) {
+			               	$course_div_added = TRUE;
+			            ?>
+			            </div>
+			            <?		
 			            }
-
-									if ($assignment_title_added && !$assignment_div_added) {
-					                	$assignment_div_added = TRUE;
-					                ?>
-					                </div>
-					                <?		
-					                }
-			    	}
-
-								if ($course_title_added && !$course_div_added) {
-					               	$course_div_added = TRUE;
-					            ?>
-					            </div>
-					            <?		
-					            }
+			            ########################
+						####### } STUDENT#######
+						########################
+					}
 				} 
 	            ?>
             
@@ -656,8 +800,8 @@
 			
 			
 			<select id="privacy_select" name="project_privacy">
-				<option id="option_public" value="public" selected >Public</option>
-				<option id="option_private" value="private">Private or Shared</option>
+				<option id="option_public" value="public">Public</option>
+				<option id="option_private" value="private" selected >Private or Shared</option>
 			  <!-- There is not need to shared projects here because a project turns to shared when new users are added -->
 			</select>
 			
