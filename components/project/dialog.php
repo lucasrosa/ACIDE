@@ -100,17 +100,6 @@
 									<div class="icon-archive icon"></div>
 									<?php echo($data['name']); ?>
 								</span>
-								
-								<!-- Adding a button to Submit the project as an assignment, only if it has an assignment attached to it -->
-								<?php
-								if ($data['assignment'] != '') {
-								?>
-								<span  onclick="codiad.project.submit('<?php echo($data['path']); ?>');">
-									<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
-								</span>
-								<?php 
-								}
-								?>
 							</div>
 						</li>
 	                
@@ -118,15 +107,15 @@
 		                }
 		            }
 
-								if ($course_title_added && !$course_div_added) {
-					               	$course_div_added = TRUE;
-					            ?>
-					            </div>
-					            <?		
-					            }
-					
-		        }
-	            ?>
+                if ($course_title_added && !$course_div_added) {
+                    $course_div_added = TRUE;
+                ?>
+                    </div>
+            <?		
+                }
+    
+		    }
+	        ?>
             
 	            </ul>
 			</div>
@@ -198,6 +187,7 @@
 			                	<?		
 			                	}
 			                	
+                                //the name for an assignment
 			                	if (!$assignment_title_added && $a > 0 && $User->type != "student") {
 										$assignment_title_added = TRUE;
 			               		?>
@@ -227,8 +217,13 @@
 									<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
 										<div class="icon-archive icon"></div>
 										<?
+                                        //if it's the first assignment or the 
+                                        //user is a student use just the name 
+                                        //of the assignment
 										if ($a == 0 || $User->type == "student") {
 											echo $data['name'];	
+                                        //otherwise show the name of the user 
+                                        //owns the assignment
 										} else {
 											echo $data['group_members'][0]['username'];
 										}

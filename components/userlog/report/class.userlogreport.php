@@ -4,9 +4,14 @@
  *  Copyright (c) UPEI lrosa@upei.ca sbateman@upei.ca
  */
  // Gets the root folder
-$root_folder = substr(substr($_SERVER["REQUEST_URI"],1), 0, strpos(substr($_SERVER["REQUEST_URI"],1), "/"));
+//$root_folder = substr(substr($_SERVER["REQUEST_URI"],1), 0, strpos(substr($_SERVER["REQUEST_URI"],1), "/"));
 // Sets the include path
-set_include_path("/var/www/");
+//set_include_path("/var/www/");
+
+set_include_path("/");
+$root_folder =  dirname(dirname(dirname(dirname(__FILE__)))); 
+
+
 // Include the  require files
 require_once($root_folder . '/common.php');
 require_once($root_folder . '/components/userlog/class.userlog.php');

@@ -7,8 +7,11 @@
 */
 
 //require_once('../../common.php');
-require_once('../course/class.course.php');
-require_once('../user/class.user.php');
+set_include_path("/");
+$root_folder =  dirname(dirname(dirname(__FILE__))); 
+
+require_once($root_folder . '/components/course/class.course.php');
+require_once($root_folder . '/components/user/class.user.php');
 
 class Project extends Common {
 
