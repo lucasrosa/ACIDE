@@ -137,133 +137,268 @@
 	            for ($l = 0; $l < count($courses); $l++) {
 					$course_title_added = FALSE;
 	            	$course_div_added = FALSE;
-					
-					# Assignments
-					$Project = new Project();
-					$assignments  = $Project->GetAssignmentsInTheSameCoursesOfUser($_SESSION['user'], $courses[$l]);
-					array_unshift($assignments, "User");
-					//error_log(print_r($assignments, TRUE));
-					
-					for ($a = 0; $a < count($assignments); $a++) {
-						$assignment_title_added = FALSE;
-						$assignment_div_added = FALSE;				
-			            foreach($projects as $project=>$data){
-			                $show = true;
-			                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
-			                if($show 
-			                	&& $data['privacy'] == 'private' 
-			                	&& $data['visibility'] == 'true' 
-			                	&& $data['course'] == $courses[$l]
-								&& (
-									($data["assignment"] == '' && $a == 0)
-									||
-									(@$data["assignment"]['id'] == $assignments[$a]['id'])
-							       )
-								  ){ //: needed when not using getUserProjects && $data['user'] == $_SESSION['user']){
-			                	if (!$course_title_added) {
-			                		$This_course = new Course();
-									$This_course->id = $courses[$l];
-									$This_course->Load();
-									$course_title_added = TRUE;
-			               		?>
-			                		<li id="li_<?=$This_course->id?>" style="font-size:13px; font-style:italic;  cursor: pointer;">
-			                			<span id="span_right_<?=$This_course->id?>" class="icon-right-dir icon" alt="Collapse" title="Collapse"></span>
-			                			<span id="span_down_<?=$This_course->id?>" class="icon-down-dir icon" alt="Collapse" title="Collapse"></span>
-			                			<i><?=$This_course->code?></i>
-			                		</li>
-			                		
-			                		<script>
-			                			$('#div_<?=$This_course->id?>').hide();
-			                			$('#span_down_<?=$This_course->id?>').hide();
-			                			$("#li_<?=$This_course->id?>").on('click', function () {
-			                				$('#div_<?=$This_course->id?>').slideToggle();
-			                				$('#span_right_<?=$This_course->id?>').toggle();
-			                				$('#span_down_<?=$This_course->id?>').toggle();
-			                				
-			                			});
-			                		</script>
-			                		
-			                		<div id="div_<?=$This_course->id?>" class="acide-course" >
-			                	<?		
-			                	}
-			                	
-                                //the name for an assignment
-			                	if (!$assignment_title_added && $a > 0 && $User->type != "student") {
-										$assignment_title_added = TRUE;
-			               		?>
-			                		<li id="li_<?=$assignments[$a]['id']?>" style="font-size:12px; text-decoration:underline; cursor: pointer;">
-			                			<span id="span_right_<?=$assignments[$a]['id']?>" class="icon-right-dir icon" alt="Collapse" title="Collapse"></span>
-			                			<span id="span_down_<?=$assignments[$a]['id']?>" class="icon-down-dir icon" alt="Collapse" title="Collapse"></span>
-			                			<i><?=$assignments[$a]['name']?></i>
-			                		</li>
-			                		
-			                		<script>
-			                			$('#div_<?=$assignments[$a]['id']?>').hide();
-			                			$('#span_down_<?=$assignments[$a]['id']?>').hide();
-			                			$("#li_<?=$assignments[$a]['id']?>").on('click', function () {
-			                				$('#div_<?=$assignments[$a]['id']?>').slideToggle();
-			                				$('#span_right_<?=$assignments[$a]['id']?>').toggle();
-			                				$('#span_down_<?=$assignments[$a]['id']?>').toggle();
-			                				
-			                			});
-			                		</script>
-			                		
-			                		<div id="div_<?=$assignments[$a]['id']?>" >
-			                	<?		
-			                	}
-			                	?>
-			                <li style="padding-left:20px;">
-								<div>
-									<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
-										<div class="icon-archive icon"></div>
+	            	
+					########################
+					########PROFESSOR { ####
+					########################
+					if ($User->type != "student") {					
+						
+						$This_course = new Course();
+						$This_course->id = $courses[$l];
+						$This_course->Load();
+						
+						$students = $This_course->GetUsersInCourse();
+						
+						// Add course title for this course
+						?>
+						<li id="li_<?=$This_course->id?>" style="font-size:13px; font-style:italic;  cursor: pointer;">
+                			<span id="span_right_<?=$This_course->id?>" class="icon-right-dir icon" alt="Collapse" title="Collapse"></span>
+                			<span id="span_down_<?=$This_course->id?>" class="icon-down-dir icon" alt="Collapse" title="Collapse"></span>
+                			<i><?=$This_course->code?></i>
+                		</li>
+                		
+                		<script>
+                			$('#div_<?=$This_course->id?>').hide();
+                			$('#span_down_<?=$This_course->id?>').hide();
+                			$("#li_<?=$This_course->id?>").on('click', function () {
+                				$('#div_<?=$This_course->id?>').slideToggle();
+                				$('#span_right_<?=$This_course->id?>').toggle();
+                				$('#span_down_<?=$This_course->id?>').toggle();
+                				
+                			});
+                		</script>
+                		
+                		<div id="div_<?=$This_course->id?>" class="acide-course" >
+						<?
+						
+						
+						// go through all the students
+						for ($istudents = 0; $istudents < count($students); $istudents++) {
+						
+							$Student = new User();
+							$Student->username = $students[$istudents];
+							//$courses = $User->GetUserCourses();
+							$Student->Load(); 
+							
+							
+							// This list only contains students, if not a student, jumps to the next one
+							if ($Student->type != "student") {
+								continue;
+							}
+							
+							// Add li for each student
+						?>
+							<li id="li_<?=$This_course->id?>_<?=$students[$istudents]?>" style="font-size:13px; font-style:italic;  cursor: pointer;">
+	                			<span id="span_right_<?=$This_course->id?>_<?=$students[$istudents]?>" 
+	                				class="icon-right-dir icon" alt="Collapse" title="Collapse"></span>
+	                			<span id="span_down_<?=$This_course->id?>_<?=$students[$istudents]?>" 
+	                				class="icon-down-dir icon" alt="Collapse" title="Collapse"></span>
+	                			<i><?=$students[$istudents]?></i>
+	                		</li>
+	                		
+	                		<script>
+	                			$('#div_<?=$This_course->id?>_<?=$students[$istudents]?>').hide();
+	                			$('#span_down_<?=$This_course->id?>_<?=$students[$istudents]?>').hide();
+	                			$("#li_<?=$This_course->id?>_<?=$students[$istudents]?>").on('click', function () {
+	                				$('#div_<?=$This_course->id?>_<?=$students[$istudents]?>').slideToggle();
+	                				$('#span_right_<?=$This_course->id?>_<?=$students[$istudents]?>').toggle();
+	                				$('#span_down_<?=$This_course->id?>_<?=$students[$istudents]?>').toggle();
+	                				
+	                			});
+	                		</script>
+	                		
+	                		<div id="div_<?=$This_course->id?>_<?=$students[$istudents]?>" class="acide-assignments" >
+						<?
+							// Get assignments for this user
+							$Project = new Project();
+							$this_user_projects = $Project->GetProjectsForUser($students[$istudents]);
+							//for ($iprojects = 0; $iprojects < count($this_user_projects); $iprojects++) {
+							foreach($this_user_projects as $this_project){
+								// If this project is not in this course or is not an assignment, go to the next one
+								if (($this_project["course"] != $This_course->id) || (!isset($this_project["assignment"]["name"]))) {
+									continue;
+								}
+								
+								// Show the project
+								?>
+								<li style="padding-left:20px;">
+									<div>
+										<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
+											<div class="icon-archive icon"></div>
+											<?=$this_project['name'];?>
+										</span>
+										<!-- Adding a button to Submit the project as an assignment, only if it has an assignment attached to it -->
+										<?php
+										if ($this_project['assignment'] != '' && !isset($this_project['assignment']['submitted_date'])) {
+										?>
+										<span  onclick="codiad.project.submit('<?php echo($this_project['path']); ?>');">
+											<div title="Submit Assignment" 
+												class="icon-graduation-cap icon" style="position:absolute; right:25px;">
+												&nbsp;&nbsp;Submit
+											</div>
+										</span>
+										<?php 
+										} else if (isset($this_project['assignment']['submitted_date'])) {
+										?>
+										<span style="cursor: auto;">
+											<div title="The changes made in this assignment will not be submitted to evaluation anymore." 
+												class="icon-lock icon" style="position:absolute; right:25px;">
+											</div>
+										</span>
 										<?
-                                        //if it's the first assignment or the 
-                                        //user is a student use just the name 
-                                        //of the assignment
-										if ($a == 0 || $User->type == "student") {
-											echo $data['name'];	
-                                        //otherwise show the name of the user 
-                                        //owns the assignment
-										} else {
-											echo $data['group_members'][0]['username'];
 										}
 										?>
-									</span>
-									<!-- Adding a button to Submit the project as an assignment, only if it has an assignment attached to it -->
-									<?php
-									if ($data['assignment'] != '' && !isset($data['assignment']['submitted_date'])) {
-									?>
-									<span  onclick="codiad.project.submit('<?php echo($data['path']); ?>');">
-										<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
-									</span>
-									<?php 
-									} else if (isset($data['assignment']['submitted_date'])) {
-									?>
-									<span style="cursor: auto;">
-										<div title="The changes made in this assignment will not be submitted to evaluation anymore." class="icon-lock icon" style="position:absolute; right:25px;"></div>
-									</span>
-									<?
-									}
-									?>
-								</div>
-							</li>
-		                
-			                <?php
-			                }
-			        	}
-									if ($assignment_title_added && !$assignment_div_added) {
-					                	$assignment_div_added = TRUE;
-					                ?>
-					                </div>
-					                <?		
-					                }
+									</div>
+								</li>
+								<?
+							}
+						?>
+							</div>
+						<?	
+						}
+						// Close acide-course DIV
+						?>
+                		</div>
+						<?
+						
+					########################
+					#### } PROFESSOR########
+					########################
+					} else {
+					
+						########################
+						#########STUDENT { #####
+						########################
+						# Assignments
+						$Project = new Project();
+						$assignments  = $Project->GetAssignmentsInTheSameCoursesOfUser($_SESSION['user'], $courses[$l]);
+						array_unshift($assignments, "User");
+						//error_log(print_r($assignments, TRUE));
+						
+						for ($a = 0; $a < count($assignments); $a++) {
+							$assignment_title_added = FALSE;
+							$assignment_div_added = FALSE;				
+				            foreach($projects as $project=>$data){
+				                $show = true;
+				                if($projects_assigned && !in_array($data['path'],$projects_assigned)){ $show=false; }
+				                if($show 
+				                	&& $data['privacy'] == 'private' 
+				                	&& $data['visibility'] == 'true' 
+				                	&& $data['course'] == $courses[$l]
+									&& (
+										($data["assignment"] == '' && $a == 0)
+										||
+										(@$data["assignment"]['id'] == $assignments[$a]['id'])
+								       )
+									  ){ //: needed when not using getUserProjects && $data['user'] == $_SESSION['user']){
+				                	if (!$course_title_added) {
+				                		$This_course = new Course();
+										$This_course->id = $courses[$l];
+										$This_course->Load();
+										$course_title_added = TRUE;
+				               		?>
+				                		<li id="li_<?=$This_course->id?>" style="font-size:13px; font-style:italic;  cursor: pointer;">
+				                			<span id="span_right_<?=$This_course->id?>" class="icon-right-dir icon" alt="Collapse" title="Collapse"></span>
+				                			<span id="span_down_<?=$This_course->id?>" class="icon-down-dir icon" alt="Collapse" title="Collapse"></span>
+				                			<i><?=$This_course->code?></i>
+				                		</li>
+				                		
+				                		<script>
+				                			$('#div_<?=$This_course->id?>').hide();
+				                			$('#span_down_<?=$This_course->id?>').hide();
+				                			$("#li_<?=$This_course->id?>").on('click', function () {
+				                				$('#div_<?=$This_course->id?>').slideToggle();
+				                				$('#span_right_<?=$This_course->id?>').toggle();
+				                				$('#span_down_<?=$This_course->id?>').toggle();
+				                				
+				                			});
+				                		</script>
+				                		
+				                		<div id="div_<?=$This_course->id?>" class="acide-course" >
+				                	<?		
+				                	}
+				                	
+	                                //the name for an assignment
+				                	if (!$assignment_title_added && $a > 0 && $User->type != "student") {
+											$assignment_title_added = TRUE;
+				               		?>
+				                		<li id="li_<?=$assignments[$a]['id']?>" style="font-size:12px; text-decoration:underline; cursor: pointer;">
+				                			<span id="span_right_<?=$assignments[$a]['id']?>" class="icon-right-dir icon" alt="Collapse" title="Collapse"></span>
+				                			<span id="span_down_<?=$assignments[$a]['id']?>" class="icon-down-dir icon" alt="Collapse" title="Collapse"></span>
+				                			<i><?=$assignments[$a]['name']?></i>
+				                		</li>
+				                		
+				                		<script>
+				                			$('#div_<?=$assignments[$a]['id']?>').hide();
+				                			$('#span_down_<?=$assignments[$a]['id']?>').hide();
+				                			$("#li_<?=$assignments[$a]['id']?>").on('click', function () {
+				                				$('#div_<?=$assignments[$a]['id']?>').slideToggle();
+				                				$('#span_right_<?=$assignments[$a]['id']?>').toggle();
+				                				$('#span_down_<?=$assignments[$a]['id']?>').toggle();
+				                				
+				                			});
+				                		</script>
+				                		
+				                		<div id="div_<?=$assignments[$a]['id']?>" >
+				                	<?		
+				                	}
+				                	?>
+				                <li style="padding-left:20px;">
+									<div>
+										<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
+											<div class="icon-archive icon"></div>
+											<?
+	                                        //if it's the first assignment or the 
+	                                        //user is a student use just the name 
+	                                        //of the assignment
+											if ($a == 0 || $User->type == "student") {
+												echo $data['name'];	
+	                                        //otherwise show the name of the user 
+	                                        //owns the assignment
+											} else {
+												echo $data['group_members'][0]['username'];
+											}
+											?>
+										</span>
+										<!-- Adding a button to Submit the project as an assignment, only if it has an assignment attached to it -->
+										<?php
+										if ($data['assignment'] != '' && !isset($data['assignment']['submitted_date'])) {
+										?>
+										<span  onclick="codiad.project.submit('<?php echo($data['path']); ?>');">
+											<div title="Submit Assignment" class="icon-graduation-cap icon" style="position:absolute; right:25px;">&nbsp;&nbsp;Submit</div>
+										</span>
+										<?php 
+										} else if (isset($data['assignment']['submitted_date'])) {
+										?>
+										<span style="cursor: auto;">
+											<div title="The changes made in this assignment will not be submitted to evaluation anymore." class="icon-lock icon" style="position:absolute; right:25px;"></div>
+										</span>
+										<?
+										}
+										?>
+									</div>
+								</li>
+			                
+				                <?php
+				                }
+				        	}
+							if ($assignment_title_added && !$assignment_div_added) {
+						    	$assignment_div_added = TRUE;
+						    ?>
+						        </div>
+						    <?		
+						    }
+						}
+						if ($course_title_added && !$course_div_added) {
+							$course_div_added = TRUE;
+						?>
+							</div>
+						<?		
+						}
+						########################
+						####### } STUDENT#######
+						########################
 					}
-								if ($course_title_added && !$course_div_added) {
-					               	$course_div_added = TRUE;
-					            ?>
-					            </div>
-					            <?		
-					            }
 		        } 
 	            ?>
             
