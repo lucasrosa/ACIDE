@@ -17,6 +17,8 @@ Ensure that the following directories/files have write capabilities:
 
 For the 'java' command work properly in the terminal and the generated `.class` file run by the browser automatically, you have to configure the system so it can generate and sign the required jar files.
 
+Change to the "javawx_workspace" directory and follow the steps below.
+
 #### Creating the keystore file
 
 To sign a jar, we must first have a keystore (a private key) to do the signing. 
