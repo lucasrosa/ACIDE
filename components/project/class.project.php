@@ -908,8 +908,11 @@ class Project extends Common {
 		$update_successful = TRUE;
 		
 		foreach ($users as $user) {
+			if ($user["type"] == "admin") {
+				continue;
+			}
 			for ($i = 0; $i < count($user["projects"]); $i++) {
-				if (isset($user["projects"][$i]["assignment"]['id'])) {
+				if (isset($user["projects"][$i]["assignment"]["id"])) {
 					if ($user["projects"][$i]["assignment"]['id'] == $id) {
 						//  Get the url of the description url 
 						$url = $user["projects"][$i]["assignment"]['description_url'];
@@ -928,8 +931,20 @@ class Project extends Common {
 		
 		$tokens = explode('/', $url);
 		$description_file_name = $tokens[sizeof($tokens)-1];
+		
+		$first_path =  dirname(dirname(__FILE__)); 
+		$first_path = explode("/", $first_path);
+		$first_path_last = count($first_path) - 1; 
+
+		unset($first_path[$first_path_last]);
+		unset($first_path[0]);
+		unset($first_path[1]);
+		unset($first_path[2]);
+		$first_path = array_values($first_path);
+		$first_path = "/" . implode("/", $first_path);
+								
 		if ($update_successful) {
-			$update_successful = unlink("../../data/assignments/" . $description_file_name);
+			$update_successful = unlink($first_path . "/data/assignments/" . $description_file_name);
 		}
 		
 		return $update_successful;

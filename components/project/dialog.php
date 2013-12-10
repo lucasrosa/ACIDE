@@ -89,7 +89,7 @@
 			                			});
 			                		</script>
 			                		
-			                		<div id="public_div_<?=$This_course->id?>" >
+			                		<div id="public_div_<?=$This_course->id?>" class="acide-course" >
 		                	<?		
 		                	}
 		                	?>
@@ -194,7 +194,7 @@
 			                			});
 			                		</script>
 			                		
-			                		<div id="div_<?=$This_course->id?>" >
+			                		<div id="div_<?=$This_course->id?>" class="acide-course" >
 			                	<?		
 			                	}
 			                	
@@ -339,7 +339,7 @@
 			                			});
 			                		</script>
 			                		
-			                		<div id="shared_div_<?=$This_course->id?>" >
+			                		<div id="shared_div_<?=$This_course->id?>" class="acide-course" >
 			                	<?		
 			                	}
 								

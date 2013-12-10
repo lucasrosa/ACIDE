@@ -158,7 +158,18 @@
 							if (file_exists("../../data/assignments/" . $_FILES["file"]["name"])) {
 								$error = "The description file \"" . $_FILES["file"]["name"] . "\" already exists. ";
 							} else {
-								move_uploaded_file($_FILES["file"]["tmp_name"], "../../data/assignments/" . $_FILES["file"]["name"]);
+								$first_path =  dirname(dirname(__FILE__)); 
+								$first_path = explode("/", $first_path);
+								$first_path_last = count($first_path) - 1; 
+
+								unset($first_path[$first_path_last]);
+								unset($first_path[0]);
+								$first_path = array_values($first_path);
+								$first_path = "/" . implode("/", $first_path);
+								
+								
+								//move_uploaded_file($_FILES["file"]["tmp_name"], "../../data/assignments/" . $_FILES["file"]["name"]);
+								move_uploaded_file($_FILES["file"]["tmp_name"], $first_path. "/data/assignments/" . $_FILES["file"]["name"]);
 								$Assignment["description_url"] = 'http';
 								
 								if (isset($_SERVER["HTTPS"])) {
@@ -167,8 +178,16 @@
 									}
 								}
 								$Assignment["description_url"] .= "://";
-								$first_path = explode("/", $_SERVER["REQUEST_URI"]);
-								$first_path = "/" .$first_path[1];
+								
+								$first_path = explode("/", $first_path);
+								unset($first_path[1]);
+								unset($first_path[2]);
+								$first_path = array_values($first_path);
+								$first_path =  implode("/", $first_path);
+								
+								//require_once(__ROOT__.'/course/class.course.php');
+								//$first_path = explode("/", $_SERVER["REQUEST_URI"]);
+								//$first_path = "/" .$first_path[1];
 								
 								if ($_SERVER["SERVER_PORT"] != "80") {
 									//$Assignment["description_url"] .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
@@ -299,13 +318,13 @@
 	
 	<head>
 		<meta charset="utf-8">
-		<title>CODIAD</title>
+		<title>ACIDE</title>
 		<link rel="stylesheet" href="../../themes/default/assignment/screen.css">
 		<link rel="stylesheet" href="../../themes/default/fonts.css">
 		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 	  	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-	  	<script src="/Codiad/components/assignment/init.js"></script>
+	  	<script src="/components/assignment/init.js"></script>
 	  	<!-- Timepicker -->
 	  	<link rel="stylesheet" type="text/css" href="timepicker/jquery.ptTimeSelect.css" />
 	    <script type="text/javascript" src="timepicker/jquery.ptTimeSelect.js" /></script>   
