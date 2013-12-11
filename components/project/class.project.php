@@ -268,7 +268,22 @@ class Project extends Common {
     //////////////////////////////////////////////////////////////////
     // LF: Create
     //////////////////////////////////////////////////////////////////
-
+	public function recurse_copy($src,$dst) { 
+	    $dir = opendir($src); 
+	    @mkdir($dst); 
+	    while(false !== ( $file = readdir($dir)) ) { 
+	        if (( $file != '.' ) && ( $file != '..' )) { 
+	            if ( is_dir($src . '/' . $file) ) { 
+	                $this->recurse_copy($src . '/' . $file,$dst . '/' . $file); 
+	            } 
+	            else { 
+	                copy($src . '/' . $file,$dst . '/' . $file); 
+	            } 
+	        } 
+	    } 
+	    closedir($dir); 
+	}
+	
     public function Create($user = ''){
     	if (isset($this->assignment["id"])) {
     		$has_assignment = TRUE;
@@ -336,6 +351,31 @@ class Project extends Common {
 				$assignment_successfully_created = FALSE;
 				if ($has_assignment) {
 					if ($this->CreateProjectOnDatabase($user)) {
+						##############################
+						## Copy resources to this folder
+						##############################
+						// Find first path
+						$first_path =  dirname(dirname(__FILE__)); 
+						$first_path = explode("/", $first_path);
+						$first_path_last = count($first_path) - 1; 
+
+						unset($first_path[$first_path_last]);
+						unset($first_path[0]);
+						$first_path = array_values($first_path);
+						$first_path = "/" . implode("/", $first_path);
+						
+						// Get path
+						$reference_folder_name = $first_path . "/data/assignments/reference_files/" . $this->assignment["id"];
+						//$this->assignment["id"]
+						// Copy resources	
+						$current_folder = $first_path . "/workspace/" . $this->path . "/Reference Material";
+						mkdir($current_folder.'/', 0755);
+						error_log("::: recurse_copy(" . $reference_folder_name . "," .  $current_folder. ");" );
+						$this->recurse_copy($reference_folder_name, $current_folder);
+						//rename($this->path . "/" . $this->assignment["id"] , $this->path . "/references");
+						
+						
+						
 						return "success";
 					} else {
 						return "Could not create the project in the database.";
@@ -958,5 +998,5 @@ class Project extends Common {
 		}
 		
 		return $update_successful;
-	}
+	}	 
 }

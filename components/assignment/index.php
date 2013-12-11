@@ -170,7 +170,22 @@
 								
 								//move_uploaded_file($_FILES["file"]["tmp_name"], "../../data/assignments/" . $_FILES["file"]["name"]);
 								move_uploaded_file($_FILES["file"]["tmp_name"], $first_path. "/data/assignments/" . $_FILES["file"]["name"]);
+								
+								####
+								# Move the reference file to assignment folder {
+								$reference_folder_name = $first_path . "/data/assignments/reference_files/" . $Assignment["id"];
+								mkdir($reference_folder_name, 0777);
+								move_uploaded_file($_FILES["reference_file1"]["tmp_name"], $reference_folder_name. "/" . $_FILES["reference_file1"]["name"]);
+								move_uploaded_file($_FILES["reference_file2"]["tmp_name"], $reference_folder_name. "/" . $_FILES["reference_file2"]["name"]);
+								move_uploaded_file($_FILES["reference_file3"]["tmp_name"], $reference_folder_name. "/" . $_FILES["reference_file3"]["name"]);
+								move_uploaded_file($_FILES["reference_file4"]["tmp_name"], $reference_folder_name. "/" . $_FILES["reference_file4"]["name"]);
+								move_uploaded_file($_FILES["reference_file5"]["tmp_name"], $reference_folder_name. "/" . $_FILES["reference_file5"]["name"]);
+								# } 
+								####
+								
+								
 								$Assignment["description_url"] = 'http';
+								
 								
 								if (isset($_SERVER["HTTPS"])) {
 									if ($_SERVER["HTTPS"] == "on") {
@@ -186,8 +201,7 @@
 								$first_path =  implode("/", $first_path);
 								
 								
-								####
-								# Move the reference file to assignment folder
+								
 								
 								//require_once(__ROOT__.'/course/class.course.php');
 								//$first_path = explode("/", $_SERVER["REQUEST_URI"]);
