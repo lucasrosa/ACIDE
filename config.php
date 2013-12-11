@@ -10,6 +10,7 @@
 // PATH
 //////////////////////////////////////////////////////////////////
 
+define("WEB_BASE_PATH", "http://hci.csit.upei.ca/dev/ACIDE");
 define("BASE_PATH","/var/www/dev/ACIDE");
 define("COMPONENTS",BASE_PATH . "/components");
 define("PLUGINS",BASE_PATH . "/plugins");

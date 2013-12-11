@@ -23,22 +23,8 @@
         //////////////////////////////////////////////////////////////
         
         case 'list':
-            $import_user_url = 'http';
-		
-			if (@$_SERVER["HTTPS"] == "on") {
-				$import_user_url .= "s";
-			}
-			
-			$import_user_url .= "://";
-			if ($_SERVER["SERVER_PORT"] != "80") {
-				 $import_user_url .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"];
-			} else {
-				$import_user_url .= $_SERVER["SERVER_NAME"];
-			}
-			
-			$dir =  dirname($_SERVER['PHP_SELF']);
-			$dirs = explode('/', $dir);
-			$import_user_url .= "/" . $dirs[1] . "/components/user/importusers";
+
+			$import_user_url = WEB_BASE_PATH . "/components/user/importusers";
 			
             $projects_assigned = false;
             if(!checkAccess()){ 
