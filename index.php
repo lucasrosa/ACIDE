@@ -446,16 +446,7 @@ if(!file_exists(DATA . '/plugins.php')) {
 		var originY = 0;
 		var lastY = 0;
     	$(document).ready(function() {
-    		setTimeout(logScroll, 5000);
-    		function logScroll() {
-	    		//ace.edit("editor");
-	    		
-	    		$('.editor').attr('id', 'editor');
-				var aceEditor = ace.edit("editor");
-				aceEditor.onScrollTopChange(function () {console.log("scrooww");});	
-    		}
-			
-			
+		
 			$(function() {
 			    var isDragging = false;
 			    $("#terminal-editor-resizing")

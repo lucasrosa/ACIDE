@@ -185,6 +185,10 @@
 								$first_path = array_values($first_path);
 								$first_path =  implode("/", $first_path);
 								
+								
+								####
+								# Move the reference file to assignment folder
+								
 								//require_once(__ROOT__.'/course/class.course.php');
 								//$first_path = explode("/", $_SERVER["REQUEST_URI"]);
 								//$first_path = "/" .$first_path[1];
