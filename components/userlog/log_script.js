@@ -4,6 +4,10 @@ var checkFocusInterval 				=  0.5; // seconds
 var checkFocusForFileInterval 		=  0.5; // seconds
 var checkExpirationForLastAction	=   10; // seconds
 
+//var EditSession = require('ace/edit_session').EditSession;
+//EditSession.on("changeScrollTop", console.log("changeScrollTop"));
+
+
 	window.onload = function() {
 	    //adding the event listerner for Mozilla
 	    if(window.addEventListener)
@@ -21,16 +25,26 @@ var checkExpirationForLastAction	=   10; // seconds
 $(document).ready(function() {
 	$('.ace_line').attr('id', 'file_input');
 	
+	// Log keydown
 	$("body").keydown(function() {
   		codiad.userlog.logUserLastAction();
 	});
 	
+	// Log clicks
 	$( "body" ).click(function() {
   		codiad.userlog.logUserLastAction();
 	});
+	
+	// Log scrolling
+	//$('.ace_scroller').scroll(function() {
+	//	console.log('asf')
+	//});
 });
 	
 (function(global, $){
+	//var aceEditor = ace.edit("editor");
+	//aceEditor.ScrollBar.onScroll(console.log("scroll"));
+	
 	var codiad = global.codiad;
 	
 	codiad.userlog.logUserHasFocusOnTheSystem();

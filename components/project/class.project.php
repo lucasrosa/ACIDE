@@ -241,12 +241,19 @@ class Project extends Common {
 				}
 			}
 		}
+		// Create the folder for the owner
+		$this->path = "AS_" . $this->assignment["owner"] ."_" . $this->assignment["id"];
+		$result = $this->Create($this->assignment["owner"]);
+		if ($result != 'success') {
+			$return = $result;
+		}
 		
 		if ($return != 'success') {
 			$users = $collection->find();
 			$user = '';
 			foreach ($users as $user) {
-				if (in_array($user['username'], $these_users)  && $user['type'] == 'student') {
+				//if (in_array($user['username'], $these_users)  && $user['type'] == 'student') {
+				if (in_array($user['username'], $these_users)) {
 					$this->path = "AS_" . $user['username'] ."_" . $this->assignment["id"];
 					$delete_as_an_assignment = TRUE;
 					$result = $this->Delete($delete_as_an_assignment);

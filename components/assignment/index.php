@@ -571,6 +571,26 @@
 										<td><input name="file" type="file" accept=".pdf"  /></td>
 									</tr>
 									<tr>
+										<th>Reference file #1</th>
+										<td><input name="reference_file1" type="file"  /></td>
+									</tr>
+									<tr>
+										<th>Reference file #2</th>
+										<td><input name="reference_file2" type="file"  /></td>
+									</tr>
+									<tr>
+										<th>Reference file #3</th>
+										<td><input name="reference_file3" type="file"  /></td>
+									</tr>
+									<tr>
+										<th>Reference file #4</th>
+										<td><input name="reference_file4" type="file"  /></td>
+									</tr>
+									<tr>
+										<th>Reference file #5</th>
+										<td><input name="reference_file5" type="file"  /></td>
+									</tr>
+									<tr>
 										<th>Maximum number of group members</th>
 										<td>
 											<select name="maximum_number_of_group_members">
