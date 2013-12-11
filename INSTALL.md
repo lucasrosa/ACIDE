@@ -67,7 +67,7 @@ In line `266` do the following:
   - Overwrite `http://your_website.ca/` with your own website address.
   
 ## Update config.php
-In the base directory update the `config.php` file to contain the correct BASE_PATH, TIMEZONE, etc.
+In the base directory update the `config.php` file to contain the correct BASE_PATH, WEB_BASE_PATH, TIMEZONE, etc.
 
 
 ## MongoDB Installtion
