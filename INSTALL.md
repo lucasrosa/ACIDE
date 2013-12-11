@@ -37,6 +37,8 @@ In this case we would have to generate a new key in a year.
 
 #### (Optional) Compile your own Console.jar
     
+The console is used to run all java files created in ACIDE on the user's local computer. The console is itself downloaded as a jar file when the user executes a command using 'java classname'. The source code is included, so that the Console can be customized. The provided Console.jar file contains a precompiled and packaged Console.
+    
     `javac Console.java`
     `jar cf Console.jar *.class`
     
