@@ -86,7 +86,7 @@ Follow the tutorial in the **[PHP website](http://php.net/manual/en/mongo.instal
 
 ## System Installation
     
-Open the URL correspondent to where the system is placed and the
+Open the URL corresponding to where the system is placed and the
 installer screen will appear. If any dependencies have not been met the
 system will alert you.
 
@@ -108,7 +108,7 @@ Log in using the administrator account you just created.
 After logging in as the admin:
 
  - Create a new course.
- - Create a professor and add to the course.
- - Logged as a professor add students to a course.
+ - Create a user in the professor role and add them to the course.
+ - Logged in as the professor add students to the course.
  
 #### DO NOT use the admin account to manage courses, it has not been tested. Courses should be adminstered by accounts in the professor role.
