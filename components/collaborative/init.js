@@ -12,7 +12,7 @@
     var codiad = global.codiad;
 
     $(function () {
-        codiad.collaborative.init();
+        //codiad.collaborative.init();
     });
 
     //////////////////////////////////////////////////////////////////

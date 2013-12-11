@@ -368,10 +368,16 @@ class Project extends Common {
 						$reference_folder_name = $first_path . "/data/assignments/reference_files/" . $this->assignment["id"];
 						//$this->assignment["id"]
 						// Copy resources	
-						$current_folder = $first_path . "/workspace/" . $this->path . "/Reference Material";
-						mkdir($current_folder.'/', 0755);
-						error_log("::: recurse_copy(" . $reference_folder_name . "," .  $current_folder. ");" );
-						$this->recurse_copy($reference_folder_name, $current_folder);
+						// Test if there are files into the reference directory, 
+						// if yes, copy to the assignment folder
+						// if not, don't create the Reference Material folder
+						if(count(glob($reference_folder_name ."/*"))) { 
+							$current_folder = $first_path . "/workspace/" . $this->path . "/Reference Material";
+							mkdir($current_folder.'/', 0755);
+							//error_log("::: recurse_copy(" . $reference_folder_name . "," .  $current_folder. ");" );
+							$this->recurse_copy($reference_folder_name, $current_folder);	
+						}
+						
 						//rename($this->path . "/" . $this->assignment["id"] , $this->path . "/references");
 						
 						

@@ -78,7 +78,6 @@
         logUserLastAction: function() {
         	// Run controller to register the user's last action
         	$.get(this.controller + '?action=log_user_last_action');
-        	console.log("logUserLastAction called");
         },
         closeAllOpenSectionsThatReachedTimeoutOfUserLastAction: function() {
         	// Run controller to close expired open sections
