@@ -35,10 +35,29 @@ $(document).ready(function() {
   		codiad.userlog.logUserLastAction();
 	});
 	
-	// Log scrolling
-	//$('.ace_scroller').scroll(function() {
-	//	console.log('asf')
-	//});
+	// Log scrolling -- must add events periodically, as elements appear
+    setInterval(function(){
+        //editor window
+        $('.ace_scrollbar').off('scroll');
+        $('.ace_scrollbar').scroll(function() {
+            codiad.userlog.logUserLastAction();
+            $('.ace_scrollbar').off('scroll');
+        });
+
+        //file manager
+        $('#file-manager').off('scroll');
+        $('#file-manager').scroll(function() {
+            codiad.userlog.logUserLastAction();
+            $('#file-manager').off('scroll');
+        });
+
+        //project manager
+        $('.sb-projects-content').off('scroll');
+        $('.sb-projects-content').scroll(function() {
+            codiad.userlog.logUserLastAction();
+            $('.sb-projects-content').off('scroll');
+        });
+    }, 2000);
 });
 	
 (function(global, $){
