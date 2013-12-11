@@ -50,7 +50,8 @@ The console is used to run all java files created in ACIDE on the user's local c
 
 To sign the Console.jar file using the keystore you just created, use the following command (Make sure you: overwrite 'password' with the password you just used to create the keystore and that you are in the website root's directory):
 
-    jarsigner -keystore /directory_where_the_keystore_file_is/keystore_file.keys -storepass 'password'  ./javaws_workspace/jnlp_xml/Console.jar   http://hci.csit.upei.ca/
+    jarsigner -keystore ./javaws_workspace/keystore_file.keys -storepass 'password' \
+    ./javaws_workspace/jnlp_xml/Console.jar http://your_website.ca/
 
 
 #### Updating the file `term.php` to point to the `.keys` file path
@@ -65,6 +66,9 @@ In line `266` do the following:
   - Overwrite `keystore password` with the password you used to generate the keystore.
   - Overwrite `http://your_website.ca/` with your own website address.
   
+## Update config.php
+In the base directory update the `config.php` file to contain the correct BASE_PATH, TIMEZONE, etc.
+
 
 ## MongoDB Installtion
 
@@ -107,4 +111,4 @@ After logging in as the admin:
  - Create a professor and add to the course.
  - Logged as a professor add students to a course.
  
-#### DO NOT use the admin account to manage courses.
+#### DO NOT use the admin account to manage courses, it has not been tested. Courses should be adminstered by accounts in the professor role.
