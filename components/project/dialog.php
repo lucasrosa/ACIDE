@@ -188,26 +188,26 @@
 							
 							// Add li for each student
 						?>
-							<li id="li_<?=$This_course->id?>_<?=$students[$istudents]?>" style="font-size:13px; font-style:italic;  cursor: pointer;">
-	                			<span id="span_right_<?=$This_course->id?>_<?=$students[$istudents]?>" 
+							<li id="li_<?=$This_course->id?>_<?=Project::SanitizeAPath($students[$istudents])?>" style="font-size:13px; font-style:italic;  cursor: pointer;">
+	                			<span id="span_right_<?=$This_course->id?>_<?=Project::SanitizeAPath($students[$istudents])?>" 
 	                				class="icon-right-dir icon" alt="Collapse" title="Collapse"></span>
-	                			<span id="span_down_<?=$This_course->id?>_<?=$students[$istudents]?>" 
+	                			<span id="span_down_<?=$This_course->id?>_<?=Project::SanitizeAPath($students[$istudents])?>" 
 	                				class="icon-down-dir icon" alt="Collapse" title="Collapse"></span>
 	                			<i><?=$students[$istudents]?></i>
 	                		</li>
 	                		
 	                		<script>
-	                			$('#div_<?=$This_course->id?>_<?=$students[$istudents]?>').hide();
-	                			$('#span_down_<?=$This_course->id?>_<?=$students[$istudents]?>').hide();
-	                			$("#li_<?=$This_course->id?>_<?=$students[$istudents]?>").on('click', function () {
-	                				$('#div_<?=$This_course->id?>_<?=$students[$istudents]?>').slideToggle();
-	                				$('#span_right_<?=$This_course->id?>_<?=$students[$istudents]?>').toggle();
-	                				$('#span_down_<?=$This_course->id?>_<?=$students[$istudents]?>').toggle();
+	                			$('#div_<?=$This_course->id?>_<?=Project::SanitizeAPath($students[$istudents])?>').hide();
+	                			$('#span_down_<?=$This_course->id?>_<?=Project::SanitizeAPath($students[$istudents])?>').hide();
+	                			$("#li_<?=$This_course->id?>_<?=Project::SanitizeAPath($students[$istudents])?>").on('click', function () {
+	                				$('#div_<?=$This_course->id?>_<?=Project::SanitizeAPath($students[$istudents])?>').slideToggle();
+	                				$('#span_right_<?=$This_course->id?>_<?=Project::SanitizeAPath($students[$istudents])?>').toggle();
+	                				$('#span_down_<?=$This_course->id?>_<?=Project::SanitizeAPath($students[$istudents])?>').toggle();
 	                				
 	                			});
 	                		</script>
 	                		
-	                		<div id="div_<?=$This_course->id?>_<?=$students[$istudents]?>" class="acide-assignments" >
+	                		<div id="div_<?=$This_course->id?>_<?=Project::SanitizeAPath($students[$istudents])?>" class="acide-assignments" >
 						<?
 							// Get assignments for this user
 							$Project = new Project();
@@ -228,7 +228,7 @@
 								?>
 								<li style="padding-left:20px;">
 									<div>
-										<span onclick="codiad.project.open('<?php echo($data['path']); ?>');">
+										<span onclick="codiad.project.open('<?php echo($this_project['path']); ?>');">
 											<div class="icon-archive icon"></div>
 											<?=$this_project['name'];?>
 										</span>

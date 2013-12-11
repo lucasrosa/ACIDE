@@ -1,7 +1,5 @@
 <?
-	//echo "application/x-java-jnlp-file";
-
-
+    if(file_exists('../../config.php')){ require_once('../../config.php'); }
 		
 	$jar_name	= $_GET['jar_name'];
 	$class_name = $_GET['class_name'];

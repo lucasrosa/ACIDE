@@ -102,7 +102,9 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		
 		for ($k = 0; $k < count($assignments); $k++) {
 				$project_path = "AS_" . $students[$idx] . "_" . $assignments[$k];
-				
+			
+				$project_path = Userlogreport::SanitizePath($project_path);
+			
 				$total_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path);
 				error_log("total_compilation_attempts = $total_compilation_attempts");		
 				$failed_compilation_attempts = $Userlogreport-> GetNumberOfCompilations($project_path, FALSE);

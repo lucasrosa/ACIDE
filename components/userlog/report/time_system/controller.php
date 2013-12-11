@@ -71,12 +71,13 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		$Userlogreport -> username =  $students[$idx];
 		
 		$time_spent  = $Userlogreport->GetTimeSpentInTheSystem();
-		$hours_spent =	($time_spent->d*24) +
-						($time_spent->h) +
-						($time_spent->i / 60) +
+		$minutes_spent =	($time_spent->d*24) +
+						($time_spent->h * 60) +
+						($time_spent->i) +
 						($time_spent->s / 60 / 60);
 							
-		$students_with_counters[$idx]['count'] = round($hours_spent, 2);
+		error_log("minutes_spent = " . round($minutes_spent, 2));
+		$students_with_counters[$idx]['count'] = round($minutes_spent, 2);
 		
 	}
 	

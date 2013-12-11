@@ -103,6 +103,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		
 		for ($k = 0; $k < count($assignments); $k++) {
 			$project_path = "AS_" . $students[$idx] . "_" . $assignments[$k];
+			$project_path = Userlogreport::SanitizePath($project_path);
 			$time_spent = $Userlogreport->GetTimeSpentInProject($project_path);
 			$minutes_spent =	($time_spent->d*24*60) +
 								($time_spent->h*60) +

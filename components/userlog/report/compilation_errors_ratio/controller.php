@@ -115,6 +115,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		if ($group_by == 0) {
 			for ($k = 0; $k < count($assignments); $k++) {
 				$project_path = "AS_" . $students[$idx] . "_" . $assignments[$k];
+				$project_path = Userlogreport::SanitizePath($project_path);
 				//$time_spent = $Userlogreport->GetTimeSpentInProject($project_path);
 									
 				//if ($group_by == 0 || $group_by == 2) {

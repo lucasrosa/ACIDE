@@ -65,10 +65,11 @@ class Userlogreport {
 
 			$interval = $date1 -> diff($date2);
 			$total_time_system -> add($interval);
+			//error_log("total_time_system = " . date("H:i:s", $total_time_system->getTimestamp()));
 		}
 
 		$total_time_system_interval = $total_time_system_helper -> diff($total_time_system);
-
+		//error_log("total_time_system_interval = " . date("H:i:s", $total_time_system_interval->getTimestamp()));
 		return $total_time_system_interval;
 	}
 
@@ -340,5 +341,14 @@ class Userlogreport {
 		return $files;
 
 	}
+	
+	//////////////////////////////////////////////////////////////////
+    // Sanitize Path
+    //////////////////////////////////////////////////////////////////
+
+    public static function SanitizePath($path){
+        $sanitized = str_replace(" ","_",$path);
+        return preg_replace('/[^\w-]/', '', $sanitized);
+    }
 
 }

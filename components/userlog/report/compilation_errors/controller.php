@@ -125,9 +125,23 @@ if ($_GET['action'] == 'get_data_for_chart') {
 		$array_of_errors[] = "javac: file not found:";
 
 		foreach ($compilation_attempts as $compilation_attempt) {
+			//error_log("compilation_attempt output : " . $compilation_attempt['output']);
 			$current_error = "";
 			$display = array();
 			$error = $compilation_attempt['output'];
+			//error_log("::");error_log("::");error_log("::");
+			//error_log("compilation_attempt['path'] = " . $compilation_attempt['path']);
+			//error_log("array = " . print_r($user_assignments, true));
+			//error_log("::");error_log("::");error_log("::");
+			// sanitize array
+			//for ($o = 0; $o < count($user_assignments); $o++) {
+			//	$user_assignments[$o] = str_replace("@","", $user_assignments[$o]);
+			//	$user_assignments[$o] = str_replace(".","", $user_assignments[$o]);
+			//}
+			
+			for ($o = 0; $o < count($user_assignments); $o++) {
+				$user_assignments[$o] = Userlogreport::SanitizePath($user_assignments[$o]);
+			}
 			
 			if ($compilation_attempt['succeeded'] == 'FALSE' && in_array($compilation_attempt['path'], $user_assignments)) {
 				preg_match('/error:(.*?)\n/', $error, $display);
@@ -146,7 +160,9 @@ if ($_GET['action'] == 'get_data_for_chart') {
 				 */
 				// Remove class/file name
 				$current_error = $display[1];
-
+				//error_log("");
+                //error_log("current error: ".$current_error);
+				//error_log("");
 				if (preg_match('/\'(.*?)\'/', $error, $display)) {
 					$array_of_symbols = array(";", "\"", "(", ")", "{", "}", "[", "]", ":", ".", "!", "=");
 					if (!in_array($display[1], $array_of_symbols)) {
@@ -255,7 +271,7 @@ if ($_GET['action'] == 'get_data_for_chart') {
 				//echo "<hr>";
 			}
 		}
-		//error_log("Assignments with counters: " . print_r($assignments_with_counters, true));
+		error_log("Assignments with counters: " . var_export($assignments_with_counters, true). count($assignments_with_counters));
 	}
 
 	/*
